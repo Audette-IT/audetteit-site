@@ -342,6 +342,16 @@ repo (Settings → Actions → General); needs the user to check.
 commits, docs), `git merge -s ours origin/main` on that branch clears the
 conflict only if `main`'s side has nothing new. Check `git diff` first.
 
+**Deploy timing (learned 2026-09-23):** Workers Builds runs one build at a
+time, and preview builds from pushes to `dev`/`staging`/other branches queue
+ahead of production. It also skips superseded commits: the PR #50 merge got no
+build of its own because PR #51 merged 48s later, and #51's build (which
+included #50) went live at 20:49 UTC, several minutes after the merge. To see
+what production is really running, fetch the deployed code with the
+Cloudflare MCP `workers_get_worker_code` (`audetteit-site`) or read the
+"Workers Builds" check run on the `main` commit. Avoid a burst of branch
+pushes right before a release.
+
 **Cloudflare project settings still need manual verification in the dashboard**
 (none of this is scriptable from here): confirm **Production branch** is `main`,
 confirm `staging` actually produces a preview deployment once something is
