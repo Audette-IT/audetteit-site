@@ -38,7 +38,10 @@ Copy should read as one capable person, not a company.
   a production README). `dev` and `staging` were then synced with `main`,
   each keeping its own README. Live pages:
   Home, Services, Contact, Privacy, with Markdown twins, `llms.txt`,
-  `llms-full.txt`, security headers, sitemap, and `favicon.ico`. Not verified
+  `llms-full.txt`, security headers, sitemap, and `favicon.ico`. A second
+  release the same day added Google Tag Manager behind the cookie consent
+  banner (#30/#38) and the `www` → apex redirect in the Worker. `www` still
+  needs its dashboard custom domain; see "Site architecture". Not verified
   from here: outbound requests to audetteit.com are blocked in these sessions,
   so the owner should load the site once and check the Cloudflare production
   build.
@@ -93,8 +96,9 @@ Copy should read as one capable person, not a company.
     Actions has never run it (see "Branch structure"), so it's still unproven.
   - #30 analytics + #38 cookie banner: the owner chose **Google Analytics via
     Google Tag Manager (container `GTM-TKBJX8F5`) with a consent banner**
-    (2026-09-23). Built on `dev` and promoted to `staging`; not on `main` until
-    the owner approves. Close both once it's live and the owner confirms GA4
+    (2026-09-23). **Live on `main` since 2026-09-23** (PR #50, merge commit `79a8741`, from
+    `release/analytics-www`, approved by the owner: "you can skip and push it
+    to main and the live site"). Close both once the owner confirms GA4
     receives data.
   - #39 asset rights: owner must confirm rights to the shield logo, then update
     `ASSETS.md`.
