@@ -121,11 +121,15 @@ redoing any design or issue-tracking work** — don't regenerate from scratch.
 
 ## Working conventions established this session
 
-- Push directly to `main` for real infra/asset changes (favicons, robots.txt,
-  maintenance page) since Cloudflare Pages deploys straight from it — there's no
-  separate staging step in this project.
+- **Never push to `main` without asking the user first — no exceptions.** This
+  supersedes the earlier "push directly to main" convention from this same
+  session; that convention is retired. Commit locally / stage the change, then
+  explicitly ask before running `git push origin ... main`. This applies to
+  every kind of change (content, assets, config, docs) — none of it is exempt
+  just because it seems small or low-risk.
 - Draft anything content/design-significant (new page layouts, copy) as a Claude
   Artifact for review first — don't push an unreviewed redesign over the live
-  maintenance page.
-- Also push to `claude/stoic-gates-w5906b` alongside `main` to keep it in sync
-  (harness convention from the original task setup).
+  maintenance page. Republishing an Artifact is not a `main` push and doesn't
+  need to wait on approval — it's a separate, private preview channel.
+- Also push to `claude/stoic-gates-w5906b` alongside `main` once approved, to
+  keep it in sync (harness convention from the original task setup).
