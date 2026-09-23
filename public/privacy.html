@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="/js/consent.js"></script>
 <title>Privacy | Audette IT</title>
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
@@ -306,6 +307,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="/css/consent.css">
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -343,7 +345,9 @@
       <p>The form on the <a href="/contact" class="inline-link">contact page</a> doesn't send anything to a server. When you hit send, it opens your own email app with your name, email, and message filled in &mdash; nothing leaves your device until you send that email yourself. Once it arrives, I use it only to reply to you.</p>
 
       <h2>Analytics and cookies</h2>
-      <p>This site doesn't run analytics and doesn't set any cookies. If that changes, this page will be updated first.</p>
+      <p>The site uses Google Analytics, loaded through Google Tag Manager, to count visits and see which pages get used. <strong>It only runs if you click &ldquo;Accept&rdquo; on the cookie banner.</strong> If you decline or ignore the banner, nothing from Google Analytics or Tag Manager loads and no analytics cookies are set.</p>
+      <p>If you accept, Google Analytics sets its own cookies (named <span class="mono">_ga</span> and <span class="mono">_ga_&hellip;</span>) and sends Google things like the pages you view, roughly where you are, and what device and browser you're using. Google handles that under <a href="https://policies.google.com/privacy" class="inline-link" rel="noopener">Google's privacy policy</a>. It's used only to see how the site is doing. It isn't used for ads, and I don't combine it with anything else.</p>
+      <p>Your choice is remembered in your browser's local storage (not a cookie), so the banner doesn't ask on every page. You can change it any time with <strong>cookie settings</strong> at the bottom of every page. Declining after accepting clears the analytics cookies.</p>
 
       <h2>Hosting</h2>
       <p>The site is hosted on Cloudflare, which processes standard request data (like IP addresses) to serve and protect the site. That's covered by <a href="https://www.cloudflare.com/privacypolicy/" class="inline-link" rel="noopener">Cloudflare's privacy policy</a>.</p>
@@ -363,6 +367,7 @@
       <a href="/services">services</a>
       <a href="/contact">contact</a>
       <a href="/privacy" aria-current="page">privacy</a>
+      <button type="button" class="linklike" data-cookie-settings>cookie settings</button>
     </div>
   </div>
 </footer>
