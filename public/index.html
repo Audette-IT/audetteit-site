@@ -1,150 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
     <link rel="icon" type="image/png" href="assets/faviconlogo.png" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audette IT | Secure, Reliable Infrastructure</title>
+    <title>Audette IT | Site Maintenance</title>
+    <meta name="robots" content="noindex">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <meta name="description"
-        content="Audette IT – Operational clarity, monitoring, and uptime you can trust. Enterprise-grade IT infrastructure management.">
+    <meta name="description" content="Audette IT is currently undergoing maintenance. We'll be back shortly.">
+    <style>
+        :root {
+            --bg-color: #0B0F14;
+            --primary-color: #00B4FF;
+            --text-color: #E6F1FF;
+            --muted-color: #9FB3C8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .maintenance-card {
+            max-width: 480px;
+        }
+
+        .logo-crop {
+            width: 64px;
+            height: 64px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 24px rgba(0, 180, 255, 0.25);
+        }
+
+        .logo-crop img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.6);
+            transform-origin: center 40%;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .text-highlight {
+            color: var(--primary-color);
+        }
+
+        p {
+            color: var(--muted-color);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 180, 255, 0.7);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.6;
+            }
+        }
+
+        .maintenance-note {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: var(--muted-color);
+        }
+    </style>
 </head>
 
 <body>
-
-    <!-- Header -->
-    <header class="header">
-        <div class="container header-container">
-            <div class="logo">
-                <div class="logo-crop">
-                    <img src="assets/logo.jpg" alt="Audette IT Logo" class="logo-img">
-                </div>
-                <span class="logo-text">Audette IT</span>
-            </div>
+    <div class="maintenance-card">
+        <div class="logo-crop">
+            <img src="assets/logo.jpg" alt="Audette IT Logo">
         </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container hero-content">
-            <img src="assets/logo.jpg" alt="Audette IT Shield" class="hero-logo">
-            <h1 class="hero-title">Secure, Reliable <br><span class="text-highlight">Infrastructure</span></h1>
-            <p class="hero-subtitle">Operational clarity, monitoring, and uptime you can trust.</p>
-            <div class="hero-actions">
-                <a href="#services" class="btn btn-primary">Our Services</a>
-                <a href="#status" class="btn btn-secondary">Check System Status</a>
-            </div>
-        </div>
-        <div class="hero-bg-effect"></div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="services">
-        <div class="container">
-            <h2 class="section-title">Core Services</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                        </svg>
-                    </div>
-                    <h3>Infrastructure Monitoring & Uptime</h3>
-                    <p>Real-time oversight of your critical systems to ensure maximum availability and performance.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
-                            </path>
-                            <line x1="12" y1="9" x2="12" y2="13"></line>
-                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                        </svg>
-                    </div>
-                    <h3>Incident Management</h3>
-                    <p>Rapid response protocols to identify, analyze, and correct hazards to prevent future
-                        reoccurrence.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                        </svg>
-                    </div>
-                    <h3>Device & Endpoint Oversight</h3>
-                    <p>Comprehensive management of all endpoints to maintain security compliance and operational
-                        efficiency.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                        </svg>
-                    </div>
-                    <h3>Secure Systems Design</h3>
-                    <p>Architecture built from the ground up with security-first principles and robust scalability.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Status Section Placeholder -->
-    <section id="status" class="status-section">
-        <div class="container">
-            <h2 class="section-title">System Status</h2>
-            <div class="status-placeholder">
-                <div class="status-indicator pulsating"></div>
-                <p>All Systems Operational</p>
-                <small class="faded">System status dashboard coming soon.</small>
-                <!-- Replace the content of this div with your status page embed (e.g., OneUptime) -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Employee Portal Placeholder -->
-    <section id="portal" class="portal-section">
-        <div class="container text-center">
-            <h3>Employee Access</h3>
-            <p>Authorized personnel only.</p>
-            <a href="#" class="btn btn-outline disabled">Employee Portal (Coming Soon)</a>
-            <!-- Replace href with internal portal link -->
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container footer-content">
-            <p>&copy; 2026 Audette IT. All rights reserved.</p>
-        </div>
-    </footer>
- 
-<script src="https://help.audetteit.net/assets/chat/chat-no-jquery.min.js"></script>
-<script>
-(function() {
-  new ZammadChat({
-    background: '#0b1016',
-    fontSize: '12px',
-    chatId: 1
-  });
-})();
-</script>
- 
+        <h1>We'll be right <span class="text-highlight">back</span></h1>
+        <p>Audette IT is currently undergoing scheduled maintenance while we work on some improvements. Thanks for your patience.</p>
+        <p class="maintenance-note"><span class="status-indicator"></span>Maintenance in progress</p>
+    </div>
 </body>
 
-
 </html>
-
-
