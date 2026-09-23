@@ -32,8 +32,11 @@ Copy should read as one capable person, not a company.
 - **Live site (`main`): the full redesign went live on 2026-09-23** — the
   maintenance page is gone. Launched at the user's request ("we need everything
   from stage to main and the site needs to go live no maintenance") by
-  promoting `staging` → `main` through a launch PR (branch `launch`: `staging`
-  plus `main` merged in with `-s ours`, plus a production README). Live pages:
+  promoting `staging` → `main` through PR #49
+  (https://github.com/Audette-IT/audetteit-site/pull/49, merge commit
+  `915d16e`; branch `launch` = `staging` + `main` merged in with `-s ours` +
+  a production README). `dev` and `staging` were then synced with `main`,
+  each keeping its own README. Live pages:
   Home, Services, Contact, Privacy, with Markdown twins, `llms.txt`,
   `llms-full.txt`, security headers, sitemap, and `favicon.ico`. Not verified
   from here: outbound requests to audetteit.com are blocked in these sessions,
