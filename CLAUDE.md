@@ -31,11 +31,13 @@ Copy should read as one capable person, not a company.
   that connector). Deploys come from Workers Builds on git push.
 - **Live site (`main`):** currently a single maintenance page (`public/index.html`)
   — dark theme, brand blue accent, "We'll be right back" notice. This is
-  intentional; the real multi-page redesign is merged into **`dev`** (see below)
-  but has **not** been promoted to `staging` or `main` yet — don't confuse
-  branches when checking what's actually live vs. in progress.
+  intentional; the real multi-page redesign is on **`dev`** and was promoted to
+  **`staging`** (for a Cloudflare preview), but has **not** been promoted to
+  `main` yet — don't confuse branches when checking what's actually live vs. in
+  progress.
 - **Repo:** `Audette-IT/audetteit-site` on GitHub, default branch `main`.
-- **Correction (found this session):** `main` still contains `functions/index.js`,
+- **Correction (found this session):** `main` (and `staging`, before the
+  promotion) contained `functions/index.js`,
   but that is a *Pages Functions* convention and this project is a
   static-assets-only Worker (the dashboard literally says "Worker that only has
   static assets") — so it has **never run**. Earlier notes/tracker entries that
@@ -124,7 +126,7 @@ history has the exact URLs if needed again.
 The redesign (Home / Services / Contact / Privacy) is implemented for real in
 `public/`. It's merged into **`dev`** (built on `feature/homepage-redesign`,
 which still exists but is no longer where changes should land — edit `dev`
-directly now). Not yet promoted to `staging` or `main`.
+directly now). Promoted to `staging`; not yet to `main`.
 
 The Claude Artifact versions (below) were the design/review draft that this was
 built from — the repo files are now the source of truth going forward, not the
@@ -205,7 +207,9 @@ promotion flow the user specified:
   or the user sets it manually in GitHub Settings &rarr; Branches. Recommended
   rule: require PR before merging, require status checks once CI exists (#32),
   don't allow bypassing even for admins.
-- **`staging`** — created, pushed, has its own README. The site is deployed as
+- **`staging`** — has its own README. **`dev` was merged in** (the full site),
+  so a staging preview now shows the real redesign rather than the maintenance
+  page. The site is deployed as
   a Cloudflare **Worker** named `audetteit-site` (account
   `b7a46df8571aa32900c3155b464416ab`, worker ID
   `c8969d22263a484bae64aa2436af8e93`) — not classic Pages — so it uses Workers
@@ -237,7 +241,7 @@ promotion flow the user specified:
      ```
 - **`dev`** — active development branch. Has diverged from `main`: carries the
   merged-in homepage redesign (real `index.html`/`services.html`/`contact.html`,
-  not just the maintenance page). Not yet promoted to `staging` or `main`.
+  not just the maintenance page). Promoted to `staging`; not yet to `main`.
 - **Feature branches** — branch off `dev`, merge back into `dev`.
 - **Local dev hosting** — `npx wrangler dev` from the repo root runs the real
   Worker + assets exactly as deployed (the old `wrangler pages dev` advice was
@@ -258,7 +262,8 @@ pushed to it, and decide on a custom domain alias for staging if wanted.
 - Tone/voice sign-off on the rewritten copy (#23).
 - Whether to add analytics, and which tool (#30).
 - Confirming rights to the shield logo (#39).
-- When to promote `dev` → `staging` → `main` (main only with explicit approval).
+- When to promote `staging` → `main` (only with explicit approval) — after
+  reviewing the staging preview.
 - Whether the old GitHub Pages workflow (`pages-build-deployment`, last run in
   July) should be turned off in Settings → Pages. The site isn't served from
   GitHub Pages anymore.
