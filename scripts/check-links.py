@@ -52,6 +52,19 @@ for page in sorted(PUBLIC.glob("*.html")):
     }
     broken += [f"{page.name}: {msg}" for msg, ok in checks.items() if not ok]
 
+# Every inline <script> must be allowed by a matching CSP hash, in both
+# public/_headers and worker/index.js (they set the CSP for different paths).
+import base64, hashlib
+INLINE = re.compile(r"<script>(.*?)</script>", re.S)
+headers = (PUBLIC / "_headers").read_text()
+for page in sorted(PUBLIC.glob("*.html")):
+    for js in INLINE.findall(page.read_text()):
+        h = "'sha256-" + base64.b64encode(hashlib.sha256(js.encode()).digest()).decode() + "'"
+        if h not in headers:
+            broken.append(f"{page.name}: inline script hash {h} missing from public/_headers CSP")
+        if h not in worker:
+            broken.append(f"{page.name}: inline script hash {h} missing from worker/index.js CSP")
+
 if broken:
     print("Problems:\n  " + "\n  ".join(broken))
     sys.exit(1)
