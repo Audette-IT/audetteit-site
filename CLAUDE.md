@@ -242,16 +242,35 @@ files on `dev` for any further changes**, not the artifacts.
   settings" button (`data-cookie-settings`) reopens the banner. Decline pushes
   `analytics_storage: denied` and clears `_ga*` cookies. GA4 itself is
   configured inside the GTM container, not in the repo.
+  **Microsoft Clarity** (project `ymzkuz40tm`) is also loaded **by GTM**, as a
+  tag in the container, not by a snippet in the repo. The owner explicitly
+  cancelled the direct inline snippet. `consent.js` defines the `window.clarity`
+  queue and sends `clarity('consentv2', {ad_Storage:'denied',
+  analytics_Storage: <choice>})` at startup and again on window `load` (in
+  case the GTM template replaced the queue), plus on every banner click.
+  Decline also clears `_clck`/`_clsk`. For this to hold outside the EEA, the
+  Clarity project's **Settings → Setup → Cookies** must be **off** (consent
+  mode). The banner and privacy page name both GA and Clarity.
   **CSP:** the inline snippet is allowed by its hash
   (`'sha256-UyV5Au11KVQu7NJLru7rrbyHqm2Q7abUOBcVvlNvgFo='`), not
   `'unsafe-inline'`, plus `https://*.googletagmanager.com` (script/img/connect),
   `https://*.google-analytics.com` and `https://*.analytics.google.com`
-  (img/connect), and `frame-src https://www.googletagmanager.com` (noscript).
+  (img/connect), `https://*.clarity.ms` (script/img/connect) and
+  `https://c.bing.com` (img/connect) for Clarity, and
+  `frame-src https://www.googletagmanager.com` (noscript).
   All of this is in **both** `public/_headers` and `worker/index.js`. **If the
   snippet changes by even one character, the hash changes.**
   `scripts/check-links.py` (CI) fails when any inline script's hash is missing
   from either CSP. A GTM "Custom HTML" tag would be blocked by the CSP, so
   stick to built-in tag types.
+- **Cloudflare Google Tag Gateway must stay OFF.** It was found on
+  2026-09-23 injecting its own GTM loader and two inline scripts
+  (`google_tags_first_party`, a `/epez/` loader) at the top of every page,
+  before `consent.js`. That breaks the "consent defaults before GTM" order,
+  and its inline scripts have no CSP hash, so browsers block them anyway. The
+  owner was asked to turn it off (zone → Google tag gateway). If first-party
+  tag serving is ever wanted, set it up deliberately: turn off auto-inject,
+  add the gateway path to CSP, and keep `consent.js` first.
 - **`public/site.webmanifest`** — icons for home-screen shortcuts (#34).
 - **`public/favicon.ico`** — at the site root because Google Search (and
   browsers that ignore `<link>` tags) request `/favicon.ico` directly. Holds
