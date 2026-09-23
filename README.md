@@ -4,9 +4,9 @@ Personal IT help for family and friends — everything from everyday
 troubleshooting to real network and Active Directory infrastructure work.
 Not a registered business.
 
-**Branch:** `staging` — pre-production. Gets a Cloudflare Pages preview
-deployment for final review before promotion to `main`. See `CLAUDE.md` for
-full project context.
+**Branch:** `staging` — pre-production. Pushes here build a Cloudflare Worker
+preview (meant to sit behind Cloudflare Access) for a final look before
+promotion to `main`. See `CLAUDE.md` for full project context.
 
 ## Branch flow
 
@@ -14,20 +14,30 @@ full project context.
 feature/*  →  dev  →  staging  →  main
 ```
 
-This branch currently mirrors `main` — nothing has been promoted from `dev`
-yet. Check `dev` (or `CLAUDE.md`) for what's actually in progress.
+This branch has the full site promoted from `dev` (Home, Services, Contact,
+Privacy). `main` still shows the maintenance page until this is approved and
+promoted.
 
 ## Structure
 
 ```
-/public
-  index.html      # Currently the maintenance page (mirrors main)
-  robots.txt
-  sitemap.xml
-  /assets         # Logo, favicons
-/functions
-  index.js        # Cloudflare Pages Function — serves Markdown on `/`
-                    when requested with `Accept: text/markdown`
+/public              # everything served to visitors
+  index.html         # Home
+  services.html      # -> /services
+  contact.html       # -> /contact (form opens your email app)
+  privacy.html       # -> /privacy
+  _headers           # Security + cache headers for static files
+  site.webmanifest, robots.txt, sitemap.xml
+  /js/site.js        # Mobile menu + contact form behavior
+  /assets            # Logo, favicons
+/worker/index.js     # Handles "/" only: Markdown for Accept: text/markdown
+wrangler.jsonc       # Cloudflare Worker config
+scripts/check-links.py  # Internal link checker (run in CI)
+ASSETS.md            # Where every image came from
 ```
 
-No build step — plain static HTML/CSS/JS, deployed via Cloudflare Pages.
+No build step. Run it locally exactly as deployed:
+
+```
+npx wrangler dev
+```

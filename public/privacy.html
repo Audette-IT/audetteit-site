@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Audette IT</title>
+<title>Privacy | Audette IT</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Audette IT — personal IT help for family and friends, from everyday troubleshooting to real network and Active Directory infrastructure.">
-<link rel="canonical" href="https://audetteit.com/">
+<meta name="description" content="What Audette IT collects when you use this site or the contact form, and what happens to it.">
+<link rel="canonical" href="https://audetteit.com/privacy">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Audette IT">
-<meta property="og:description" content="Audette IT — personal IT help for family and friends, from everyday troubleshooting to real network and Active Directory infrastructure.">
-<meta property="og:url" content="https://audetteit.com/">
+<meta property="og:title" content="Privacy | Audette IT">
+<meta property="og:description" content="What Audette IT collects when you use this site or the contact form, and what happens to it.">
+<meta property="og:url" content="https://audetteit.com/privacy">
 <meta property="og:image" content="https://audetteit.com/assets/logo-mark.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Audette IT">
-<meta name="twitter:description" content="Audette IT — personal IT help for family and friends, from everyday troubleshooting to real network and Active Directory infrastructure.">
+<meta name="twitter:title" content="Privacy | Audette IT">
+<meta name="twitter:description" content="What Audette IT collects when you use this site or the contact form, and what happens to it.">
 <meta name="twitter:image" content="https://audetteit.com/assets/logo-mark.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#0074A8">
@@ -291,21 +291,19 @@
       padding-block: 14px; border-top: 1px solid var(--line); font-size: 0.95rem;
     }
   }
+
+  /* ---------- Prose (privacy) ---------- */
+  .prose { max-width: 68ch; }
+  .prose h2 { font-size: 1.1rem; font-weight: 700; margin: 32px 0 8px; }
+  .prose h2:first-child { margin-top: 0; }
+  .prose p { color: var(--text-dim); font-size: 0.98rem; line-height: 1.65; }
+  .inline-link { color: var(--signal); text-decoration: underline; text-underline-offset: 2px; }
 </style>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "url": "https://audetteit.com/",
-  "name": "Audette IT",
-  "description": "Personal IT help for family and friends, from everyday troubleshooting to network and Active Directory infrastructure."
-}
-</script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -316,7 +314,7 @@
       <span class="word">AUDETTE_IT</span>
     </a>
     <nav class="nav-links" id="primary-nav" aria-label="Primary">
-      <a href="/" class="active" aria-current="page">home</a>
+      <a href="/">home</a>
       <a href="/services">services</a>
       <a href="/contact">contact</a>
     </nav>
@@ -329,77 +327,28 @@
   </div>
 </header>
 <main id="main-content">
-  <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <span class="eyebrow"><span class="dot" aria-hidden="true"></span>Audette IT &middot; Personal &amp; Home Infrastructure</span>
-        <h1>Uptime isn't luck. <span class="signal">It's a system someone is actually watching.</span></h1>
-        <p class="lede">Audette IT is one person who knows what they're doing &mdash; from forgotten passwords to full network and Active Directory builds, for family and friends who'd rather not guess.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="/contact">Contact us</a>
-          <a class="btn btn-ghost" href="/services">See what I do</a>
-        </div>
-      </div>
-      <div class="console">
-        <div class="console-head"><span>// self-hosted status &mdash; in progress</span><span>example</span></div>
-        <div class="console-body">
-          <div class="log-row"><span class="ts">09:14:02</span><span class="tag ok">OK</span><span class="msg">endpoint-fleet <span class="v">patched</span></span></div>
-          <div class="log-row"><span class="ts">09:14:02</span><span class="tag ok">OK</span><span class="msg">network-monitor <span class="v">online</span></span></div>
-          <div class="log-row"><span class="ts">09:12:47</span><span class="tag warn">WARN</span><span class="msg">cert-renewal <span class="v">12d left</span></span></div>
-          <div class="log-row"><span class="ts">09:10:03</span><span class="tag ok">OK</span><span class="msg">backup-verify <span class="v">passed</span></span></div>
-          <div class="log-row"><span class="ts">09:08:55</span><span class="tag ok">OK</span><span class="msg">firewall-ruleset <span class="v">synced</span></span></div>
-          <div class="cursor mono"></div>
-        </div>
-      </div>
+  <section class="hero" style="border-bottom:1px solid var(--line);">
+    <div class="wrap" style="padding-block: 52px 44px;">
+      <span class="eyebrow"><span class="dot" aria-hidden="true"></span>Privacy</span>
+      <h1 style="max-width: 24ch; font-size: clamp(1.6rem, 3vw, 2.1rem);">What this site collects</h1>
+      <p class="lede" style="margin-bottom:0;">Short version: very little, and nothing is sold or shared.</p>
     </div>
   </section>
 
-  <section id="coverage">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="section-eyebrow">// 01 &mdash; coverage</span>
-        <h2>Two speeds: everyday help, and the deep stuff</h2>
-        <p>Most requests are a quick fix. Some need a network redesign. Both get the same attention &mdash; and unlike most family tech support, the second kind is actually on the table.</p>
-      </div>
-      <div class="manifest">
-        <div class="manifest-row">
-          <span class="name">EVERYDAY HELP</span>
-          <span class="desc">Wifi and device troubleshooting, slow computers, printers, locked-out accounts, parental controls on the kids' devices.</span>
-          <span class="status">QUICK</span>
-        </div>
-        <div class="manifest-row">
-          <span class="name">INFRASTRUCTURE &amp; ADVANCED</span>
-          <span class="desc">Home network design, Active Directory and domain setups, self-hosted services, real security hardening.</span>
-          <span class="status">DEEP</span>
-        </div>
-      </div>
-      <p style="margin-top:18px;"><a href="/services" class="mono" style="color:var(--signal); font-size:0.88rem;">See the full list &rarr;</a></p>
-    </div>
-  </section>
+  <section id="privacy-body">
+    <div class="wrap prose">
+      <h2>The contact form</h2>
+      <p>The form on the <a href="/contact" class="inline-link">contact page</a> doesn't send anything to a server. When you hit send, it opens your own email app with your name, email, and message filled in &mdash; nothing leaves your device until you send that email yourself. Once it arrives, I use it only to reply to you.</p>
 
-  <section id="process">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="section-eyebrow">// 02 &mdash; process</span>
-        <h2>The same four stages, every time</h2>
-        <p>Whether it's setting something up for the first time or fixing something that broke tonight.</p>
-      </div>
-      <div class="pipeline">
-        <div class="pipe-step"><div class="pipe-line"></div><div class="pipe-node mono">01</div><h3>Assess</h3><p>Figure out what's actually going on before changing anything.</p></div>
-        <div class="pipe-step"><div class="pipe-line"></div><div class="pipe-node mono">02</div><h3>Deploy</h3><p>Roll out the fix or setup in a way that doesn't break what's already working.</p></div>
-        <div class="pipe-step"><div class="pipe-line"></div><div class="pipe-node mono">03</div><h3>Monitor</h3><p>Keep an eye on it afterward instead of disappearing once it's "done."</p></div>
-        <div class="pipe-step"><div class="pipe-node mono">04</div><h3>Respond</h3><p>If it acts up again, it gets triaged and fixed &mdash; same process, no starting over.</p></div>
-      </div>
-    </div>
-  </section>
+      <h2>Analytics and cookies</h2>
+      <p>This site doesn't run analytics and doesn't set any cookies. If that changes, this page will be updated first.</p>
 
-  <section id="contact-teaser">
-    <div class="wrap" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;">
-      <div>
-        <span class="section-eyebrow">// 03 &mdash; contact</span>
-        <h2 style="font-size:1.3rem;">Something acting up, or planning something new?</h2>
-      </div>
-      <a class="btn btn-primary" href="/contact">Contact us</a>
+      <h2>Hosting</h2>
+      <p>The site is hosted on Cloudflare, which processes standard request data (like IP addresses) to serve and protect the site. That's covered by <a href="https://www.cloudflare.com/privacypolicy/" class="inline-link" rel="noopener">Cloudflare's privacy policy</a>.</p>
+      <p>Fonts load from Google Fonts, so your browser also makes a request to Google's servers when a page loads. Google Fonts doesn't set cookies; see <a href="https://developers.google.com/fonts/faq/privacy" class="inline-link" rel="noopener">Google's Fonts privacy FAQ</a>.</p>
+
+      <h2>Questions</h2>
+      <p>Email <span class="mono">michael.audette@audetteit.com</span> if you want to know what I have from you, or want it deleted.</p>
     </div>
   </section>
 </main>
@@ -411,7 +360,7 @@
       <a href="/">home</a>
       <a href="/services">services</a>
       <a href="/contact">contact</a>
-      <a href="/privacy">privacy</a>
+      <a href="/privacy" aria-current="page">privacy</a>
     </div>
   </div>
 </footer>
