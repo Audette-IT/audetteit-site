@@ -30,9 +30,9 @@ Copy should read as one capable person, not a company.
   this project at all; don't touch the Vercel connector for this repo).
 - **Live site (`main`):** currently a single maintenance page (`public/index.html`)
   — dark theme, brand blue accent, "We'll be right back" notice. This is
-  intentional; the real multi-page redesign lives on `feature/homepage-redesign`
-  (see below) and has **not** been merged into `main`, `staging`, or `dev` yet —
-  don't confuse branches when checking what's actually live vs. in progress.
+  intentional; the real multi-page redesign is merged into **`dev`** (see below)
+  but has **not** been promoted to `staging` or `main` yet — don't confuse
+  branches when checking what's actually live vs. in progress.
 - **Repo:** `Audette-IT/audetteit-site` on GitHub, default branch `main`.
 - `functions/index.js` — a Cloudflare Pages Function that serves a Markdown version
   of the homepage when a request sends `Accept: text/markdown` (a free-tier stand-in
@@ -92,17 +92,18 @@ history has the exact URLs if needed again.
 ## Homepage redesign — now real files, not just an artifact
 
 The redesign (Home / Services / Contact) is implemented for real as
-`public/index.html`, `public/services.html`, `public/contact.html` on branch
-**`feature/homepage-redesign`** (branched off `dev`) — not merged to `dev`,
-`staging`, or `main` yet. `public/style.css` was removed on this branch (dead —
-nothing references it once the redesign uses inline `<style>` per page, same
-convention as the maintenance page). `functions/index.js`'s Markdown-negotiation
-stand-in was updated to match the new homepage copy.
+`public/index.html`, `public/services.html`, `public/contact.html`. It's
+merged into **`dev`** (built on `feature/homepage-redesign`, which still
+exists but is no longer where changes should land — edit `dev` directly now).
+Not yet promoted to `staging` or `main`. `public/style.css` was removed
+(dead — nothing references it once the redesign uses inline `<style>` per
+page, same convention as the maintenance page). `functions/index.js`'s
+Markdown-negotiation stand-in was updated to match the new homepage copy.
 
 The Claude Artifact versions (below) were the design/review draft that this was
 built from — the repo files are now the source of truth going forward, not the
 artifacts. Keep the artifacts around for reference/history, but **edit the real
-files on `feature/homepage-redesign` for any further changes**, not the artifacts.
+files on `dev` for any further changes**, not the artifacts.
 
 - **Homepage redesign artifact** (original draft, now superseded by the real
   files above) — https://claude.ai/artifact/Vj8Pvwbi5uY8SZEhKSFpxq
@@ -163,8 +164,9 @@ promotion flow the user specified:
          "policies": [{ "decision": "allow", "include": [{ "email": { "email": "michael.audette@audetteit.com" } }] }]
        }'
      ```
-- **`dev`** — created, pushed, currently at the same commit as `main`. Active
-  development branch.
+- **`dev`** — active development branch. Has diverged from `main`: carries the
+  merged-in homepage redesign (real `index.html`/`services.html`/`contact.html`,
+  not just the maintenance page). Not yet promoted to `staging` or `main`.
 - **Feature branches** — branch off `dev`, merge back into `dev`.
 - **Local dev hosting** — the user is setting this up themselves to avoid
   burning Cloudflare build minutes on every feature-branch push (e.g.
