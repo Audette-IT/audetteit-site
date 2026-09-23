@@ -9,7 +9,7 @@ Every page on this site has a Markdown version. Append `.md` to the page path, o
 - [Home](https://audetteit.com/index.md): What Audette IT is, the two service tiers, and the four-stage process
 - [Services](https://audetteit.com/services.md): Full list of everyday and infrastructure services
 - [Contact](https://audetteit.com/contact.md): Email address and how the contact form works
-- [Privacy](https://audetteit.com/privacy.md): What the site collects: contact form, opt-in Google Analytics, hosting
+- [Privacy](https://audetteit.com/privacy.md): What the site collects: contact form, opt-in Google Analytics and Microsoft Clarity, hosting
 
 ## Docs
 
