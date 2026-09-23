@@ -112,6 +112,38 @@ redoing any design or issue-tracking work** — don't regenerate from scratch.
     open/closed GitHub state (never invent a "Done" status without actually
     closing the issue).
 
+## Branch structure
+
+Feature branch(es) &rarr; `dev` &rarr; `staging` &rarr; `main`, matching the
+promotion flow the user specified:
+- **`main`** — production, protected. Should be locked down with GitHub branch
+  protection (require PRs, no direct pushes) — **not yet configured**: the GitHub
+  App lacks the "Administration" permission needed to set this via API (same
+  `403 Resource not accessible by integration` pattern as the Issues permission
+  originally did). Either grant that permission the same way Issues was granted,
+  or the user sets it manually in GitHub Settings &rarr; Branches. Recommended
+  rule: require PR before merging, require status checks once CI exists (#32),
+  don't allow bypassing even for admins.
+- **`staging`** — created, pushed, currently at the same commit as `main`. Meant
+  to get a Cloudflare Pages preview deployment (git-connected Pages projects
+  auto-preview every non-production branch). If a **stable** staging URL is
+  wanted instead of a per-commit hash, that needs a custom domain alias
+  (e.g. `staging.audetteit.com`) set up in the Cloudflare dashboard — not
+  something available via the Cloudflare tools in this session (scoped to
+  D1/R2/KV/Workers-code/Hyperdrive, not Pages project/build settings).
+- **`dev`** — created, pushed, currently at the same commit as `main`. Active
+  development branch.
+- **Feature branches** — branch off `dev`, merge back into `dev`.
+- **Local dev hosting** — the user is setting this up themselves to avoid
+  burning Cloudflare build minutes on every feature-branch push (e.g.
+  `npx wrangler pages dev public/`, or any static file server — this is plain
+  HTML/CSS/JS plus one Pages Function in `functions/`, no build step needed).
+
+**Cloudflare project settings still need manual verification in the dashboard**
+(none of this is scriptable from here): confirm **Production branch** is `main`,
+confirm `staging` actually produces a preview deployment once something is
+pushed to it, and decide on a custom domain alias for staging if wanted.
+
 ## Open questions for the user (don't guess these)
 
 - Whether/when to build the self-hosted help desk (issue #44 — standing reminder,
