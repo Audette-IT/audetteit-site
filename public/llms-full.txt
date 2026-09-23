@@ -1,0 +1,26 @@
+# Audette IT — full site content
+
+> Everything on audetteit.com in one file, for AI agents and anyone who wants plain text. The site is currently a single maintenance page; the HTML page is the canonical version.
+
+## How this site serves Markdown
+
+- The homepage has a Markdown twin at `/index.md`.
+- Requesting `/` with `Accept: text/markdown` returns the same Markdown with `Content-Type: text/markdown`. Those responses send `Vary: Accept` and a `Link: <https://audetteit.com/>; rel="canonical"` header.
+- Index: https://audetteit.com/llms.txt
+- XML sitemap: https://audetteit.com/sitemap.xml
+
+---
+
+Source: https://audetteit.com/
+
+## Audette IT
+
+> Personal IT help for family and friends, from everyday fixes to real network and Active Directory work. Not a registered business.
+
+### We'll be right back
+
+Audette IT is currently undergoing scheduled maintenance while we work on some improvements. Thanks for your patience.
+
+Status: maintenance in progress.
+
+Contact: michael.audette@audetteit.com

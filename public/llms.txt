@@ -1,0 +1,14 @@
+# Audette IT
+
+> Personal IT help for family and friends, run by one person: everyday troubleshooting plus real infrastructure work (network design, Active Directory, self-hosted services, security hardening). Not a registered business. The site is currently under maintenance. Contact: michael.audette@audetteit.com
+
+The homepage has a Markdown version at `/index.md`, or request `/` with an `Accept: text/markdown` header.
+
+## Pages
+
+- [Home](https://audetteit.com/index.md): Maintenance notice (the full site is being rebuilt)
+
+## Docs
+
+- [Full site content](https://audetteit.com/llms-full.txt): Everything on the site in one Markdown file, plus how it serves Markdown
+- [Sitemap](https://audetteit.com/sitemap.xml): XML sitemap
