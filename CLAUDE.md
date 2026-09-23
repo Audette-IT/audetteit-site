@@ -96,9 +96,12 @@ Copy should read as one capable person, not a company.
     with Search Console and a link-preview debugger in a few days (indexing
     lag), then close it. Don't close it before that.
   - #32 CI: the workflow is registered and active, but GitHub Actions has
-    **never run it** (0 runs across every push and PR #46–#55). Actions is
-    likely disabled or restricted at repo/org level (permissions API → 403
-    here). The owner needs Settings → Actions → General → allow actions.
+    **never run it**. After the owner enabled Actions in repo settings, a push
+    still produced no run, and a direct `workflow_dispatch` via the API
+    returned **"Actions has been disabled for this user."** That's an
+    account/org-level block (billing/payment issue or GitHub restricting a new
+    account), not the repo toggle. The owner needs to check the Audette-IT org
+    Actions policy and billing, or contact GitHub Support.
   - #39 asset rights: owner must confirm rights to the shield logo, then update
     `ASSETS.md`.
   - #43 Markdown for Agents: Pro-plan feature; the Worker stand-in covers
@@ -262,7 +265,7 @@ files on `dev` for any further changes**, not the artifacts.
   from either CSP. A GTM "Custom HTML" tag would be blocked by the CSP, so
   stick to built-in tag types.
 - **Cloudflare Google Tag Gateway: ON (owner wants it), allowed by CSP
-  hashes.** Cloudflare injects two fixed inline scripts at the very top of
+  hashes (PR #57, live 2026-09-23 21:32 UTC).** Cloudflare injects two fixed inline scripts at the very top of
   every page's `<head>`, *after* the Worker runs (the Worker can't remove or
   reorder them, and there's no per-path exclusion): one pushes `GTM-TKBJX8F5`
   into `window.google_tags_first_party`; the other pushes
@@ -354,7 +357,8 @@ promotion flow the user specified:
   `release/main-markdown` (PR #46), `docs/main-after-46` (PR #47), `launch`
   (PR #49), `release/analytics-www` (PR #50), `docs/after-50` (PR #51),
   `release/gtm-advanced` (PR #52), `docs/after-52` (PR #53),
-  `docs/www-live` (PR #54), `release/clarity` (PR #55), `docs/after-55`. `feature/homepage-redesign` and
+  `docs/www-live` (PR #54), `release/clarity` (PR #55), `docs/after-55`
+  (PR #56), `release/tag-gateway` (PR #57), `docs/after-57`. `feature/homepage-redesign` and
   the two `cloudflare/workers-autoconfig*` branches are also stale.
 - **`release/main-markdown`** — merged into `main` via PR #46 (Markdown for
   the maintenance page, `favicon.ico`, first real `wrangler.jsonc` on
