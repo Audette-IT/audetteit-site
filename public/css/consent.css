@@ -1,0 +1,29 @@
+/* Cookie consent banner + footer "cookie settings" button.
+   Uses the page's own color tokens (--surface, --line, --signal, ...). */
+.consent {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding-block: 14px;
+}
+.consent[hidden] { display: none; }
+.consent:focus { outline: none; }
+.consent:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
+.consent-inner {
+  max-width: 1120px; margin: 0 auto; padding-inline: 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px 24px;
+  flex-wrap: wrap;
+}
+.consent-text { margin: 0; font-size: 0.9rem; color: var(--text); flex: 1 1 320px; line-height: 1.5; }
+.consent-tag {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--signal);
+  border: 1px solid var(--line); border-radius: 2px; padding: 2px 6px; margin-right: 6px;
+}
+.consent-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.consent-actions .btn { min-height: 44px; }
+
+.linklike {
+  background: none; border: 0; padding: 0; margin: 0; cursor: pointer;
+  font: inherit; color: inherit;
+}
+.linklike:hover { color: var(--signal); }

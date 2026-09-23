@@ -91,10 +91,11 @@ Copy should read as one capable person, not a company.
     unreachable from these sessions).
   - #32 CI: workflow is on every branch including `main` now, but GitHub
     Actions has never run it (see "Branch structure"), so it's still unproven.
-  - #30 analytics: needs the owner to choose; recommended Cloudflare Web
-    Analytics (cookieless). Enabling it needs the CSP in both `public/_headers`
-    and `worker/index.js` updated in the same change.
-  - #38 cookie banner: unnecessary while the site sets no cookies.
+  - #30 analytics + #38 cookie banner: the owner chose **Google Analytics via
+    Google Tag Manager (container `GTM-TKBJX8F5`) with a consent banner**
+    (2026-09-23). Built on `dev` and promoted to `staging`; not on `main` until
+    the owner approves. Close both once it's live and the owner confirms GA4
+    receives data.
   - #39 asset rights: owner must confirm rights to the shield logo, then update
     `ASSETS.md`.
   - #43 Markdown for Agents: Pro-plan feature; the Worker stand-in now covers
@@ -201,9 +202,27 @@ files on `dev` for any further changes**, not the artifacts.
   honeypot field, then opens the visitor's email app via `mailto:` pre-filled to
   `michael.audette@audetteit.com`. Honest about that on the page. A real
   server-side send would need an email API + secret (not available here).
-- **`public/privacy.html`** — short plain-language note (#27). States there's no
-  analytics and no cookies — **if analytics (#30) or any cookie-setting embed is
-  ever added, update this page first.** Also discloses Google Fonts + Cloudflare.
+- **`public/privacy.html`** — short plain-language note (#27). Discloses the
+  opt-in Google Analytics/Tag Manager setup, its `_ga` cookies, the
+  localStorage consent record, Google Fonts, and Cloudflare. **Any new
+  tracking or cookie-setting embed must be added here (and to `privacy.md`)
+  in the same change.**
+- **Google Tag Manager + cookie consent (#30, #38)** — `public/js/consent.js`
+  is the first script in every page's `<head>`. It sets Google Consent Mode
+  defaults to all-denied and **only injects GTM (`GTM-TKBJX8F5`) after the
+  visitor clicks Accept**. Nothing from Google loads before that. The choice
+  lives in localStorage key `audetteit-consent` (`granted`/`denied`). The
+  banner is built by the script, styled by `public/css/consent.css`, and
+  reopened by the footer "cookie settings" button (`data-cookie-settings`).
+  Declining after accepting sets consent to denied, clears `_ga*` cookies, and
+  reloads the page. Google's `<noscript>` iframe snippet was **deliberately
+  left out**: it would load GTM without consent (and GA4 doesn't run without
+  JS anyway). GA4 itself is configured inside the GTM container, not in the
+  repo. CSP allows `https://*.googletagmanager.com` (script/img/connect) and
+  `https://*.google-analytics.com`, `https://*.analytics.google.com`
+  (img/connect), in **both** `public/_headers` and `worker/index.js`. A GTM
+  "Custom HTML" tag would be blocked by the CSP (no `'unsafe-inline'`); stick
+  to built-in tag types.
 - **`public/site.webmanifest`** — icons for home-screen shortcuts (#34).
 - **`public/favicon.ico`** — at the site root because Google Search (and
   browsers that ignore `<link>` tags) request `/favicon.ico` directly. Holds
