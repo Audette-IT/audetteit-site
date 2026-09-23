@@ -101,8 +101,8 @@ Copy should read as one capable person, not a company.
   - #43 Markdown for Agents: Pro-plan feature; the Worker stand-in now covers
     every page, plus `.md` twins and `llms.txt`/`llms-full.txt`.
   - #44 self-hosted help desk: standing reminder.
-- The Issue Tracker artifact was re-synced from the API after these changes
-  (14 done / 7 in progress / 3 open).
+- The Issue Tracker artifact was last updated 2026-09-23 after the analytics
+  work (14 done / 9 in progress / 1 open; #30 and #38 moved to in progress).
 
 ## Design direction (already decided — don't restart from scratch)
 
