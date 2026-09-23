@@ -96,7 +96,7 @@ Copy should read as one capable person, not a company.
     Actions has never run it (see "Branch structure"), so it's still unproven.
   - #30 analytics + #38 cookie banner: the owner chose **Google Analytics via
     Google Tag Manager (container `GTM-TKBJX8F5`) with a consent banner**
-    (2026-09-23). **Live on `main` since 2026-09-23** (release PR from
+    (2026-09-23). **Live on `main` since 2026-09-23** (PR #50, merge commit `79a8741`, from
     `release/analytics-www`, approved by the owner: "you can skip and push it
     to main and the live site"). Close both once the owner confirms GA4
     receives data.
@@ -305,6 +305,11 @@ promotion flow the user specified:
          "policies": [{ "decision": "allow", "include": [{ "email": { "email": "michael.audette@audetteit.com" } }] }]
        }'
      ```
+- **Finished branches to delete** (all merged; the git proxy here returns 403
+  on branch deletes, so the owner deletes them in GitHub → Branches):
+  `release/main-markdown` (PR #46), `docs/main-after-46` (PR #47), `launch`
+  (PR #49), `release/analytics-www` (PR #50). `feature/homepage-redesign` and
+  the two `cloudflare/workers-autoconfig*` branches are also stale.
 - **`release/main-markdown`** — merged into `main` via PR #46 (Markdown for
   the maintenance page, `favicon.ico`, first real `wrangler.jsonc` on
   production). Superseded by the launch. The user asked to delete it, but the
