@@ -30,7 +30,9 @@ Copy should read as one capable person, not a company.
   (not classic Pages — migrated off Vercel; Vercel is irrelevant now, don't touch
   that connector). Deploys come from Workers Builds on git push.
 - **Live site (`main`):** currently a single maintenance page (`public/index.html`)
-  — dark theme, brand blue accent, "We'll be right back" notice. This is
+  — dark theme, brand blue accent, "We'll be right back" notice. Since
+  2026-09-23 it also serves Markdown (`/index.md`, `Accept: text/markdown` on
+  `/`), `llms.txt`, `llms-full.txt`, and `/favicon.ico`. This is
   intentional; the real multi-page redesign is on **`dev`** and was promoted to
   **`staging`** (for a Cloudflare preview), but has **not** been promoted to
   `main` yet — don't confuse branches when checking what's actually live vs. in
@@ -43,8 +45,9 @@ Copy should read as one capable person, not a company.
   static assets") — so it has **never run**. Earlier notes/tracker entries that
   called the Markdown-for-Agents stand-in "live" were wrong; it was never
   verified (outbound network to audetteit.com is blocked from these sessions).
-  It's fixed properly on `dev` (see "Site architecture" below) and becomes real
-  once `dev` is promoted.
+  `functions/` was removed from `main` on 2026-09-23 and replaced with a real
+  Worker (`wrangler.jsonc` + `worker/index.js`). Deployed, but not verified
+  live from here (outbound requests to audetteit.com are blocked).
 - `public/robots.txt` and `public/sitemap.xml` are live.
 - Logo/favicons were recropped tight to the actual shield glyph (`public/assets/
   logo-mark.png`, `favicon-32.png`, `favicon-16.png`, `apple-touch-icon.png`,
@@ -260,16 +263,15 @@ promotion flow the user specified:
          "policies": [{ "decision": "allow", "include": [{ "email": { "email": "michael.audette@audetteit.com" } }] }]
        }'
      ```
-- **`release/main-markdown`** — prepared for `main`, **not merged; waiting
-  on the user's approval.** It's `main` (maintenance page) plus Markdown for
-  agents, so production also gets it in the meantime: `wrangler.jsonc` +
-  `worker/index.js` (Markdown on `/` via `Accept: text/markdown`),
-  `public/index.md`, `llms.txt`, `llms-full.txt`, sitemap `lastmod`, and the
-  dead `functions/index.js` removed. No security headers/CSP on this branch
-  (kept to what was asked). Adds a real `wrangler.jsonc` to production for the
-  first time, so check that the `staging` preview build (same config style)
-  succeeds before merging. Once it's in, push `main` and
-  `claude/stoic-gates-w5906b` too.
+- **`release/main-markdown`** — **merged into `main` on 2026-09-23 with the
+  user's approval** (fast-forward). Production is still the maintenance page,
+  now with: `wrangler.jsonc` + `worker/index.js` (Markdown on `/` via
+  `Accept: text/markdown`), `public/index.md`, `llms.txt`, `llms-full.txt`,
+  sitemap `lastmod`, `/favicon.ico` (for Google Search), and the dead
+  `functions/index.js` removed. No security headers/CSP on `main` yet (those
+  arrive when `staging` is promoted). This was the first real `wrangler.jsonc`
+  on production. If the Cloudflare production build fails, check the build
+  log first. The branch can be deleted once the deploy is confirmed.
 - **`dev`** — active development branch. Has diverged from `main`: carries the
   merged-in homepage redesign (real `index.html`/`services.html`/`contact.html`,
   not just the maintenance page). Promoted to `staging`; not yet to `main`.
