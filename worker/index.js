@@ -1,12 +1,12 @@
-// Runs only for "/" (see assets.run_worker_first in wrangler.jsonc); every
-// other path is served straight from public/ as a static asset.
+// Runs only for the HTML page routes listed in assets.run_worker_first
+// (wrangler.jsonc); everything else is served straight from public/.
 //
-// Serves a Markdown version of the homepage to clients that ask for it with
-// `Accept: text/markdown` — a free-tier stand-in for Cloudflare's paid
-// "Markdown for Agents" zone feature (GitHub issue #43).
+// Clients that send `Accept: text/markdown` get the page's Markdown twin
+// (public/<page>.md) instead of the HTML — a free-tier stand-in for
+// Cloudflare's paid "Markdown for Agents" zone feature (GitHub issue #43).
 
 // public/_headers is NOT applied to responses that pass through Worker code,
-// so "/" sets these itself. Keep in sync with the "/*" block in public/_headers.
+// so these are set here. Keep in sync with the "/*" block in public/_headers.
 const SECURITY_HEADERS = {
   "Content-Security-Policy":
     "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; connect-src 'self'; manifest-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests",
@@ -17,29 +17,26 @@ const SECURITY_HEADERS = {
   "Strict-Transport-Security": "max-age=31536000",
 };
 
-const MARKDOWN = `# Audette IT
-
-Uptime isn't luck. It's a system someone is actually watching.
-
-Audette IT is one person who knows what they're doing — from forgotten passwords to full network and Active Directory builds, for family and friends who'd rather not guess.
-
-## Coverage
-
-- **Everyday help** — wifi and device troubleshooting, slow computers, printers, locked-out accounts, parental controls on the kids' devices.
-- **Infrastructure & advanced** — home network design, Active Directory and domain setups, self-hosted services, real security hardening.
-
-See [services](/services) for the full list, or [contact](/contact) to get in touch.
-`;
+// Page path -> Markdown twin. Must match run_worker_first in wrangler.jsonc.
+const MARKDOWN_PAGES = {
+  "/": "/index.md",
+  "/services": "/services.md",
+  "/contact": "/contact.md",
+  "/privacy": "/privacy.md",
+};
 
 export default {
   async fetch(request, env) {
-    const accept = request.headers.get("Accept") || "";
+    const url = new URL(request.url);
+    const mdPath = MARKDOWN_PAGES[url.pathname];
+    const wantsMarkdown = (request.headers.get("Accept") || "").includes("text/markdown");
 
     let response;
-    if (accept.includes("text/markdown")) {
-      response = new Response(MARKDOWN, {
-        headers: { "Content-Type": "text/markdown; charset=utf-8" },
-      });
+    if (mdPath && wantsMarkdown) {
+      const md = await env.ASSETS.fetch(new URL(mdPath, url));
+      response = new Response(md.body, { status: md.status });
+      response.headers.set("Content-Type", "text/markdown; charset=utf-8");
+      response.headers.set("Link", `<https://audetteit.com${url.pathname}>; rel="canonical"`);
     } else {
       const asset = await env.ASSETS.fetch(request);
       response = new Response(asset.body, asset);

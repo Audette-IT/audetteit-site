@@ -1,0 +1,17 @@
+# Audette IT
+
+> Personal IT help for family and friends, run by one person: everyday troubleshooting (wifi, slow computers, printers, accounts, parental controls) plus real infrastructure work (network design, Active Directory, self-hosted services, security hardening). Not a registered business. Contact: michael.audette@audetteit.com
+
+Every page on this site has a Markdown version. Append `.md` to the page path, or request the normal URL with an `Accept: text/markdown` header.
+
+## Pages
+
+- [Home](https://audetteit.com/index.md): What Audette IT is, the two service tiers, and the four-stage process
+- [Services](https://audetteit.com/services.md): Full list of everyday and infrastructure services
+- [Contact](https://audetteit.com/contact.md): Email address and how the contact form works
+- [Privacy](https://audetteit.com/privacy.md): What the site collects (very little: no analytics, no cookies)
+
+## Docs
+
+- [Full site content](https://audetteit.com/llms-full.txt): Every page in one Markdown file, plus how this site serves Markdown
+- [Sitemap](https://audetteit.com/sitemap.xml): XML sitemap of the HTML pages
