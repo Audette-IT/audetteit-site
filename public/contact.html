@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Audette IT</title>
+<title>Contact | Audette IT</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Audette IT — personal IT help for family and friends, from everyday troubleshooting to real network and Active Directory infrastructure.">
+<meta name="description" content="Get in touch with Audette IT.">
 <style>
   :root {
     --bg: #F1F3F5;
@@ -273,9 +273,9 @@
       <span class="word">AUDETTE_IT</span>
     </a>
     <nav class="nav-links">
-      <a href="index.html" class="active" aria-current="page">home</a>
+      <a href="index.html">home</a>
       <a href="services.html">services</a>
-      <a href="contact.html">contact</a>
+      <a href="contact.html" class="active" aria-current="page">contact</a>
     </nav>
     <div class="nav-cta">
       <a class="btn btn-primary" href="contact.html">Contact us</a>
@@ -286,77 +286,32 @@
   </div>
 </header>
 <main id="top">
-  <section class="hero">
-    <div class="wrap hero-grid">
+  <section class="hero" style="border-bottom:1px solid var(--line);">
+    <div class="wrap" style="padding-block: 52px 44px;">
+      <span class="eyebrow"><span class="dot"></span>Contact</span>
+      <h1 style="max-width: 24ch; font-size: clamp(1.6rem, 3vw, 2.1rem);">Tell me what you're running</h1>
+      <p class="lede" style="margin-bottom:0;">A quick fix, an ongoing setup, or something more involved &mdash; send the details and I'll follow up.</p>
+    </div>
+  </section>
+
+  <section id="contact-main">
+    <div class="wrap contact-grid">
       <div>
-        <span class="eyebrow"><span class="dot"></span>Audette IT &middot; Personal &amp; Home Infrastructure</span>
-        <h1>Uptime isn't luck. <span class="signal">It's a system someone is actually watching.</span></h1>
-        <p class="lede">Audette IT is one person who knows what they're doing &mdash; from forgotten passwords to full network and Active Directory builds, for family and friends who'd rather not guess.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="contact.html">Contact us</a>
-          <a class="btn btn-ghost" href="services.html">See what I do</a>
+        <div class="contact-info">
+          <div class="contact-row"><span class="label">Email</span><span class="value">michael.audette@audetteit.com</span></div>
         </div>
       </div>
-      <div class="console">
-        <div class="console-head"><span>// self-hosted status &mdash; in progress</span><span>example</span></div>
-        <div class="console-body">
-          <div class="log-row"><span class="ts">09:14:02</span><span class="tag ok">OK</span><span class="msg">endpoint-fleet <span class="v">patched</span></span></div>
-          <div class="log-row"><span class="ts">09:14:02</span><span class="tag ok">OK</span><span class="msg">network-monitor <span class="v">online</span></span></div>
-          <div class="log-row"><span class="ts">09:12:47</span><span class="tag warn">WARN</span><span class="msg">cert-renewal <span class="v">12d left</span></span></div>
-          <div class="log-row"><span class="ts">09:10:03</span><span class="tag ok">OK</span><span class="msg">backup-verify <span class="v">passed</span></span></div>
-          <div class="log-row"><span class="ts">09:08:55</span><span class="tag ok">OK</span><span class="msg">firewall-ruleset <span class="v">synced</span></span></div>
-          <div class="cursor mono"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="coverage">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="section-eyebrow">// 01 &mdash; coverage</span>
-        <h2>Two speeds: everyday help, and the deep stuff</h2>
-        <p>Most requests are a quick fix. Some need a network redesign. Both get the same attention &mdash; and unlike most family tech support, the second kind is actually on the table.</p>
-      </div>
-      <div class="manifest">
-        <div class="manifest-row">
-          <span class="name">EVERYDAY HELP</span>
-          <span class="desc">Wifi and device troubleshooting, slow computers, printers, locked-out accounts, parental controls on the kids' devices.</span>
-          <span class="status">QUICK</span>
-        </div>
-        <div class="manifest-row">
-          <span class="name">INFRASTRUCTURE &amp; ADVANCED</span>
-          <span class="desc">Home network design, Active Directory and domain setups, self-hosted services, real security hardening.</span>
-          <span class="status">DEEP</span>
-        </div>
-      </div>
-      <p style="margin-top:18px;"><a href="services.html" class="mono" style="color:var(--signal); font-size:0.88rem;">See the full list &rarr;</a></p>
-    </div>
-  </section>
-
-  <section id="process">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="section-eyebrow">// 02 &mdash; process</span>
-        <h2>The same four stages, every time</h2>
-        <p>Whether it's setting something up for the first time or fixing something that broke tonight.</p>
-      </div>
-      <div class="pipeline">
-        <div class="pipe-step"><div class="pipe-line"></div><div class="pipe-node mono">01</div><h3>Assess</h3><p>Figure out what's actually going on before changing anything.</p></div>
-        <div class="pipe-step"><div class="pipe-line"></div><div class="pipe-node mono">02</div><h3>Deploy</h3><p>Roll out the fix or setup in a way that doesn't break what's already working.</p></div>
-        <div class="pipe-step"><div class="pipe-line"></div><div class="pipe-node mono">03</div><h3>Monitor</h3><p>Keep an eye on it afterward instead of disappearing once it's "done."</p></div>
-        <div class="pipe-step"><div class="pipe-node mono">04</div><h3>Respond</h3><p>If it acts up again, it gets triaged and fixed &mdash; same process, no starting over.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact-teaser">
-    <div class="wrap" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;">
-      <div>
-        <span class="section-eyebrow">// 03 &mdash; contact</span>
-        <h2 style="font-size:1.3rem;">Something acting up, or planning something new?</h2>
-      </div>
-      <a class="btn btn-primary" href="contact.html">Contact us</a>
+      <form class="contact-form" onsubmit="return false;">
+        <div class="field"><label for="name">Name</label><input id="name" type="text" placeholder="Jane Smith"></div>
+        <div class="field"><label for="email">Email</label><input id="email" type="email" placeholder="jane@company.com"></div>
+        <div class="field"><label for="message">What's going on?</label><textarea id="message" rows="4" placeholder="Tell me about your setup and what you need."></textarea></div>
+        <label class="consent-row">
+          <input type="checkbox">
+          <span>I'm okay with this info being used to follow up with me. <span class="mono">[placeholder: privacy link]</span></span>
+        </label>
+        <button class="btn btn-primary" type="submit" style="justify-content:center;">Send message</button>
+        <span class="form-note">[placeholder: not wired to a backend yet &mdash; tracked in issue #24]</span>
+      </form>
     </div>
   </section>
 </main>

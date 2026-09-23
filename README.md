@@ -4,9 +4,10 @@ Personal IT help for family and friends — everything from everyday
 troubleshooting to real network and Active Directory infrastructure work.
 Not a registered business.
 
-**Branch:** `dev` — integration branch for active development. Feature
-branches merge in here before being promoted to `staging` and eventually
-`main`. See `CLAUDE.md` for full project context.
+**Branch:** `dev` — integration branch for active development. The
+homepage/services/contact redesign is merged here. Not yet promoted to
+`staging` or `main` (which still shows the maintenance page). See
+`CLAUDE.md` for full project context.
 
 ## Branch flow
 
@@ -20,17 +21,13 @@ feature/*  →  dev  →  staging  →  main
 - `dev` — this branch. Integrates finished feature work before promotion.
 - `feature/*` — one branch per unit of work, merged back into `dev`.
 
-## Current status
-
-The homepage/services/contact redesign is implemented and ready for review on
-`feature/homepage-redesign`, but **not yet merged into `dev`**. Check that
-branch (or `CLAUDE.md`) for the latest work-in-progress state.
-
 ## Structure
 
 ```
 /public
-  index.html      # Currently the maintenance page (mirrors main)
+  index.html      # Home
+  services.html   # Everyday help + infrastructure/advanced capabilities
+  contact.html    # Contact form + real contact info
   robots.txt
   sitemap.xml
   /assets         # Logo, favicons
@@ -40,3 +37,16 @@ branch (or `CLAUDE.md`) for the latest work-in-progress state.
 ```
 
 No build step — plain static HTML/CSS/JS, deployed via Cloudflare Pages.
+
+## Design direction
+
+An "ops console" visual language (IBM Plex Mono headlines, sharp corners,
+hairline borders, one sparing signal-blue accent) instead of a generic
+SaaS-template look. See `CLAUDE.md` for the reasoning and sources.
+
+## Status
+
+Not yet promoted to `staging` or `main` (both still show the maintenance
+page). Placeholders still open: real business/service list still being
+built out (see `services.html`), contact form not wired to a backend yet
+(tracked as GitHub issue #24).

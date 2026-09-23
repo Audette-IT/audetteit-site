@@ -28,9 +28,11 @@ Copy should read as one capable person, not a company.
 
 - **Hosting:** Cloudflare Pages (migrated off Vercel — Vercel is no longer relevant to
   this project at all; don't touch the Vercel connector for this repo).
-- **Live site:** currently a single maintenance page (`public/index.html`) — dark
-  theme, brand blue accent, "We'll be right back" notice. This is intentional; the
-  real multi-page redesign has **not** been pushed live yet, only drafted (see below).
+- **Live site (`main`):** currently a single maintenance page (`public/index.html`)
+  — dark theme, brand blue accent, "We'll be right back" notice. This is
+  intentional; the real multi-page redesign lives on `feature/homepage-redesign`
+  (see below) and has **not** been merged into `main`, `staging`, or `dev` yet —
+  don't confuse branches when checking what's actually live vs. in progress.
 - **Repo:** `Audette-IT/audetteit-site` on GitHub, default branch `main`.
 - `functions/index.js` — a Cloudflare Pages Function that serves a Markdown version
   of the homepage when a request sends `Accept: text/markdown` (a free-tier stand-in
@@ -87,26 +89,33 @@ design work): the `funboy322/avoid-ai-design` checklist, Vercel's
 `web-interface-guidelines` repo, and the "Anti-Slop Framework" article — search
 history has the exact URLs if needed again.
 
-## Live drafts (not yet merged into the repo)
+## Homepage redesign — now real files, not just an artifact
 
-Two Claude Artifacts hold the current work-in-progress. **Read these before
-redoing any design or issue-tracking work** — don't regenerate from scratch.
+The redesign (Home / Services / Contact) is implemented for real as
+`public/index.html`, `public/services.html`, `public/contact.html` on branch
+**`feature/homepage-redesign`** (branched off `dev`) — not merged to `dev`,
+`staging`, or `main` yet. `public/style.css` was removed on this branch (dead —
+nothing references it once the redesign uses inline `<style>` per page, same
+convention as the maintenance page). `functions/index.js`'s Markdown-negotiation
+stand-in was updated to match the new homepage copy.
 
-- **Homepage redesign** (multi-page: Home / Services / Contact) —
-  https://claude.ai/artifact/Vj8Pvwbi5uY8SZEhKSFpxq
-  - Real nav between actual pages, not anchor scrolling.
+The Claude Artifact versions (below) were the design/review draft that this was
+built from — the repo files are now the source of truth going forward, not the
+artifacts. Keep the artifacts around for reference/history, but **edit the real
+files on `feature/homepage-redesign` for any further changes**, not the artifacts.
+
+- **Homepage redesign artifact** (original draft, now superseded by the real
+  files above) — https://claude.ai/artifact/Vj8Pvwbi5uY8SZEhKSFpxq
   - Services split into two honest tiers: **Everyday help** (wifi, slow computers,
     printers, accounts, parental controls) and **Infrastructure & advanced**
     (network design, Active Directory/domains, self-hosted services, security
-    hardening).
-  - Contact page shows the real email (`michael.audette@audetteit.com`) only.
-    Phone, city, and the footer "run by ___" name were all removed rather than
-    left as placeholders — the user asked for the email filled in and everything
-    else stripped, not left dangling. Re-add phone/city/footer name only if the
-    user actually asks to include them.
+    hardening) — same split carried into the real files.
+  - Contact page shows the real email (`michael.audette@audetteit.com`) only —
+    phone, city, and the footer "run by ___" name were deliberately removed,
+    not left as placeholders. Re-add only if the user actually asks.
   - Not wired to a backend yet (contact form) — that's issue #24.
-- **Issue tracker** —
-  https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy
+- **Issue tracker artifact** (still the canonical live source — this one is NOT
+  superseded, keep using it) — https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy
   - Every issue's full body is the exact GitHub text (verified byte-for-byte),
     grouped by area, expandable, with status pills strictly tied to actual
     open/closed GitHub state (never invent a "Done" status without actually
