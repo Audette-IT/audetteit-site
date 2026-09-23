@@ -2,7 +2,9 @@
 <html lang="en">
 
 <head>
-    <link rel="icon" type="image/png" href="assets/faviconlogo.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audette IT | Site Maintenance</title>
@@ -47,23 +49,19 @@
         }
 
         .logo-crop {
-            width: 64px;
-            height: 64px;
-            overflow: hidden;
-            border-radius: 8px;
+            width: 96px;
+            height: 96px;
             margin: 0 auto 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 24px rgba(0, 180, 255, 0.25);
+            filter: drop-shadow(0 0 20px rgba(0, 180, 255, 0.3));
         }
 
         .logo-crop img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            transform: scale(1.6);
-            transform-origin: center 40%;
+            object-fit: contain;
         }
 
         h1 {
@@ -119,7 +117,7 @@
 <body>
     <div class="maintenance-card">
         <div class="logo-crop">
-            <img src="assets/logo.jpg" alt="Audette IT Logo">
+            <img src="assets/logo.png" alt="Audette IT Logo">
         </div>
         <h1>We'll be right <span class="text-highlight">back</span></h1>
         <p>Audette IT is currently undergoing scheduled maintenance while we work on some improvements. Thanks for your patience.</p>
