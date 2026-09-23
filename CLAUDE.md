@@ -1,5 +1,17 @@
 # Audette IT site — context for Claude
 
+> **Maintenance rule — read this first:** This file is the standing source of truth
+> for project state. **Any agent (Claude or otherwise) that makes a meaningful
+> change to this repo must update this file in the same session as part of that
+> change** — not as a separate later cleanup. That includes: pushing code/content
+> to `main`, changing what's live vs. drafted, creating/closing/editing GitHub
+> issues, publishing or updating either Artifact linked below, resolving an open
+> question in the list below, or changing the design direction. Stale sections
+> (dead links, outdated status, resolved "open questions" left unresolved on paper)
+> are a bug — fix them in the same commit as the change that caused them, don't
+> defer it. If you're an agent reading this and about to make such a change,
+> plan the CLAUDE.md update as part of that change up front, not as an afterthought.
+
 ## What this actually is
 
 Audette IT is **personal/family IT help, not a licensed or registered business.** The
