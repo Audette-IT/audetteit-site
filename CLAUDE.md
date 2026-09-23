@@ -69,6 +69,26 @@ Copy should read as one capable person, not a company.
   **closed as not planned** — not applicable without a registered business.
 - #27 was simplified from "Privacy Policy + Terms of Service" to just a short
   informal privacy note.
+- **Build-out on `dev` (commit f113b4b) closed as completed:** #21, #22, #24,
+  #26, #27, #28, #29, #33, #35, #36, #40 (each has a closing comment on GitHub
+  saying what was done). #37 was already closed. The work is on `dev` only, not
+  live: closing an issue means the code is done, not deployed.
+- **Still open, and why** (each has a progress comment on GitHub):
+  - #23 copy: waiting on the owner's tone/voice review.
+  - #25 SEO, #31 headers, #34 icons: done on `dev`, left open only for the
+    post-launch check (link-preview debugger, header scanner, favicon checker).
+  - #32 CI: workflow exists on `dev` but hasn't run on GitHub yet (only runs
+    once it reaches a PR or `main`).
+  - #30 analytics: needs the owner to choose; recommended Cloudflare Web
+    Analytics (cookieless). Enabling it needs the CSP in both `public/_headers`
+    and `worker/index.js` updated in the same change.
+  - #38 cookie banner: unnecessary while the site sets no cookies.
+  - #39 asset rights: owner must confirm rights to the shield logo, then update
+    `ASSETS.md`.
+  - #43 Markdown for Agents: Pro-plan feature; the Worker stand-in covers `/`.
+  - #44 self-hosted help desk: standing reminder.
+- The Issue Tracker artifact was re-synced from the API after these changes
+  (14 done / 7 in progress / 3 open).
 
 ## Design direction (already decided — don't restart from scratch)
 
@@ -235,6 +255,13 @@ pushed to it, and decide on a custom domain alias for staging if wanted.
   no deadline) to replace the third-party Zammad widget at `help.audetteit.net`.
 - Full list of services beyond what's drafted — more will likely get added as
   they're built out (noted as a placeholder on the Services page).
+- Tone/voice sign-off on the rewritten copy (#23).
+- Whether to add analytics, and which tool (#30).
+- Confirming rights to the shield logo (#39).
+- When to promote `dev` → `staging` → `main` (main only with explicit approval).
+- Whether the old GitHub Pages workflow (`pages-build-deployment`, last run in
+  July) should be turned off in Settings → Pages. The site isn't served from
+  GitHub Pages anymore.
 
 ## Working conventions established this session
 
