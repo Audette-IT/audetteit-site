@@ -261,14 +261,29 @@ files on `dev` for any further changes**, not the artifacts.
   `scripts/check-links.py` (CI) fails when any inline script's hash is missing
   from either CSP. A GTM "Custom HTML" tag would be blocked by the CSP, so
   stick to built-in tag types.
-- **Cloudflare Google Tag Gateway must stay OFF.** It was found on
-  2026-09-23 injecting its own GTM loader and two inline scripts
-  (`google_tags_first_party`, a `/epez/` loader) at the top of every page,
-  before `consent.js`. That breaks the "consent defaults before GTM" order,
-  and its inline scripts have no CSP hash, so browsers block them anyway. The
-  owner was asked to turn it off (zone → Google tag gateway). If first-party
-  tag serving is ever wanted, set it up deliberately: turn off auto-inject,
-  add the gateway path to CSP, and keep `consent.js` first.
+- **Cloudflare Google Tag Gateway: ON (owner wants it), allowed by CSP
+  hashes.** Cloudflare injects two fixed inline scripts at the very top of
+  every page's `<head>`, *after* the Worker runs (the Worker can't remove or
+  reorder them, and there's no per-path exclusion): one pushes `GTM-TKBJX8F5`
+  into `window.google_tags_first_party`; the other pushes
+  `set developer_id.dY2E1Nz` and async-loads GTM first-party from `/epez/`
+  (same origin, so `'self'` covers it and its collection calls). Their CSP
+  hashes are `'sha256-L7128Ucn8Uz1AVKkbXZh64Cp6i4V2MW7KQbAv84MBq0='` and
+  `'sha256-l6WiYX1ug7tDF6hFBAEd08DFrf7YxBn+kEWIYJDSnLI='`, in both CSPs. They
+  were computed from the live injected text (2026-09-23) and verified by
+  simulating the injection in Chromium. **If Cloudflare ever changes the
+  injected text** (new measurement path, tag ID, or developer ID), those
+  hashes stop matching and browsers silently block the gateway. Re-scrape the
+  live page (Firecrawl `rawHtml`, `maxAge: 0`) and recompute them.
+  `check-links.py` can't catch this because the scripts aren't in the repo.
+  **Consent ordering:** the gateway's loader runs before `consent.js`, so GTM
+  could start before the "denied" defaults. The durable fix is inside GTM: a
+  consent-default tag on the **Consent Initialization – All Pages** trigger
+  that sets everything to denied (and reads the `audetteit-consent`
+  localStorage value to grant analytics for returning visitors who
+  accepted). GA4 and Clarity tags then wait on `analytics_storage`. The
+  owner sets this up in the GTM container, not the repo. Keep `consent.js`
+  either way, since it runs the banner and Clarity's consent API.
 - **`public/site.webmanifest`** — icons for home-screen shortcuts (#34).
 - **`public/favicon.ico`** — at the site root because Google Search (and
   browsers that ignore `<link>` tags) request `/favicon.ico` directly. Holds
