@@ -4,10 +4,9 @@ Personal IT help for family and friends — everything from everyday
 troubleshooting to real network and Active Directory infrastructure work.
 Not a registered business.
 
-**Branch:** `dev` — integration branch for active development. The
-homepage/services/contact redesign is merged here. Not yet promoted to
-`staging` or `main` (which still shows the maintenance page). See
-`CLAUDE.md` for full project context.
+**Branch:** `dev` — integration branch for active development. Everything
+here as of 2026-09-23 is live on `main` (PR #49). See `CLAUDE.md` for full
+project context.
 
 ## Branch flow
 
@@ -15,8 +14,8 @@ homepage/services/contact redesign is merged here. Not yet promoted to
 feature/*  →  dev  →  staging  →  main
 ```
 
-- `main` — production (the Cloudflare Worker deploys from here). Currently a
-  maintenance page while the full rewrite is in progress.
+- `main` — production (the Cloudflare Worker deploys from here). Live at
+  https://audetteit.com.
 - `staging` — pre-production, gets a Cloudflare Worker preview.
 - `dev` — this branch. Integrates finished feature work before promotion.
 - `feature/*` — one branch per unit of work, merged back into `dev`.
@@ -74,6 +73,5 @@ SaaS-template look. See `CLAUDE.md` for the reasoning and sources.
 
 ## Status
 
-Not yet promoted to `staging` or `main` (both still show the maintenance
-page). Still open: the service list will grow as more gets built out, and
-the logo's rights need confirming (`ASSETS.md`).
+Live since 2026-09-23. Still open: the service list will grow as more gets
+built out, and the logo's rights need confirming (`ASSETS.md`).
