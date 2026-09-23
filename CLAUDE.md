@@ -29,14 +29,16 @@ Copy should read as one capable person, not a company.
 - **Hosting:** a Cloudflare **Worker with static assets** named `audetteit-site`
   (not classic Pages — migrated off Vercel; Vercel is irrelevant now, don't touch
   that connector). Deploys come from Workers Builds on git push.
-- **Live site (`main`, last changed by PR #46):** currently a single maintenance page (`public/index.html`)
-  — dark theme, brand blue accent, "We'll be right back" notice. Since
-  2026-09-23 it also serves Markdown (`/index.md`, `Accept: text/markdown` on
-  `/`), `llms.txt`, `llms-full.txt`, and `/favicon.ico`. This is
-  intentional; the real multi-page redesign is on **`dev`** and was promoted to
-  **`staging`** (for a Cloudflare preview), but has **not** been promoted to
-  `main` yet — don't confuse branches when checking what's actually live vs. in
-  progress.
+- **Live site (`main`): the full redesign went live on 2026-09-23** — the
+  maintenance page is gone. Launched at the user's request ("we need everything
+  from stage to main and the site needs to go live no maintenance") by
+  promoting `staging` → `main` through a launch PR (branch `launch`: `staging`
+  plus `main` merged in with `-s ours`, plus a production README). Live pages:
+  Home, Services, Contact, Privacy, with Markdown twins, `llms.txt`,
+  `llms-full.txt`, security headers, sitemap, and `favicon.ico`. Not verified
+  from here: outbound requests to audetteit.com are blocked in these sessions,
+  so the owner should load the site once and check the Cloudflare production
+  build.
 - **Repo:** `Audette-IT/audetteit-site` on GitHub, default branch `main`.
 - **Correction (found this session):** `main` (and `staging`, before the
   promotion) contained `functions/index.js`,
@@ -46,9 +48,9 @@ Copy should read as one capable person, not a company.
   called the Markdown-for-Agents stand-in "live" were wrong; it was never
   verified (outbound network to audetteit.com is blocked from these sessions).
   `functions/` was removed from `main` on 2026-09-23 and replaced with a real
-  Worker (`wrangler.jsonc` + `worker/index.js`). Deployed, but not verified
-  live from here (outbound requests to audetteit.com are blocked).
-- `public/robots.txt` and `public/sitemap.xml` are live.
+  Worker (`wrangler.jsonc` + `worker/index.js`).
+- `public/robots.txt`, `public/sitemap.xml`, `llms.txt`, and `llms-full.txt`
+  are live.
 - Logo/favicons were recropped tight to the actual shield glyph (`public/assets/
   logo-mark.png`, `favicon-32.png`, `favicon-16.png`, `apple-touch-icon.png`,
   `faviconlogo.png`) — no more CSS `scale()`/`transform-origin` cropping hacks.
@@ -76,14 +78,16 @@ Copy should read as one capable person, not a company.
   informal privacy note.
 - **Build-out on `dev` (commit f113b4b) closed as completed:** #21, #22, #24,
   #26, #27, #28, #29, #33, #35, #36, #40 (each has a closing comment on GitHub
-  saying what was done). #37 was already closed. The work is on `dev` only, not
-  live: closing an issue means the code is done, not deployed.
+  saying what was done). #37 was already closed. All of it went live with the
+  2026-09-23 launch.
 - **Still open, and why** (each has a progress comment on GitHub):
   - #23 copy: waiting on the owner's tone/voice review.
-  - #25 SEO, #31 headers, #34 icons: done on `dev`, left open only for the
-    post-launch check (link-preview debugger, header scanner, favicon checker).
-  - #32 CI: workflow exists on `dev` but hasn't run on GitHub yet (only runs
-    once it reaches a PR or `main`).
+  - #25 SEO, #31 headers, #34 icons: live since the 2026-09-23 launch; left
+    open only for the post-launch check (link-preview debugger, header
+    scanner, favicon checker), which the owner has to run (audetteit.com is
+    unreachable from these sessions).
+  - #32 CI: workflow is on every branch including `main` now, but GitHub
+    Actions has never run it (see "Branch structure"), so it's still unproven.
   - #30 analytics: needs the owner to choose; recommended Cloudflare Web
     Analytics (cookieless). Enabling it needs the CSP in both `public/_headers`
     and `worker/index.js` updated in the same change.
@@ -130,7 +134,7 @@ history has the exact URLs if needed again.
 The redesign (Home / Services / Contact / Privacy) is implemented for real in
 `public/`. It's merged into **`dev`** (built on `feature/homepage-redesign`,
 which still exists but is no longer where changes should land — edit `dev`
-directly now). Promoted to `staging`; not yet to `main`.
+directly now). Live on `main` since the 2026-09-23 launch.
 
 The Claude Artifact versions (below) were the design/review draft that this was
 built from — the repo files are now the source of truth going forward, not the
@@ -155,7 +159,7 @@ files on `dev` for any further changes**, not the artifacts.
     open/closed GitHub state (never invent a "Done" status without actually
     closing the issue).
 
-## Site architecture (on `dev`)
+## Site architecture (live on `main`)
 
 - **`wrangler.jsonc`** — explicit Worker config (previously there was none, and
   Cloudflare auto-detected a static-assets-only setup). `assets.directory` is
@@ -201,8 +205,7 @@ files on `dev` for any further changes**, not the artifacts.
 - **`public/favicon.ico`** — at the site root because Google Search (and
   browsers that ignore `<link>` tags) request `/favicon.ico` directly. Holds
   16/32/48px generated from `logo-mark.png`; Google needs 48px or a multiple of
-  it. Linked first on every page with `sizes="48x48"`. Also on
-  `release/main-markdown` for the maintenance page.
+  it. Linked first on every page with `sizes="48x48"`.
 - **SEO** — canonical, Open Graph, Twitter card on every page; `WebSite` JSON-LD
   on the homepage only. Deliberately no `Person`/`Organization` schema — the
   user removed their name from the site, and it's not a registered business.
@@ -231,9 +234,9 @@ promotion flow the user specified:
   or the user sets it manually in GitHub Settings &rarr; Branches. Recommended
   rule: require PR before merging, require status checks once CI exists (#32),
   don't allow bypassing even for admins.
-- **`staging`** — has its own README. **`dev` was merged in** (the full site),
-  so a staging preview now shows the real redesign rather than the maintenance
-  page. The site is deployed as
+- **`staging`** — has its own README. Promoted to `main` on 2026-09-23
+  (launch). Next promotion: merge `dev` in, review the preview, then PR to
+  `main`. The site is deployed as
   a Cloudflare **Worker** named `audetteit-site` (account
   `b7a46df8571aa32900c3155b464416ab`, worker ID
   `c8969d22263a484bae64aa2436af8e93`) — not classic Pages — so it uses Workers
@@ -263,27 +266,19 @@ promotion flow the user specified:
          "policies": [{ "decision": "allow", "include": [{ "email": { "email": "michael.audette@audetteit.com" } }] }]
        }'
      ```
-- **`release/main-markdown`** — merged into `main` on 2026-09-23 by the user
-  through PR #46 (https://github.com/Audette-IT/audetteit-site/pull/46), merge
-  commit `d626514`. Production is still the maintenance page, now with:
-  `wrangler.jsonc` + `worker/index.js` (Markdown on `/` via
-  `Accept: text/markdown`), `public/index.md`, `llms.txt`, `llms-full.txt`,
-  sitemap `lastmod`, `/favicon.ico` (for Google Search), and the dead
-  `functions/index.js` removed. No security headers/CSP on `main` yet (those
-  arrive when `staging` is promoted). This was the first real `wrangler.jsonc`
-  on production; the Cloudflare production build result hasn't been checked
-  from here (no dashboard access). No GitHub checks ran on PR #46, because
-  `.github/workflows/ci.yml` only exists on `dev`/`staging` until they're
-  promoted. The branch has no more work to do and can be deleted.
+- **`release/main-markdown`** — merged into `main` via PR #46 (Markdown for
+  the maintenance page, `favicon.ico`, first real `wrangler.jsonc` on
+  production). Superseded by the launch. The user asked to delete it, but the
+  git proxy returns 403 on branch deletes and no GitHub tool here deletes
+  branches. The owner has to delete it (e.g. "Delete branch" on PR #46).
 - **PR #47** (CLAUDE.md docs update for `main`) — merged by Claude on
   2026-09-23 at the user's request ("merge 47"), merge commit `4c44fe2`. `main`'s
   CLAUDE.md matches `dev`'s as of that merge, minus this bullet.
 - **`claude/stoic-gates-w5906b`** (harness branch) — synced with `main` after
   PR #47 (merged `main` in, kept `main`'s README; files identical to `main` at
   `4c44fe2`). Re-sync it the same way whenever `main` changes.
-- **`dev`** — active development branch. Has diverged from `main`: carries the
-  merged-in homepage redesign (real `index.html`/`services.html`/`contact.html`,
-  not just the maintenance page). Promoted to `staging`; not yet to `main`.
+- **`dev`** — active development branch. Everything on it as of 2026-09-23 is
+  live. New work: feature branch → `dev` → `staging` → PR to `main`.
 - **Feature branches** — branch off `dev`, merge back into `dev`.
 - **Local dev hosting** — `npx wrangler dev` from the repo root runs the real
   Worker + assets exactly as deployed (the old `wrangler pages dev` advice was
@@ -298,13 +293,10 @@ the GitHub Pages workflow. Likely Actions is disabled or restricted for the
 repo (Settings → Actions → General); needs the user to check.
 
 **PR #48** (`dev` → `main`, opened from the Claude Code UI and mislabeled as
-"to staging") was **closed on 2026-09-23 at the user's request**. The launch
-will be a `staging` → `main` promotion later, not straight from `dev`. Before
-closing, `main` was merged into `dev` (keeping `dev`'s files, tree unchanged)
-to clear its merge conflict. `staging` hasn't had `main` merged in yet, so
-expect the same conflict at launch time. It resolves the same way:
-`git merge -s ours origin/main` on `staging`, since `main` only holds the
-maintenance-page versions.
+"to staging") was closed on 2026-09-23 at the user's request; launch went
+`staging` → `main` instead. When `main` has commits a branch lacks (merge
+commits, docs), `git merge -s ours origin/main` on that branch clears the
+conflict only if `main`'s side has nothing new. Check `git diff` first.
 
 **Cloudflare project settings still need manual verification in the dashboard**
 (none of this is scriptable from here): confirm **Production branch** is `main`,
@@ -320,9 +312,6 @@ pushed to it, and decide on a custom domain alias for staging if wanted.
 - Tone/voice sign-off on the rewritten copy (#23).
 - Whether to add analytics, and which tool (#30).
 - Confirming rights to the shield logo (#39).
-- When to launch: promote `staging` → `main` (only with explicit approval),
-  after reviewing the staging preview. Decided 2026-09-23 that launch goes from
-  `staging`, not a `dev` → `main` PR.
 - **GitHub Pages is publishing `staging`.** Its `pages-build-deployment`
   workflow ran on `staging` on 2026-09-23 (triggered by the `audetteit`
   account), so the Pages source appears to have been switched to `staging`.
@@ -338,9 +327,9 @@ pushed to it, and decide on a custom domain alias for staging if wanted.
   explicitly ask before running `git push origin ... main`. This applies to
   every kind of change (content, assets, config, docs) — none of it is exempt
   just because it seems small or low-risk.
-- Draft anything content/design-significant (new page layouts, copy) as a Claude
-  Artifact for review first — don't push an unreviewed redesign over the live
-  maintenance page. Republishing an Artifact is not a `main` push and doesn't
+- Draft anything content/design-significant (new page layouts, copy) for review
+  first (Artifact or the `staging` preview) — don't push unreviewed design
+  changes to the live site. Republishing an Artifact is not a `main` push and doesn't
   need to wait on approval — it's a separate, private preview channel.
 - Also push to `claude/stoic-gates-w5906b` alongside `main` once approved, to
   keep it in sync (harness convention from the original task setup).
