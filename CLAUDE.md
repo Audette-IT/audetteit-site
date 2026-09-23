@@ -40,8 +40,8 @@ Copy should read as one capable person, not a company.
   Home, Services, Contact, Privacy, with Markdown twins, `llms.txt`,
   `llms-full.txt`, security headers, sitemap, and `favicon.ico`. A second
   release the same day added Google Tag Manager behind the cookie consent
-  banner (#30/#38) and the `www` → apex redirect in the Worker. `www` still
-  needs its dashboard custom domain; see "Site architecture". Not verified
+  banner (#30/#38) and a `www` → apex redirect. `www.audetteit.com` works
+  (Cloudflare Redirect Rule + proxied DNS record; see "Site architecture"). Not verified
   from here: outbound requests to audetteit.com are blocked in these sessions,
   so the owner should load the site once and check the Cloudflare production
   build.
@@ -197,19 +197,22 @@ files on `dev` for any further changes**, not the artifacts.
   nosniff, `X-Frame-Options: DENY`, Referrer-Policy, Permissions-Policy, HSTS
   (deliberately *without* `includeSubDomains`, so a future HTTP-only self-hosted
   subdomain isn't broken). `/assets/*` cached 1 day (not fingerprinted).
-- **`www` → apex.** `worker/index.js` 301-redirects `www.audetteit.com` to
-  `https://audetteit.com` (same path and query), but only for requests that
-  reach the Worker: the page routes in `run_worker_first`. As of 2026-09-23,
-  `www.audetteit.com` has **no DNS record** (it didn't resolve), so the owner
-  has to attach it in the dashboard: Workers & Pages → `audetteit-site` →
-  Settings → Domains & Routes → Add → Custom domain → `www.audetteit.com`.
-  Cloudflare then creates the DNS record and certificate. It was deliberately
-  **not** declared under `routes` in `wrangler.jsonc`: wrangler replaces the
-  Worker's whole custom-domain set on deploy, and how the apex is attached
-  couldn't be checked from here, so a config-managed list risked detaching
-  `audetteit.com`. If the domains ever move into `wrangler.jsonc`, list the apex
-  **and** `www`. Optional: a dashboard Redirect Rule ("Redirect from WWW to
-  root" template) also covers static-asset URLs on `www`.
+- **`www` → apex: working since 2026-09-23 (confirmed by the owner).** It's
+  handled at Cloudflare's edge, not in the repo:
+  - **Redirect Rule** (zone `audetteit.com` → Rules → Redirect Rules,
+    "Redirect from WWW to root" template), named `Redirect www to root`:
+    wildcard `https://www.audetteit.com/*` → `https://audetteit.com/${1}`,
+    301, preserve query string. It covers every path, static assets included.
+  - **DNS:** `A www 192.0.2.1`, **proxied** (orange cloud). That's a
+    discard placeholder: the rule answers at the edge, so the IP is never
+    contacted. It must stay proxied, or `www` stops working.
+  - `worker/index.js` also 301s `www.audetteit.com` to the apex, but only as
+    a backup. With the rule in place, `www` requests never reach the Worker.
+  - The domains were deliberately **not** put under `routes` in
+    `wrangler.jsonc`: wrangler replaces the Worker's whole custom-domain set
+    on deploy, which could detach `audetteit.com`. If domains ever move into
+    `wrangler.jsonc`, list the apex **and** `www`, and remove the `www` DNS
+    record first (a custom domain can't be created over an existing record).
 - **Clean URLs.** Workers serves `/services`, `/contact`, `/privacy`; the
   `.html` forms 307-redirect. All links, canonicals, `og:url`s, and the sitemap
   use clean URLs — don't reintroduce `.html` links.
