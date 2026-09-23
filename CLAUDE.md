@@ -305,6 +305,11 @@ promotion flow the user specified:
          "policies": [{ "decision": "allow", "include": [{ "email": { "email": "michael.audette@audetteit.com" } }] }]
        }'
      ```
+- **Finished branches to delete** (all merged; the git proxy here returns 403
+  on branch deletes, so the owner deletes them in GitHub → Branches):
+  `release/main-markdown` (PR #46), `docs/main-after-46` (PR #47), `launch`
+  (PR #49), `release/analytics-www` (PR #50). `feature/homepage-redesign` and
+  the two `cloudflare/workers-autoconfig*` branches are also stale.
 - **`release/main-markdown`** — merged into `main` via PR #46 (Markdown for
   the maintenance page, `favicon.ico`, first real `wrangler.jsonc` on
   production). Superseded by the launch. The user asked to delete it, but the
