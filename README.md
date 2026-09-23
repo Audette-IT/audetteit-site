@@ -29,15 +29,36 @@ feature/*  →  dev  →  staging  →  main
   services.html      # Everyday help + infrastructure/advanced   -> /services
   contact.html       # Contact form (opens your email app)        -> /contact
   privacy.html       # Plain-language privacy note                -> /privacy
+  index.md, services.md, contact.md, privacy.md  # Markdown twin of each page
+  llms.txt           # Index of the Markdown pages for AI agents
+  llms-full.txt      # All pages in one file (generated, don't hand-edit)
   _headers           # Security + cache headers for static files
   site.webmanifest, robots.txt, sitemap.xml
   /js/site.js        # Mobile menu + contact form behavior
   /assets            # Logo, favicons
-/worker/index.js     # Handles "/" only: Markdown for Accept: text/markdown
+/worker/index.js     # Page routes only: Markdown for Accept: text/markdown
 wrangler.jsonc       # Cloudflare Worker config
-scripts/check-links.py  # Internal link checker (run in CI)
+scripts/check-links.py  # Link + Markdown-coverage checker (run in CI)
+scripts/build-llms.py   # Regenerates public/llms-full.txt
 ASSETS.md            # Where every image came from
 ```
+
+## Markdown for agents
+
+Every page has a Markdown version, three ways:
+
+- `https://audetteit.com/services.md` (append `.md`; the homepage is `/index.md`)
+- the normal URL with `Accept: text/markdown`
+- `llms.txt` (index) and `llms-full.txt` (everything in one file)
+
+When you change a page, update its `.md` twin too, then run
+`python3 scripts/build-llms.py`. Adding a page means adding it in five places,
+all enforced by `scripts/check-links.py` in CI: the `.md` twin,
+`MARKDOWN_PAGES` in `worker/index.js`, `run_worker_first` in
+`wrangler.jsonc`, `sitemap.xml`, and `llms.txt` (plus `PAGES` in
+`scripts/build-llms.py`).
+
+## Running locally
 
 No build step. Run it locally exactly as deployed:
 

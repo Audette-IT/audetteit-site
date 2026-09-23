@@ -18,8 +18,11 @@ jobs:
       - name: Lint HTML
         run: npx --yes htmlhint@1 "public/**/*.html"
 
-      - name: Check internal links
+      - name: Check internal links and Markdown coverage
         run: python3 scripts/check-links.py
+
+      - name: Check llms-full.txt is up to date
+        run: python3 scripts/build-llms.py --check
 
       - name: Validate manifest and sitemap
         run: |
