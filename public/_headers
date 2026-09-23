@@ -1,7 +1,32 @@
-# Markdown twin points search engines at the HTML page as the canonical copy.
+# Applied to static asset responses only. The page routes ("/", "/services",
+# "/contact", "/privacy") go through worker/index.js, which sets the same
+# security headers itself — keep the two in sync.
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; connect-src 'self'; manifest-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Strict-Transport-Security: max-age=31536000
+
+# Images/icons aren't fingerprinted, so a day rather than "immutable".
+/assets/*
+  Cache-Control: public, max-age=86400
+
+# Markdown twins point search engines at the HTML page as the canonical copy.
 /index.md
   Content-Type: text/markdown; charset=utf-8
   Link: <https://audetteit.com/>; rel="canonical"
+/services.md
+  Content-Type: text/markdown; charset=utf-8
+  Link: <https://audetteit.com/services>; rel="canonical"
+/contact.md
+  Content-Type: text/markdown; charset=utf-8
+  Link: <https://audetteit.com/contact>; rel="canonical"
+/privacy.md
+  Content-Type: text/markdown; charset=utf-8
+  Link: <https://audetteit.com/privacy>; rel="canonical"
 
 /llms.txt
   Content-Type: text/plain; charset=utf-8
