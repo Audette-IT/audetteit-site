@@ -26,15 +26,25 @@ Copy should read as one capable person, not a company.
 
 ## Current live state
 
-- **Hosting:** Cloudflare Pages (migrated off Vercel — Vercel is no longer relevant to
-  this project at all; don't touch the Vercel connector for this repo).
-- **Live site:** currently a single maintenance page (`public/index.html`) — dark
-  theme, brand blue accent, "We'll be right back" notice. This is intentional; the
-  real multi-page redesign has **not** been pushed live yet, only drafted (see below).
+- **Hosting:** a Cloudflare **Worker with static assets** named `audetteit-site`
+  (not classic Pages — migrated off Vercel; Vercel is irrelevant now, don't touch
+  that connector). Deploys come from Workers Builds on git push.
+- **Live site (`main`):** currently a single maintenance page (`public/index.html`)
+  — dark theme, brand blue accent, "We'll be right back" notice. This is
+  intentional; the real multi-page redesign is on **`dev`** and was promoted to
+  **`staging`** (for a Cloudflare preview), but has **not** been promoted to
+  `main` yet — don't confuse branches when checking what's actually live vs. in
+  progress.
 - **Repo:** `Audette-IT/audetteit-site` on GitHub, default branch `main`.
-- `functions/index.js` — a Cloudflare Pages Function that serves a Markdown version
-  of the homepage when a request sends `Accept: text/markdown` (a free-tier stand-in
-  for Cloudflare's paid "Markdown for Agents" zone feature — see issue #43).
+- **Correction (found this session):** `main` (and `staging`, before the
+  promotion) contained `functions/index.js`,
+  but that is a *Pages Functions* convention and this project is a
+  static-assets-only Worker (the dashboard literally says "Worker that only has
+  static assets") — so it has **never run**. Earlier notes/tracker entries that
+  called the Markdown-for-Agents stand-in "live" were wrong; it was never
+  verified (outbound network to audetteit.com is blocked from these sessions).
+  It's fixed properly on `dev` (see "Site architecture" below) and becomes real
+  once `dev` is promoted.
 - `public/robots.txt` and `public/sitemap.xml` are live.
 - Logo/favicons were recropped tight to the actual shield glyph (`public/assets/
   logo-mark.png`, `favicon-32.png`, `favicon-16.png`, `apple-touch-icon.png`,
@@ -61,6 +71,27 @@ Copy should read as one capable person, not a company.
   **closed as not planned** — not applicable without a registered business.
 - #27 was simplified from "Privacy Policy + Terms of Service" to just a short
   informal privacy note.
+- **Build-out on `dev` (commit f113b4b) closed as completed:** #21, #22, #24,
+  #26, #27, #28, #29, #33, #35, #36, #40 (each has a closing comment on GitHub
+  saying what was done). #37 was already closed. The work is on `dev` only, not
+  live: closing an issue means the code is done, not deployed.
+- **Still open, and why** (each has a progress comment on GitHub):
+  - #23 copy: waiting on the owner's tone/voice review.
+  - #25 SEO, #31 headers, #34 icons: done on `dev`, left open only for the
+    post-launch check (link-preview debugger, header scanner, favicon checker).
+  - #32 CI: workflow exists on `dev` but hasn't run on GitHub yet (only runs
+    once it reaches a PR or `main`).
+  - #30 analytics: needs the owner to choose; recommended Cloudflare Web
+    Analytics (cookieless). Enabling it needs the CSP in both `public/_headers`
+    and `worker/index.js` updated in the same change.
+  - #38 cookie banner: unnecessary while the site sets no cookies.
+  - #39 asset rights: owner must confirm rights to the shield logo, then update
+    `ASSETS.md`.
+  - #43 Markdown for Agents: Pro-plan feature; the Worker stand-in now covers
+    every page, plus `.md` twins and `llms.txt`/`llms-full.txt`.
+  - #44 self-hosted help desk: standing reminder.
+- The Issue Tracker artifact was re-synced from the API after these changes
+  (14 done / 7 in progress / 3 open).
 
 ## Design direction (already decided — don't restart from scratch)
 
@@ -76,7 +107,11 @@ infrastructure:
 - Sharp corners (2–4px radius), hairline borders, no soft `rounded-2xl` + shadow
   treatment
 - One signal accent color (blue) used sparingly — status dots, links, one blinking
-  cursor — not decorative icon-in-rounded-square badges everywhere
+  cursor — not decorative icon-in-rounded-square badges everywhere. **Light-mode
+  signal is `#0074A8`, not the brand `#0090CC`**: `#0090CC` measured 3.22:1 as
+  link text and 3.58:1 for white-on-button, failing WCAG AA; `#0074A8` is the
+  closest blue that passes everywhere (4.65–5.17:1). Dark mode keeps `#2FD1FF`
+  (11:1). Don't "fix" it back.
 - Services shown as a dense manifest/spec list with status tags, not icon cards
 - Process shown as a connected pipeline diagram (nodes + line), not numbered cards
 - A static example "monitoring console" panel as the hero's visual anchor, clearly
@@ -87,30 +122,94 @@ design work): the `funboy322/avoid-ai-design` checklist, Vercel's
 `web-interface-guidelines` repo, and the "Anti-Slop Framework" article — search
 history has the exact URLs if needed again.
 
-## Live drafts (not yet merged into the repo)
+## Homepage redesign — now real files, not just an artifact
 
-Two Claude Artifacts hold the current work-in-progress. **Read these before
-redoing any design or issue-tracking work** — don't regenerate from scratch.
+The redesign (Home / Services / Contact / Privacy) is implemented for real in
+`public/`. It's merged into **`dev`** (built on `feature/homepage-redesign`,
+which still exists but is no longer where changes should land — edit `dev`
+directly now). Promoted to `staging`; not yet to `main`.
 
-- **Homepage redesign** (multi-page: Home / Services / Contact) —
-  https://claude.ai/artifact/Vj8Pvwbi5uY8SZEhKSFpxq
-  - Real nav between actual pages, not anchor scrolling.
+The Claude Artifact versions (below) were the design/review draft that this was
+built from — the repo files are now the source of truth going forward, not the
+artifacts. Keep the artifacts around for reference/history, but **edit the real
+files on `dev` for any further changes**, not the artifacts.
+
+- **Homepage redesign artifact** (original draft, now superseded by the real
+  files above) — https://claude.ai/artifact/Vj8Pvwbi5uY8SZEhKSFpxq
   - Services split into two honest tiers: **Everyday help** (wifi, slow computers,
     printers, accounts, parental controls) and **Infrastructure & advanced**
     (network design, Active Directory/domains, self-hosted services, security
-    hardening).
-  - Contact page shows the real email (`michael.audette@audetteit.com`) only.
-    Phone, city, and the footer "run by ___" name were all removed rather than
-    left as placeholders — the user asked for the email filled in and everything
-    else stripped, not left dangling. Re-add phone/city/footer name only if the
-    user actually asks to include them.
-  - Not wired to a backend yet (contact form) — that's issue #24.
-- **Issue tracker** —
-  https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy
+    hardening) — same split carried into the real files.
+  - Contact page shows the real email (`michael.audette@audetteit.com`) only —
+    phone, city, and the footer "run by ___" name were deliberately removed,
+    not left as placeholders. Re-add only if the user actually asks.
+  - The artifact's contact form was a non-functional mock; the real one on `dev`
+    works (see "Site architecture").
+- **Issue tracker artifact** (still the canonical live source — this one is NOT
+  superseded, keep using it) — https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy
   - Every issue's full body is the exact GitHub text (verified byte-for-byte),
     grouped by area, expandable, with status pills strictly tied to actual
     open/closed GitHub state (never invent a "Done" status without actually
     closing the issue).
+
+## Site architecture (on `dev`)
+
+- **`wrangler.jsonc`** — explicit Worker config (previously there was none, and
+  Cloudflare auto-detected a static-assets-only setup). `assets.directory` is
+  `./public` so repo files (CLAUDE.md, README, etc.) are never served;
+  `run_worker_first: ["/"]` means only the homepage runs through code.
+- **Markdown for every page (user requirement: "in all deployments we need
+  markdown for all pages then detailed docs and the sitemap and index").**
+  Each page has a hand-written twin in `public/` (`index.md`, `services.md`,
+  `contact.md`, `privacy.md`), served three ways: directly at `/<page>.md`,
+  via `Accept: text/markdown` on the normal URL (Worker), and bundled in
+  `public/llms-full.txt` (the "detailed docs", generated by
+  `scripts/build-llms.py`, never hand-edited). `public/llms.txt` is the index.
+  HTML pages link their twin with `<link rel="alternate" type="text/markdown">`;
+  Markdown responses send `Link: rel="canonical"` back to the HTML so search
+  engines don't treat them as duplicates. **When page copy changes, update the
+  `.md` twin in the same change and rerun `build-llms.py`** — CI fails if
+  `llms-full.txt` is stale or any page lacks its twin/route/sitemap/llms entry.
+- **`worker/index.js`** — runs for the four page routes only
+  (`run_worker_first` in `wrangler.jsonc` must match `MARKDOWN_PAGES`):
+  returns the page's `.md` twin when `Accept: text/markdown`, otherwise the
+  static HTML. Sets the security headers itself and
+  `Vary: Accept`, because `public/_headers` is **not** applied to responses that
+  pass through Worker code. Its `SECURITY_HEADERS` must stay in sync with the
+  `/*` block in `public/_headers`.
+- **`public/_headers`** — CSP (`script-src 'self'`, no inline scripts allowed),
+  nosniff, `X-Frame-Options: DENY`, Referrer-Policy, Permissions-Policy, HSTS
+  (deliberately *without* `includeSubDomains`, so a future HTTP-only self-hosted
+  subdomain isn't broken). `/assets/*` cached 1 day (not fingerprinted).
+- **Clean URLs.** Workers serves `/services`, `/contact`, `/privacy`; the
+  `.html` forms 307-redirect. All links, canonicals, `og:url`s, and the sitemap
+  use clean URLs — don't reintroduce `.html` links.
+- **`public/js/site.js`** — all page JS (mobile menu toggle, contact form),
+  external because the CSP forbids inline scripts. Lives in `/js/`, not
+  `/assets/`, so it isn't caught by the 1-day asset cache.
+- **Contact form** — no backend. Validates name/email/message/consent, has a
+  honeypot field, then opens the visitor's email app via `mailto:` pre-filled to
+  `michael.audette@audetteit.com`. Honest about that on the page. A real
+  server-side send would need an email API + secret (not available here).
+- **`public/privacy.html`** — short plain-language note (#27). States there's no
+  analytics and no cookies — **if analytics (#30) or any cookie-setting embed is
+  ever added, update this page first.** Also discloses Google Fonts + Cloudflare.
+- **`public/site.webmanifest`** — icons for home-screen shortcuts (#34).
+- **SEO** — canonical, Open Graph, Twitter card on every page; `WebSite` JSON-LD
+  on the homepage only. Deliberately no `Person`/`Organization` schema — the
+  user removed their name from the site, and it's not a registered business.
+- **Accessibility** — skip link, visible `:focus-visible` rings, `aria-hidden`
+  on decorative elements, working mobile menu with `aria-expanded` (before this,
+  the hamburger had no JS and mobile visitors couldn't navigate at all).
+- **CI** — `.github/workflows/ci.yml`: htmlhint, `scripts/check-links.py`
+  (internal links + Markdown coverage), `build-llms.py --check`,
+  manifest/sitemap validation, `wrangler deploy
+  --dry-run`. All pass locally.
+- **`ASSETS.md`** — asset provenance (#39). Logo rights are still **unconfirmed**
+  — needs the user.
+- **Verified locally** with `npx wrangler dev` + Playwright/Chromium: 4 pages ×
+  phone/desktop × light/dark, zero horizontal overflow, no CSP violations,
+  mobile menu and form validation exercised end to end.
 
 ## Branch structure
 
@@ -124,7 +223,9 @@ promotion flow the user specified:
   or the user sets it manually in GitHub Settings &rarr; Branches. Recommended
   rule: require PR before merging, require status checks once CI exists (#32),
   don't allow bypassing even for admins.
-- **`staging`** — created, pushed, has its own README. The site is deployed as
+- **`staging`** — has its own README. **`dev` was merged in** (the full site),
+  so a staging preview now shows the real redesign rather than the maintenance
+  page. The site is deployed as
   a Cloudflare **Worker** named `audetteit-site` (account
   `b7a46df8571aa32900c3155b464416ab`, worker ID
   `c8969d22263a484bae64aa2436af8e93`) — not classic Pages — so it uses Workers
@@ -154,13 +255,24 @@ promotion flow the user specified:
          "policies": [{ "decision": "allow", "include": [{ "email": { "email": "michael.audette@audetteit.com" } }] }]
        }'
      ```
-- **`dev`** — created, pushed, currently at the same commit as `main`. Active
-  development branch.
+- **`release/main-markdown`** — prepared for `main`, **not merged; waiting
+  on the user's approval.** It's `main` (maintenance page) plus Markdown for
+  agents, so production also gets it in the meantime: `wrangler.jsonc` +
+  `worker/index.js` (Markdown on `/` via `Accept: text/markdown`),
+  `public/index.md`, `llms.txt`, `llms-full.txt`, sitemap `lastmod`, and the
+  dead `functions/index.js` removed. No security headers/CSP on this branch
+  (kept to what was asked). Adds a real `wrangler.jsonc` to production for the
+  first time, so check that the `staging` preview build (same config style)
+  succeeds before merging. Once it's in, push `main` and
+  `claude/stoic-gates-w5906b` too.
+- **`dev`** — active development branch. Has diverged from `main`: carries the
+  merged-in homepage redesign (real `index.html`/`services.html`/`contact.html`,
+  not just the maintenance page). Promoted to `staging`; not yet to `main`.
 - **Feature branches** — branch off `dev`, merge back into `dev`.
-- **Local dev hosting** — the user is setting this up themselves to avoid
-  burning Cloudflare build minutes on every feature-branch push (e.g.
-  `npx wrangler pages dev public/`, or any static file server — this is plain
-  HTML/CSS/JS plus one Pages Function in `functions/`, no build step needed).
+- **Local dev hosting** — `npx wrangler dev` from the repo root runs the real
+  Worker + assets exactly as deployed (the old `wrangler pages dev` advice was
+  wrong for a Worker). No build step. Doing this locally instead of pushing
+  feature branches avoids burning Cloudflare build minutes.
 
 **Cloudflare project settings still need manual verification in the dashboard**
 (none of this is scriptable from here): confirm **Production branch** is `main`,
@@ -173,6 +285,17 @@ pushed to it, and decide on a custom domain alias for staging if wanted.
   no deadline) to replace the third-party Zammad widget at `help.audetteit.net`.
 - Full list of services beyond what's drafted — more will likely get added as
   they're built out (noted as a placeholder on the Services page).
+- Tone/voice sign-off on the rewritten copy (#23).
+- Whether to add analytics, and which tool (#30).
+- Confirming rights to the shield logo (#39).
+- When to promote `staging` → `main` (only with explicit approval) — after
+  reviewing the staging preview.
+- **GitHub Pages is publishing `staging`.** Its `pages-build-deployment`
+  workflow ran on `staging` on 2026-09-23 (triggered by the `audetteit`
+  account), so the Pages source appears to have been switched to `staging`.
+  That publishes staging publicly on github.io, outside Cloudflare Access.
+  Recommended: turn GitHub Pages off in Settings → Pages. The site is served by
+  the Cloudflare Worker, not GitHub Pages.
 
 ## Working conventions established this session
 
