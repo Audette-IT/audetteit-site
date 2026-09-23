@@ -29,7 +29,7 @@ Copy should read as one capable person, not a company.
 - **Hosting:** a Cloudflare **Worker with static assets** named `audetteit-site`
   (not classic Pages — migrated off Vercel; Vercel is irrelevant now, don't touch
   that connector). Deploys come from Workers Builds on git push.
-- **Live site (`main`):** currently a single maintenance page (`public/index.html`)
+- **Live site (`main`, last changed by PR #46):** currently a single maintenance page (`public/index.html`)
   — dark theme, brand blue accent, "We'll be right back" notice. Since
   2026-09-23 it also serves Markdown (`/index.md`, `Accept: text/markdown` on
   `/`), `llms.txt`, `llms-full.txt`, and `/favicon.ico`. This is
@@ -263,15 +263,21 @@ promotion flow the user specified:
          "policies": [{ "decision": "allow", "include": [{ "email": { "email": "michael.audette@audetteit.com" } }] }]
        }'
      ```
-- **`release/main-markdown`** — **merged into `main` on 2026-09-23 with the
-  user's approval** (fast-forward). Production is still the maintenance page,
-  now with: `wrangler.jsonc` + `worker/index.js` (Markdown on `/` via
+- **`release/main-markdown`** — merged into `main` on 2026-09-23 by the user
+  through PR #46 (https://github.com/Audette-IT/audetteit-site/pull/46), merge
+  commit `d626514`. Production is still the maintenance page, now with:
+  `wrangler.jsonc` + `worker/index.js` (Markdown on `/` via
   `Accept: text/markdown`), `public/index.md`, `llms.txt`, `llms-full.txt`,
   sitemap `lastmod`, `/favicon.ico` (for Google Search), and the dead
   `functions/index.js` removed. No security headers/CSP on `main` yet (those
   arrive when `staging` is promoted). This was the first real `wrangler.jsonc`
-  on production. If the Cloudflare production build fails, check the build
-  log first. The branch can be deleted once the deploy is confirmed.
+  on production; the Cloudflare production build result hasn't been checked
+  from here (no dashboard access). No GitHub checks ran on PR #46, because
+  `.github/workflows/ci.yml` only exists on `dev`/`staging` until they're
+  promoted. The branch has no more work to do and can be deleted.
+- **`claude/stoic-gates-w5906b`** (harness branch) — synced with `main` after
+  PR #46 (merged `main` in, kept `main`'s README; files identical to `main` at
+  `d626514`). Re-sync it the same way whenever `main` changes.
 - **`dev`** — active development branch. Has diverged from `main`: carries the
   merged-in homepage redesign (real `index.html`/`services.html`/`contact.html`,
   not just the maintenance page). Promoted to `staging`; not yet to `main`.
@@ -280,6 +286,22 @@ promotion flow the user specified:
   Worker + assets exactly as deployed (the old `wrangler pages dev` advice was
   wrong for a Worker). No build step. Doing this locally instead of pushing
   feature branches avoids burning Cloudflare build minutes.
+
+**Verified 2026-09-23 via PR #48's checks:** the Cloudflare "Workers Builds:
+audetteit-site" preview build of `dev` succeeded, so the new `wrangler.jsonc` +
+Worker setup builds on Cloudflare. **GitHub Actions CI has never run** — no
+`CI` workflow run exists for any push to `dev`/`staging` or for PR #48, only
+the GitHub Pages workflow. Likely Actions is disabled or restricted for the
+repo (Settings → Actions → General); needs the user to check.
+
+**PR #48** (`dev` → `main`, opened from the Claude Code UI and mislabeled as
+"to staging") was **closed on 2026-09-23 at the user's request**. The launch
+will be a `staging` → `main` promotion later, not straight from `dev`. Before
+closing, `main` was merged into `dev` (keeping `dev`'s files, tree unchanged)
+to clear its merge conflict. `staging` hasn't had `main` merged in yet, so
+expect the same conflict at launch time. It resolves the same way:
+`git merge -s ours origin/main` on `staging`, since `main` only holds the
+maintenance-page versions.
 
 **Cloudflare project settings still need manual verification in the dashboard**
 (none of this is scriptable from here): confirm **Production branch** is `main`,
@@ -295,8 +317,9 @@ pushed to it, and decide on a custom domain alias for staging if wanted.
 - Tone/voice sign-off on the rewritten copy (#23).
 - Whether to add analytics, and which tool (#30).
 - Confirming rights to the shield logo (#39).
-- When to promote `staging` → `main` (only with explicit approval) — after
-  reviewing the staging preview.
+- When to launch: promote `staging` → `main` (only with explicit approval),
+  after reviewing the staging preview. Decided 2026-09-23 that launch goes from
+  `staging`, not a `dev` → `main` PR.
 - **GitHub Pages is publishing `staging`.** Its `pages-build-deployment`
   workflow ran on `staging` on 2026-09-23 (triggered by the `audetteit`
   account), so the Pages source appears to have been switched to `staging`.
