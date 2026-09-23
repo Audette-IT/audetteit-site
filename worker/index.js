@@ -28,6 +28,14 @@ const MARKDOWN_PAGES = {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    // One canonical host: www.audetteit.com -> audetteit.com, same path/query.
+    if (url.hostname === "www.audetteit.com") {
+      url.protocol = "https:";
+      url.hostname = "audetteit.com";
+      return Response.redirect(url.toString(), 301);
+    }
+
     const mdPath = MARKDOWN_PAGES[url.pathname];
     const wantsMarkdown = (request.headers.get("Accept") || "").includes("text/markdown");
 
