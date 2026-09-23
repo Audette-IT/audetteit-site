@@ -294,12 +294,14 @@ Worker setup builds on Cloudflare. **GitHub Actions CI has never run** — no
 the GitHub Pages workflow. Likely Actions is disabled or restricted for the
 repo (Settings → Actions → General); needs the user to check.
 
-**PR #48** (`dev` → `main`, opened by the user from the Claude Code UI) is
-titled "Promote dev redesign to staging" but targets `main`: merging it would
-launch the full redesign. Asked the user whether it's meant as the launch PR
-or should be closed; don't merge or retitle it without an answer. `main` was
-merged into `dev` (keeping `dev`'s files, tree unchanged) to clear its merge
-conflict.
+**PR #48** (`dev` → `main`, opened from the Claude Code UI and mislabeled as
+"to staging") was **closed on 2026-09-23 at the user's request**. The launch
+will be a `staging` → `main` promotion later, not straight from `dev`. Before
+closing, `main` was merged into `dev` (keeping `dev`'s files, tree unchanged)
+to clear its merge conflict. `staging` hasn't had `main` merged in yet, so
+expect the same conflict at launch time. It resolves the same way:
+`git merge -s ours origin/main` on `staging`, since `main` only holds the
+maintenance-page versions.
 
 **Cloudflare project settings still need manual verification in the dashboard**
 (none of this is scriptable from here): confirm **Production branch** is `main`,
@@ -315,8 +317,9 @@ pushed to it, and decide on a custom domain alias for staging if wanted.
 - Tone/voice sign-off on the rewritten copy (#23).
 - Whether to add analytics, and which tool (#30).
 - Confirming rights to the shield logo (#39).
-- When to promote `staging` → `main` (only with explicit approval) — after
-  reviewing the staging preview.
+- When to launch: promote `staging` → `main` (only with explicit approval),
+  after reviewing the staging preview. Decided 2026-09-23 that launch goes from
+  `staging`, not a `dev` → `main` PR.
 - **GitHub Pages is publishing `staging`.** Its `pages-build-deployment`
   workflow ran on `staging` on 2026-09-23 (triggered by the `audetteit`
   account), so the Pages source appears to have been switched to `staging`.
