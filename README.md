@@ -28,6 +28,8 @@ feature/*  →  dev  →  staging  →  main
   _headers           # Security + cache headers for static files
   favicon.ico, site.webmanifest, robots.txt, sitemap.xml
   /js/site.js        # Mobile menu + contact form behavior
+  /js/consent.js     # Cookie banner; loads Google Tag Manager only after Accept
+  /css/consent.css   # Cookie banner styles
   /assets            # Logo, favicons
 /worker/index.js     # Page routes only: Markdown for Accept: text/markdown
 wrangler.jsonc       # Cloudflare Worker config

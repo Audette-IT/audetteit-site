@@ -32,10 +32,16 @@ Copy should read as one capable person, not a company.
 - **Live site (`main`): the full redesign went live on 2026-09-23** — the
   maintenance page is gone. Launched at the user's request ("we need everything
   from stage to main and the site needs to go live no maintenance") by
-  promoting `staging` → `main` through a launch PR (branch `launch`: `staging`
-  plus `main` merged in with `-s ours`, plus a production README). Live pages:
+  promoting `staging` → `main` through PR #49
+  (https://github.com/Audette-IT/audetteit-site/pull/49, merge commit
+  `915d16e`; branch `launch` = `staging` + `main` merged in with `-s ours` +
+  a production README). `dev` and `staging` were then synced with `main`,
+  each keeping its own README. Live pages:
   Home, Services, Contact, Privacy, with Markdown twins, `llms.txt`,
-  `llms-full.txt`, security headers, sitemap, and `favicon.ico`. Not verified
+  `llms-full.txt`, security headers, sitemap, and `favicon.ico`. A second
+  release the same day added Google Tag Manager behind the cookie consent
+  banner (#30/#38) and the `www` → apex redirect in the Worker. `www` still
+  needs its dashboard custom domain; see "Site architecture". Not verified
   from here: outbound requests to audetteit.com are blocked in these sessions,
   so the owner should load the site once and check the Cloudflare production
   build.
@@ -88,17 +94,19 @@ Copy should read as one capable person, not a company.
     unreachable from these sessions).
   - #32 CI: workflow is on every branch including `main` now, but GitHub
     Actions has never run it (see "Branch structure"), so it's still unproven.
-  - #30 analytics: needs the owner to choose; recommended Cloudflare Web
-    Analytics (cookieless). Enabling it needs the CSP in both `public/_headers`
-    and `worker/index.js` updated in the same change.
-  - #38 cookie banner: unnecessary while the site sets no cookies.
+  - #30 analytics + #38 cookie banner: the owner chose **Google Analytics via
+    Google Tag Manager (container `GTM-TKBJX8F5`) with a consent banner**
+    (2026-09-23). **Live on `main` since 2026-09-23** (release PR from
+    `release/analytics-www`, approved by the owner: "you can skip and push it
+    to main and the live site"). Close both once the owner confirms GA4
+    receives data.
   - #39 asset rights: owner must confirm rights to the shield logo, then update
     `ASSETS.md`.
   - #43 Markdown for Agents: Pro-plan feature; the Worker stand-in now covers
     every page, plus `.md` twins and `llms.txt`/`llms-full.txt`.
   - #44 self-hosted help desk: standing reminder.
-- The Issue Tracker artifact was re-synced from the API after these changes
-  (14 done / 7 in progress / 3 open).
+- The Issue Tracker artifact was last updated 2026-09-23 after the analytics
+  work (14 done / 9 in progress / 1 open; #30 and #38 moved to in progress).
 
 ## Design direction (already decided — don't restart from scratch)
 
@@ -188,6 +196,19 @@ files on `dev` for any further changes**, not the artifacts.
   nosniff, `X-Frame-Options: DENY`, Referrer-Policy, Permissions-Policy, HSTS
   (deliberately *without* `includeSubDomains`, so a future HTTP-only self-hosted
   subdomain isn't broken). `/assets/*` cached 1 day (not fingerprinted).
+- **`www` → apex.** `worker/index.js` 301-redirects `www.audetteit.com` to
+  `https://audetteit.com` (same path and query), but only for requests that
+  reach the Worker: the page routes in `run_worker_first`. As of 2026-09-23,
+  `www.audetteit.com` has **no DNS record** (it didn't resolve), so the owner
+  has to attach it in the dashboard: Workers & Pages → `audetteit-site` →
+  Settings → Domains & Routes → Add → Custom domain → `www.audetteit.com`.
+  Cloudflare then creates the DNS record and certificate. It was deliberately
+  **not** declared under `routes` in `wrangler.jsonc`: wrangler replaces the
+  Worker's whole custom-domain set on deploy, and how the apex is attached
+  couldn't be checked from here, so a config-managed list risked detaching
+  `audetteit.com`. If the domains ever move into `wrangler.jsonc`, list the apex
+  **and** `www`. Optional: a dashboard Redirect Rule ("Redirect from WWW to
+  root" template) also covers static-asset URLs on `www`.
 - **Clean URLs.** Workers serves `/services`, `/contact`, `/privacy`; the
   `.html` forms 307-redirect. All links, canonicals, `og:url`s, and the sitemap
   use clean URLs — don't reintroduce `.html` links.
@@ -198,9 +219,27 @@ files on `dev` for any further changes**, not the artifacts.
   honeypot field, then opens the visitor's email app via `mailto:` pre-filled to
   `michael.audette@audetteit.com`. Honest about that on the page. A real
   server-side send would need an email API + secret (not available here).
-- **`public/privacy.html`** — short plain-language note (#27). States there's no
-  analytics and no cookies — **if analytics (#30) or any cookie-setting embed is
-  ever added, update this page first.** Also discloses Google Fonts + Cloudflare.
+- **`public/privacy.html`** — short plain-language note (#27). Discloses the
+  opt-in Google Analytics/Tag Manager setup, its `_ga` cookies, the
+  localStorage consent record, Google Fonts, and Cloudflare. **Any new
+  tracking or cookie-setting embed must be added here (and to `privacy.md`)
+  in the same change.**
+- **Google Tag Manager + cookie consent (#30, #38)** — `public/js/consent.js`
+  is the first script in every page's `<head>`. It sets Google Consent Mode
+  defaults to all-denied and **only injects GTM (`GTM-TKBJX8F5`) after the
+  visitor clicks Accept**. Nothing from Google loads before that. The choice
+  lives in localStorage key `audetteit-consent` (`granted`/`denied`). The
+  banner is built by the script, styled by `public/css/consent.css`, and
+  reopened by the footer "cookie settings" button (`data-cookie-settings`).
+  Declining after accepting sets consent to denied, clears `_ga*` cookies, and
+  reloads the page. Google's `<noscript>` iframe snippet was **deliberately
+  left out**: it would load GTM without consent (and GA4 doesn't run without
+  JS anyway). GA4 itself is configured inside the GTM container, not in the
+  repo. CSP allows `https://*.googletagmanager.com` (script/img/connect) and
+  `https://*.google-analytics.com`, `https://*.analytics.google.com`
+  (img/connect), in **both** `public/_headers` and `worker/index.js`. A GTM
+  "Custom HTML" tag would be blocked by the CSP (no `'unsafe-inline'`); stick
+  to built-in tag types.
 - **`public/site.webmanifest`** — icons for home-screen shortcuts (#34).
 - **`public/favicon.ico`** — at the site root because Google Search (and
   browsers that ignore `<link>` tags) request `/favicon.ico` directly. Holds
