@@ -8,11 +8,16 @@ export async function onRequestGet(context) {
   if (accept.includes("text/markdown")) {
     const markdown = `# Audette IT
 
-**We'll be right back**
+Uptime isn't luck. It's a system someone is actually watching.
 
-Audette IT is currently undergoing scheduled maintenance while we work on some improvements. Thanks for your patience.
+Audette IT is one person who knows what they're doing — from forgotten passwords to full network and Active Directory builds, for family and friends who'd rather not guess.
 
-_Maintenance in progress_
+## Coverage
+
+- **Everyday help** — wifi and device troubleshooting, slow computers, printers, locked-out accounts, parental controls on the kids' devices.
+- **Infrastructure & advanced** — home network design, Active Directory and domain setups, self-hosted services, real security hardening.
+
+See [services.html](/services.html) for the full list, or [contact.html](/contact.html) to get in touch.
 `;
     return new Response(markdown, {
       headers: {
