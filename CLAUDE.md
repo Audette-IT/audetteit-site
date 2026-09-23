@@ -195,6 +195,11 @@ files on `dev` for any further changes**, not the artifacts.
   analytics and no cookies — **if analytics (#30) or any cookie-setting embed is
   ever added, update this page first.** Also discloses Google Fonts + Cloudflare.
 - **`public/site.webmanifest`** — icons for home-screen shortcuts (#34).
+- **`public/favicon.ico`** — at the site root because Google Search (and
+  browsers that ignore `<link>` tags) request `/favicon.ico` directly. Holds
+  16/32/48px generated from `logo-mark.png`; Google needs 48px or a multiple of
+  it. Linked first on every page with `sizes="48x48"`. Also on
+  `release/main-markdown` for the maintenance page.
 - **SEO** — canonical, Open Graph, Twitter card on every page; `WebSite` JSON-LD
   on the homepage only. Deliberately no `Person`/`Organization` schema — the
   user removed their name from the site, and it's not a registered business.
