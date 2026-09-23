@@ -224,22 +224,30 @@ files on `dev` for any further changes**, not the artifacts.
   localStorage consent record, Google Fonts, and Cloudflare. **Any new
   tracking or cookie-setting embed must be added here (and to `privacy.md`)
   in the same change.**
-- **Google Tag Manager + cookie consent (#30, #38)** — `public/js/consent.js`
-  is the first script in every page's `<head>`. It sets Google Consent Mode
-  defaults to all-denied and **only injects GTM (`GTM-TKBJX8F5`) after the
-  visitor clicks Accept**. Nothing from Google loads before that. The choice
-  lives in localStorage key `audetteit-consent` (`granted`/`denied`). The
-  banner is built by the script, styled by `public/css/consent.css`, and
-  reopened by the footer "cookie settings" button (`data-cookie-settings`).
-  Declining after accepting sets consent to denied, clears `_ga*` cookies, and
-  reloads the page. Google's `<noscript>` iframe snippet was **deliberately
-  left out**: it would load GTM without consent (and GA4 doesn't run without
-  JS anyway). GA4 itself is configured inside the GTM container, not in the
-  repo. CSP allows `https://*.googletagmanager.com` (script/img/connect) and
-  `https://*.google-analytics.com`, `https://*.analytics.google.com`
-  (img/connect), in **both** `public/_headers` and `worker/index.js`. A GTM
-  "Custom HTML" tag would be blocked by the CSP (no `'unsafe-inline'`); stick
-  to built-in tag types.
+- **Google Tag Manager + cookie consent (#30, #38)** — Consent Mode
+  **"advanced"** (owner's choice, 2026-09-23, so Google's "Test your website"
+  checker and Tag Assistant detect the tag). Every page's `<head>` starts
+  with `<script src="/js/consent.js">`, which sets all Consent Mode signals to
+  `denied` (and to `analytics_storage: granted` if the visitor accepted
+  before), then Google's **exact** GTM snippet for `GTM-TKBJX8F5`. The
+  `<noscript>` GTM iframe comes right after `<body>`. GTM loads for everyone,
+  but GA sets no cookies until the visitor clicks Accept. Before that it only
+  sends cookieless pings, and `privacy.html`/`privacy.md` say so. The banner is
+  built by `consent.js` and styled by `public/css/consent.css`. The choice
+  lives in localStorage key `audetteit-consent`, and the footer "cookie
+  settings" button (`data-cookie-settings`) reopens the banner. Decline pushes
+  `analytics_storage: denied` and clears `_ga*` cookies. GA4 itself is
+  configured inside the GTM container, not in the repo.
+  **CSP:** the inline snippet is allowed by its hash
+  (`'sha256-UyV5Au11KVQu7NJLru7rrbyHqm2Q7abUOBcVvlNvgFo='`), not
+  `'unsafe-inline'`, plus `https://*.googletagmanager.com` (script/img/connect),
+  `https://*.google-analytics.com` and `https://*.analytics.google.com`
+  (img/connect), and `frame-src https://www.googletagmanager.com` (noscript).
+  All of this is in **both** `public/_headers` and `worker/index.js`. **If the
+  snippet changes by even one character, the hash changes.**
+  `scripts/check-links.py` (CI) fails when any inline script's hash is missing
+  from either CSP. A GTM "Custom HTML" tag would be blocked by the CSP, so
+  stick to built-in tag types.
 - **`public/site.webmanifest`** — icons for home-screen shortcuts (#34).
 - **`public/favicon.ico`** — at the site root because Google Search (and
   browsers that ignore `<link>` tags) request `/favicon.ico` directly. Holds
@@ -341,6 +349,16 @@ repo (Settings → Actions → General); needs the user to check.
 `staging` → `main` instead. When `main` has commits a branch lacks (merge
 commits, docs), `git merge -s ours origin/main` on that branch clears the
 conflict only if `main`'s side has nothing new. Check `git diff` first.
+
+**Deploy timing (learned 2026-09-23):** Workers Builds runs one build at a
+time, and preview builds from pushes to `dev`/`staging`/other branches queue
+ahead of production. It also skips superseded commits: the PR #50 merge got no
+build of its own because PR #51 merged 48s later, and #51's build (which
+included #50) went live at 20:49 UTC, several minutes after the merge. To see
+what production is really running, fetch the deployed code with the
+Cloudflare MCP `workers_get_worker_code` (`audetteit-site`) or read the
+"Workers Builds" check run on the `main` commit. Avoid a burst of branch
+pushes right before a release.
 
 **Cloudflare project settings still need manual verification in the dashboard**
 (none of this is scriptable from here): confirm **Production branch** is `main`,

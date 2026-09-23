@@ -1,12 +1,11 @@
-// Cookie consent + Google Tag Manager. Loaded as the first script in <head>
-// (external, not inline, so the CSP can keep script-src free of 'unsafe-inline').
+// Cookie consent for Google Tag Manager. Must stay the first script in <head>,
+// before Google's GTM snippet, so Consent Mode defaults exist before GTM runs.
 //
-// Nothing from Google loads until the visitor clicks "Accept": Consent Mode
-// defaults everything to denied, and GTM itself is only injected after consent.
-// The choice is kept in localStorage (not a cookie), and the footer's
+// GTM loads on every page (Consent Mode "advanced"), but analytics_storage stays
+// "denied" until the visitor clicks Accept, so GA sets no cookies before that.
+// The choice is kept in localStorage (not a cookie); the footer's
 // "cookie settings" button reopens the banner to change it.
 (function () {
-  var GTM_ID = 'GTM-TKBJX8F5';
   var KEY = 'audetteit-consent';
 
   window.dataLayer = window.dataLayer || [];
@@ -25,21 +24,7 @@
     try { localStorage.setItem(KEY, value); } catch (e) { /* storage blocked: ask again next page */ }
   }
 
-  var gtmLoaded = false;
-  function loadGtm() {
-    if (gtmLoaded) return;
-    gtmLoaded = true;
-    window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-    var s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://www.googletagmanager.com/gtm.js?id=' + GTM_ID;
-    document.head.appendChild(s);
-  }
-
-  function grant() {
-    gtag('consent', 'update', { analytics_storage: 'granted' });
-    loadGtm();
-  }
+  if (readChoice() === 'granted') gtag('consent', 'update', { analytics_storage: 'granted' });
 
   // Google Analytics cookies are _ga and _ga_<id>, set on the parent domain.
   function clearAnalyticsCookies() {
@@ -53,8 +38,6 @@
       });
     });
   }
-
-  if (readChoice() === 'granted') grant();
 
   // Keep the fixed banner from covering the footer while it's open.
   function reserveSpace(el) {
@@ -70,7 +53,7 @@
       '<div class="consent-inner">' +
         '<p class="consent-text"><span class="consent-tag">cookies</span> ' +
         'Can this site use Google Analytics cookies to count visits? ' +
-        'Nothing loads unless you say yes. <a href="/privacy" class="inline-link">Details</a>.</p>' +
+        'No analytics cookies are set unless you say yes. <a href="/privacy" class="inline-link">Details</a>.</p>' +
         '<div class="consent-actions">' +
           '<button type="button" class="btn btn-ghost" data-consent="denied">Decline</button>' +
           '<button type="button" class="btn btn-ghost" data-consent="granted">Accept</button>' +
@@ -80,18 +63,11 @@
       var btn = e.target.closest('[data-consent]');
       if (!btn) return;
       var value = btn.getAttribute('data-consent');
-      var previous = readChoice();
       saveChoice(value);
       el.hidden = true;
       reserveSpace(el);
-      if (value === 'granted') return grant();
-      if (previous === 'granted' || gtmLoaded) {
-        // GTM can't be unloaded from a running page: withdraw consent, clear
-        // its cookies, and reload so nothing from Google is left running.
-        gtag('consent', 'update', { analytics_storage: 'denied' });
-        clearAnalyticsCookies();
-        location.reload();
-      }
+      gtag('consent', 'update', { analytics_storage: value });
+      if (value === 'denied') clearAnalyticsCookies();
     });
     document.body.appendChild(el);
     reserveSpace(el);
