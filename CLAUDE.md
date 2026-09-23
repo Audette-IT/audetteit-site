@@ -280,13 +280,37 @@ files on `dev` for any further changes**, not the artifacts.
   live page (Firecrawl `rawHtml`, `maxAge: 0`) and recompute them.
   `check-links.py` can't catch this because the scripts aren't in the repo.
   **Consent ordering:** the gateway's loader runs before `consent.js`, so GTM
-  could start before the "denied" defaults. The durable fix is inside GTM: a
-  consent-default tag on the **Consent Initialization – All Pages** trigger
-  that sets everything to denied (and reads the `audetteit-consent`
-  localStorage value to grant analytics for returning visitors who
-  accepted). GA4 and Clarity tags then wait on `analytics_storage`. The
-  owner sets this up in the GTM container, not the repo. Keep `consent.js`
-  either way, since it runs the banner and Clarity's consent API.
+  could start before the site's "denied" defaults. That's solved **inside the
+  GTM container** (published by the owner 2026-09-23, version "Consent
+  defaults in GTM"), so it no longer matters which script loads first. See
+  "GTM container configuration" below. Keep `consent.js` either way: it
+  runs the banner, the Accept/Decline updates, and Clarity's consent API.
+- **GTM container configuration (`GTM-TKBJX8F5`, lives in Google Tag
+  Manager, not the repo):**
+  - **Template:** "Consent Mode (Google + Microsoft tags)" by
+    gtm-templates-simo-ahava (Community Template Gallery). Also
+    "Microsoft Clarity - Official".
+  - **Variable `LS - audetteit-consent`** (Custom JavaScript): returns
+    `localStorage.getItem('audetteit-consent')` (null if storage is blocked).
+    **If the localStorage key in `consent.js` is ever renamed, update this
+    variable too.**
+  - **Trigger `Consent Init - accepted before`:** Consent Initialization,
+    fires when `LS - audetteit-consent` equals `granted`.
+  - **Tag `Consent - Default`** (Consent Mode template, command Default):
+    `ad_storage`, `analytics_storage`, `ad_user_data`, `ad_personalization`
+    = denied, "wait for update" 500 ms, Microsoft Consent Mode off. Trigger:
+    **Consent Initialization - All Pages**.
+  - **Tag `Consent - Update (accepted before)`** (command Update):
+    `analytics_storage` = granted only, Microsoft Consent Mode off. Trigger:
+    `Consent Init - accepted before`. **Never attach it to "Consent
+    Initialization - All Pages"**: that would grant analytics to every
+    visitor, including people who declined.
+  - **Tag `Audette IT Website`** (Google tag / GA4) on Initialization - All
+    Pages, relying on built-in consent checks. **Tag `Microsoft Clarity -
+    Official`** on All Pages, with no extra consent requirement, because
+    Clarity gets the choice from `consent.js` via `consentv2`. Microsoft
+    Consent Mode stays off in the template so Clarity doesn't get two sets of
+    signals.
 - **`public/site.webmanifest`** — icons for home-screen shortcuts (#34).
 - **`public/favicon.ico`** — at the site root because Google Search (and
   browsers that ignore `<link>` tags) request `/favicon.ico` directly. Holds
@@ -381,10 +405,9 @@ promotion flow the user specified:
 
 **Verified 2026-09-23 via PR #48's checks:** the Cloudflare "Workers Builds:
 audetteit-site" preview build of `dev` succeeded, so the new `wrangler.jsonc` +
-Worker setup builds on Cloudflare. **GitHub Actions CI has never run** — no
-`CI` workflow run exists for any push to `dev`/`staging` or for PR #48, only
-the GitHub Pages workflow. Likely Actions is disabled or restricted for the
-repo (Settings → Actions → General); needs the user to check.
+Worker setup builds on Cloudflare. **GitHub Actions CI has never run.** The
+cause is an account/org-level block ("Actions has been disabled for this
+user"); see #32 under "GitHub project tracking".
 
 **PR #48** (`dev` → `main`, opened from the Claude Code UI and mislabeled as
 "to staging") was closed on 2026-09-23 at the user's request; launch went
@@ -414,7 +437,6 @@ pushed to it, and decide on a custom domain alias for staging if wanted.
 - Full list of services beyond what's drafted — more will likely get added as
   they're built out (noted as a placeholder on the Services page).
 - Tone/voice sign-off on the rewritten copy (#23).
-- Whether to add analytics, and which tool (#30).
 - Confirming rights to the shield logo (#39).
 - **GitHub Pages is publishing `staging`.** Its `pages-build-deployment`
   workflow ran on `staging` on 2026-09-23 (triggered by the `audetteit`
