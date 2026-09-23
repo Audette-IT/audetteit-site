@@ -287,6 +287,22 @@ promotion flow the user specified:
   wrong for a Worker). No build step. Doing this locally instead of pushing
   feature branches avoids burning Cloudflare build minutes.
 
+**Verified 2026-09-23 via PR #48's checks:** the Cloudflare "Workers Builds:
+audetteit-site" preview build of `dev` succeeded, so the new `wrangler.jsonc` +
+Worker setup builds on Cloudflare. **GitHub Actions CI has never run** — no
+`CI` workflow run exists for any push to `dev`/`staging` or for PR #48, only
+the GitHub Pages workflow. Likely Actions is disabled or restricted for the
+repo (Settings → Actions → General); needs the user to check.
+
+**PR #48** (`dev` → `main`, opened from the Claude Code UI and mislabeled as
+"to staging") was **closed on 2026-09-23 at the user's request**. The launch
+will be a `staging` → `main` promotion later, not straight from `dev`. Before
+closing, `main` was merged into `dev` (keeping `dev`'s files, tree unchanged)
+to clear its merge conflict. `staging` hasn't had `main` merged in yet, so
+expect the same conflict at launch time. It resolves the same way:
+`git merge -s ours origin/main` on `staging`, since `main` only holds the
+maintenance-page versions.
+
 **Cloudflare project settings still need manual verification in the dashboard**
 (none of this is scriptable from here): confirm **Production branch** is `main`,
 confirm `staging` actually produces a preview deployment once something is
@@ -301,8 +317,9 @@ pushed to it, and decide on a custom domain alias for staging if wanted.
 - Tone/voice sign-off on the rewritten copy (#23).
 - Whether to add analytics, and which tool (#30).
 - Confirming rights to the shield logo (#39).
-- When to promote `staging` → `main` (only with explicit approval) — after
-  reviewing the staging preview.
+- When to launch: promote `staging` → `main` (only with explicit approval),
+  after reviewing the staging preview. Decided 2026-09-23 that launch goes from
+  `staging`, not a `dev` → `main` PR.
 - **GitHub Pages is publishing `staging`.** Its `pages-build-deployment`
   workflow ran on `staging` on 2026-09-23 (triggered by the `audetteit`
   account), so the Pages source appears to have been switched to `staging`.
