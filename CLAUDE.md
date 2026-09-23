@@ -99,9 +99,11 @@ redoing any design or issue-tracking work** — don't regenerate from scratch.
     printers, accounts, parental controls) and **Infrastructure & advanced**
     (network design, Active Directory/domains, self-hosted services, security
     hardening).
-  - Every unverified fact (email, phone, city, footer name) is marked
-    `[placeholder]` — deliberately not fabricated. Get real values from the user
-    before shipping.
+  - Contact page shows the real email (`michael.audette@audetteit.com`) only.
+    Phone, city, and the footer "run by ___" name were all removed rather than
+    left as placeholders — the user asked for the email filled in and everything
+    else stripped, not left dangling. Re-add phone/city/footer name only if the
+    user actually asks to include them.
   - Not wired to a backend yet (contact form) — that's issue #24.
 - **Issue tracker** —
   https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy
@@ -112,8 +114,6 @@ redoing any design or issue-tracking work** — don't regenerate from scratch.
 
 ## Open questions for the user (don't guess these)
 
-- Real contact email/phone/city for the site.
-- Name to show in the footer ("run by ___").
 - Whether/when to build the self-hosted help desk (issue #44 — standing reminder,
   no deadline) to replace the third-party Zammad widget at `help.audetteit.net`.
 - Full list of services beyond what's drafted — more will likely get added as
