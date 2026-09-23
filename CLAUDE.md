@@ -264,9 +264,12 @@ pushed to it, and decide on a custom domain alias for staging if wanted.
 - Confirming rights to the shield logo (#39).
 - When to promote `staging` → `main` (only with explicit approval) — after
   reviewing the staging preview.
-- Whether the old GitHub Pages workflow (`pages-build-deployment`, last run in
-  July) should be turned off in Settings → Pages. The site isn't served from
-  GitHub Pages anymore.
+- **GitHub Pages is publishing `staging`.** Its `pages-build-deployment`
+  workflow ran on `staging` on 2026-09-23 (triggered by the `audetteit`
+  account), so the Pages source appears to have been switched to `staging`.
+  That publishes staging publicly on github.io, outside Cloudflare Access.
+  Recommended: turn GitHub Pages off in Settings → Pages. The site is served by
+  the Cloudflare Worker, not GitHub Pages.
 
 ## Working conventions established this session
 
