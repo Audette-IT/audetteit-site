@@ -255,6 +255,16 @@ promotion flow the user specified:
          "policies": [{ "decision": "allow", "include": [{ "email": { "email": "michael.audette@audetteit.com" } }] }]
        }'
      ```
+- **`release/main-markdown`** — prepared for `main`, **not merged; waiting
+  on the user's approval.** It's `main` (maintenance page) plus Markdown for
+  agents, so production also gets it in the meantime: `wrangler.jsonc` +
+  `worker/index.js` (Markdown on `/` via `Accept: text/markdown`),
+  `public/index.md`, `llms.txt`, `llms-full.txt`, sitemap `lastmod`, and the
+  dead `functions/index.js` removed. No security headers/CSP on this branch
+  (kept to what was asked). Adds a real `wrangler.jsonc` to production for the
+  first time, so check that the `staging` preview build (same config style)
+  succeeds before merging. Once it's in, push `main` and
+  `claude/stoic-gates-w5906b` too.
 - **`dev`** — active development branch. Has diverged from `main`: carries the
   merged-in homepage redesign (real `index.html`/`services.html`/`contact.html`,
   not just the maintenance page). Promoted to `staging`; not yet to `main`.
