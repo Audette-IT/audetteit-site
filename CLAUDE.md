@@ -96,9 +96,12 @@ Copy should read as one capable person, not a company.
     with Search Console and a link-preview debugger in a few days (indexing
     lag), then close it. Don't close it before that.
   - #32 CI: the workflow is registered and active, but GitHub Actions has
-    **never run it** (0 runs across every push and PR #46–#55). Actions is
-    likely disabled or restricted at repo/org level (permissions API → 403
-    here). The owner needs Settings → Actions → General → allow actions.
+    **never run it**. After the owner enabled Actions in repo settings, a push
+    still produced no run, and a direct `workflow_dispatch` via the API
+    returned **"Actions has been disabled for this user."** That's an
+    account/org-level block (billing/payment issue or GitHub restricting a new
+    account), not the repo toggle. The owner needs to check the Audette-IT org
+    Actions policy and billing, or contact GitHub Support.
   - #39 asset rights: owner must confirm rights to the shield logo, then update
     `ASSETS.md`.
   - #43 Markdown for Agents: Pro-plan feature; the Worker stand-in covers
@@ -261,14 +264,29 @@ files on `dev` for any further changes**, not the artifacts.
   `scripts/check-links.py` (CI) fails when any inline script's hash is missing
   from either CSP. A GTM "Custom HTML" tag would be blocked by the CSP, so
   stick to built-in tag types.
-- **Cloudflare Google Tag Gateway must stay OFF.** It was found on
-  2026-09-23 injecting its own GTM loader and two inline scripts
-  (`google_tags_first_party`, a `/epez/` loader) at the top of every page,
-  before `consent.js`. That breaks the "consent defaults before GTM" order,
-  and its inline scripts have no CSP hash, so browsers block them anyway. The
-  owner was asked to turn it off (zone → Google tag gateway). If first-party
-  tag serving is ever wanted, set it up deliberately: turn off auto-inject,
-  add the gateway path to CSP, and keep `consent.js` first.
+- **Cloudflare Google Tag Gateway: ON (owner wants it), allowed by CSP
+  hashes (PR #57, live 2026-09-23 21:32 UTC).** Cloudflare injects two fixed inline scripts at the very top of
+  every page's `<head>`, *after* the Worker runs (the Worker can't remove or
+  reorder them, and there's no per-path exclusion): one pushes `GTM-TKBJX8F5`
+  into `window.google_tags_first_party`; the other pushes
+  `set developer_id.dY2E1Nz` and async-loads GTM first-party from `/epez/`
+  (same origin, so `'self'` covers it and its collection calls). Their CSP
+  hashes are `'sha256-L7128Ucn8Uz1AVKkbXZh64Cp6i4V2MW7KQbAv84MBq0='` and
+  `'sha256-l6WiYX1ug7tDF6hFBAEd08DFrf7YxBn+kEWIYJDSnLI='`, in both CSPs. They
+  were computed from the live injected text (2026-09-23) and verified by
+  simulating the injection in Chromium. **If Cloudflare ever changes the
+  injected text** (new measurement path, tag ID, or developer ID), those
+  hashes stop matching and browsers silently block the gateway. Re-scrape the
+  live page (Firecrawl `rawHtml`, `maxAge: 0`) and recompute them.
+  `check-links.py` can't catch this because the scripts aren't in the repo.
+  **Consent ordering:** the gateway's loader runs before `consent.js`, so GTM
+  could start before the "denied" defaults. The durable fix is inside GTM: a
+  consent-default tag on the **Consent Initialization – All Pages** trigger
+  that sets everything to denied (and reads the `audetteit-consent`
+  localStorage value to grant analytics for returning visitors who
+  accepted). GA4 and Clarity tags then wait on `analytics_storage`. The
+  owner sets this up in the GTM container, not the repo. Keep `consent.js`
+  either way, since it runs the banner and Clarity's consent API.
 - **`public/site.webmanifest`** — icons for home-screen shortcuts (#34).
 - **`public/favicon.ico`** — at the site root because Google Search (and
   browsers that ignore `<link>` tags) request `/favicon.ico` directly. Holds
@@ -339,7 +357,8 @@ promotion flow the user specified:
   `release/main-markdown` (PR #46), `docs/main-after-46` (PR #47), `launch`
   (PR #49), `release/analytics-www` (PR #50), `docs/after-50` (PR #51),
   `release/gtm-advanced` (PR #52), `docs/after-52` (PR #53),
-  `docs/www-live` (PR #54), `release/clarity` (PR #55), `docs/after-55`. `feature/homepage-redesign` and
+  `docs/www-live` (PR #54), `release/clarity` (PR #55), `docs/after-55`
+  (PR #56), `release/tag-gateway` (PR #57), `docs/after-57`. `feature/homepage-redesign` and
   the two `cloudflare/workers-autoconfig*` branches are also stale.
 - **`release/main-markdown`** — merged into `main` via PR #46 (Markdown for
   the maintenance page, `favicon.ico`, first real `wrangler.jsonc` on
