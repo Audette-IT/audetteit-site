@@ -124,13 +124,36 @@ promotion flow the user specified:
   or the user sets it manually in GitHub Settings &rarr; Branches. Recommended
   rule: require PR before merging, require status checks once CI exists (#32),
   don't allow bypassing even for admins.
-- **`staging`** — created, pushed, currently at the same commit as `main`. Meant
-  to get a Cloudflare Pages preview deployment (git-connected Pages projects
-  auto-preview every non-production branch). If a **stable** staging URL is
-  wanted instead of a per-commit hash, that needs a custom domain alias
-  (e.g. `staging.audetteit.com`) set up in the Cloudflare dashboard — not
-  something available via the Cloudflare tools in this session (scoped to
-  D1/R2/KV/Workers-code/Hyperdrive, not Pages project/build settings).
+- **`staging`** — created, pushed, has its own README. The site is deployed as
+  a Cloudflare **Worker** named `audetteit-site` (account
+  `b7a46df8571aa32900c3155b464416ab`, worker ID
+  `c8969d22263a484bae64aa2436af8e93`) — not classic Pages — so it uses Workers
+  Builds preview behavior, not Pages preview deployments. Every push to a
+  non-production branch auto-builds a Preview by default once Preview Builds
+  are enabled; no per-branch config needed as long as `main` stays the
+  Production branch. **Two manual dashboard steps still needed** (no tool in
+  this session can touch Worker/Pages project or Access settings —
+  Cloudflare tools here are scoped to D1/R2/KV/Workers-code/Hyperdrive only):
+  1. **Workers & Pages → `audetteit-site` → Settings → Build → Branch
+     control**: confirm Production branch = `main`, Enable Preview Builds is
+     on. Optionally restrict which branches get previews to just `staging` if
+     `dev`/feature branches firing previews too is unwanted.
+  2. **Lock previews behind Cloudflare Access**: same Worker → **Access** tab
+     → Protect this Worker behind Access → scope **Previews only** (not "All
+     traffic", which would also lock production) → set an authentication
+     policy → Apply Access. API equivalent (needs a real
+     `CLOUDFLARE_API_TOKEN`, not available in this session):
+     ```
+     curl "https://api.cloudflare.com/client/v4/accounts/b7a46df8571aa32900c3155b464416ab/access/apps" \
+       --request POST \
+       --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+       --json '{
+         "type": "self_hosted",
+         "name": "Access for audetteit-site previews",
+         "destinations": [{ "type": "preview_worker", "worker_id": "c8969d22263a484bae64aa2436af8e93" }],
+         "policies": [{ "decision": "allow", "include": [{ "email": { "email": "michael.audette@audetteit.com" } }] }]
+       }'
+     ```
 - **`dev`** — created, pushed, currently at the same commit as `main`. Active
   development branch.
 - **Feature branches** — branch off `dev`, merge back into `dev`.
