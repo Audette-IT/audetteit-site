@@ -1,17 +1,33 @@
-# Audette IT Landing Page
+# Audette IT
 
-A professional, enterprise-style landing page for Audette IT, featuring a dark technical theme, service overview, and placeholders for status pages and employee portals.
+Personal IT help for family and friends — everything from everyday
+troubleshooting to real network and Active Directory infrastructure work.
+Not a registered business.
 
-## Project Structure
+**Branch:** `staging` — pre-production. Gets a Cloudflare Pages preview
+deployment for final review before promotion to `main`. See `CLAUDE.md` for
+full project context.
+
+## Branch flow
+
+```
+feature/*  →  dev  →  staging  →  main
+```
+
+This branch currently mirrors `main` — nothing has been promoted from `dev`
+yet. Check `dev` (or `CLAUDE.md`) for what's actually in progress.
+
+## Structure
 
 ```
 /public
-  /assets        # Images and resources
-  index.html     # Main landing page
-  style.css      # Custom styles (Dark theme, responsive)
+  index.html      # Currently the maintenance page (mirrors main)
+  robots.txt
+  sitemap.xml
+  /assets         # Logo, favicons
+/functions
+  index.js        # Cloudflare Pages Function — serves Markdown on `/`
+                    when requested with `Accept: text/markdown`
 ```
 
-## Customization
-
-- **Status Page**: Look for `<!-- Replace the content of this div with your status page embed -->` in `index.html` to add your OneUptime or other status dashboard.
-- **Employee Portal**: Update the link in the `#portal` section in `index.html` to point to your internal login page.
+No build step — plain static HTML/CSS/JS, deployed via Cloudflare Pages.
