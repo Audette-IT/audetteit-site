@@ -123,7 +123,9 @@ Until you accept (or if you decline), Google Analytics runs in a restricted mode
 
 If you accept, Google Analytics sets its own cookies (named `_ga` and `_ga_…`) and sends Google things like the pages you view, roughly where you are, and what device and browser you're using. Google handles that under [Google's privacy policy](https://policies.google.com/privacy). It's used only to see how the site is doing. It isn't used for ads, and I don't combine it with anything else.
 
-Your choice is remembered in your browser's local storage (not a cookie), so the banner doesn't ask on every page. You can change it any time with **cookie settings** at the bottom of every page. Declining after accepting clears the analytics cookies.
+The site also uses **Microsoft Clarity**, loaded through Tag Manager, to see how pages are used: clicks, scrolling, and anonymized recordings of page visits, which help find layout problems. What you type into form fields is masked and never recorded. Clarity follows the same banner choice. Until you accept, it runs without cookies and treats every page view as a separate visit. If you accept, it sets its own cookies (`_clck`, `_clsk`) so visits can be linked across pages. Microsoft handles that data under the [Microsoft Privacy Statement](https://privacy.microsoft.com/privacystatement). It isn't used for ads.
+
+Your choice is remembered in your browser's local storage (not a cookie), so the banner doesn't ask on every page. You can change it any time with **cookie settings** at the bottom of every page. Declining after accepting clears the analytics cookies from both.
 
 ### Hosting
 

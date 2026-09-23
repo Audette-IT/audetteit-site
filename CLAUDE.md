@@ -86,28 +86,26 @@ Copy should read as one capable person, not a company.
   #26, #27, #28, #29, #33, #35, #36, #40 (each has a closing comment on GitHub
   saying what was done). #37 was already closed. All of it went live with the
   2026-09-23 launch.
+- **Closed 2026-09-23 after live verification** (via Firecrawl, since
+  audetteit.com itself is unreachable from these sessions): #31 (securityheaders.com
+  grade **A+**), #34 (favicon/manifest served), #30 (GTM + GA4 + Clarity via
+  GTM), #38 (consent banner).
 - **Still open, and why** (each has a progress comment on GitHub):
   - #23 copy: waiting on the owner's tone/voice review.
-  - #25 SEO, #31 headers, #34 icons: live since the 2026-09-23 launch; left
-    open only for the post-launch check (link-preview debugger, header
-    scanner, favicon checker), which the owner has to run (audetteit.com is
-    unreachable from these sessions).
-  - #32 CI: workflow is on every branch including `main` now, but GitHub
-    Actions has never run it (see "Branch structure"), so it's still unproven.
-  - #30 analytics + #38 cookie banner (switched to advanced Consent Mode via
-    PR #52, live 2026-09-23 20:54 UTC): the owner chose **Google Analytics via
-    Google Tag Manager (container `GTM-TKBJX8F5`) with a consent banner**
-    (2026-09-23). **Live on `main` since 2026-09-23** (PR #50, merge commit `79a8741`, from
-    `release/analytics-www`, approved by the owner: "you can skip and push it
-    to main and the live site"). Close both once the owner confirms GA4
-    receives data.
+  - #25 SEO: everything is served and was confirmed live. The owner will verify
+    with Search Console and a link-preview debugger in a few days (indexing
+    lag), then close it. Don't close it before that.
+  - #32 CI: the workflow is registered and active, but GitHub Actions has
+    **never run it** (0 runs across every push and PR #46–#55). Actions is
+    likely disabled or restricted at repo/org level (permissions API → 403
+    here). The owner needs Settings → Actions → General → allow actions.
   - #39 asset rights: owner must confirm rights to the shield logo, then update
     `ASSETS.md`.
-  - #43 Markdown for Agents: Pro-plan feature; the Worker stand-in now covers
+  - #43 Markdown for Agents: Pro-plan feature; the Worker stand-in covers
     every page, plus `.md` twins and `llms.txt`/`llms-full.txt`.
   - #44 self-hosted help desk: standing reminder.
-- The Issue Tracker artifact was last updated 2026-09-23 after the analytics
-  work (14 done / 9 in progress / 1 open; #30 and #38 moved to in progress).
+- The Issue Tracker artifact was last re-synced from the API on 2026-09-23
+  after these closures (18 done / 5 in progress / 1 open).
 
 ## Design direction (already decided — don't restart from scratch)
 
@@ -242,16 +240,35 @@ files on `dev` for any further changes**, not the artifacts.
   settings" button (`data-cookie-settings`) reopens the banner. Decline pushes
   `analytics_storage: denied` and clears `_ga*` cookies. GA4 itself is
   configured inside the GTM container, not in the repo.
+  **Microsoft Clarity** (project `ymzkuz40tm`) is also loaded **by GTM**, as a
+  tag in the container, not by a snippet in the repo. The owner explicitly
+  cancelled the direct inline snippet. `consent.js` defines the `window.clarity`
+  queue and sends `clarity('consentv2', {ad_Storage:'denied',
+  analytics_Storage: <choice>})` at startup and again on window `load` (in
+  case the GTM template replaced the queue), plus on every banner click.
+  Decline also clears `_clck`/`_clsk`. For this to hold outside the EEA, the
+  Clarity project's **Settings → Setup → Cookies** must be **off** (consent
+  mode). The banner and privacy page name both GA and Clarity.
   **CSP:** the inline snippet is allowed by its hash
   (`'sha256-UyV5Au11KVQu7NJLru7rrbyHqm2Q7abUOBcVvlNvgFo='`), not
   `'unsafe-inline'`, plus `https://*.googletagmanager.com` (script/img/connect),
   `https://*.google-analytics.com` and `https://*.analytics.google.com`
-  (img/connect), and `frame-src https://www.googletagmanager.com` (noscript).
+  (img/connect), `https://*.clarity.ms` (script/img/connect) and
+  `https://c.bing.com` (img/connect) for Clarity, and
+  `frame-src https://www.googletagmanager.com` (noscript).
   All of this is in **both** `public/_headers` and `worker/index.js`. **If the
   snippet changes by even one character, the hash changes.**
   `scripts/check-links.py` (CI) fails when any inline script's hash is missing
   from either CSP. A GTM "Custom HTML" tag would be blocked by the CSP, so
   stick to built-in tag types.
+- **Cloudflare Google Tag Gateway must stay OFF.** It was found on
+  2026-09-23 injecting its own GTM loader and two inline scripts
+  (`google_tags_first_party`, a `/epez/` loader) at the top of every page,
+  before `consent.js`. That breaks the "consent defaults before GTM" order,
+  and its inline scripts have no CSP hash, so browsers block them anyway. The
+  owner was asked to turn it off (zone → Google tag gateway). If first-party
+  tag serving is ever wanted, set it up deliberately: turn off auto-inject,
+  add the gateway path to CSP, and keep `consent.js` first.
 - **`public/site.webmanifest`** — icons for home-screen shortcuts (#34).
 - **`public/favicon.ico`** — at the site root because Google Search (and
   browsers that ignore `<link>` tags) request `/favicon.ico` directly. Holds
@@ -321,7 +338,8 @@ promotion flow the user specified:
   on branch deletes, so the owner deletes them in GitHub → Branches):
   `release/main-markdown` (PR #46), `docs/main-after-46` (PR #47), `launch`
   (PR #49), `release/analytics-www` (PR #50), `docs/after-50` (PR #51),
-  `release/gtm-advanced` (PR #52), `docs/after-52`. `feature/homepage-redesign` and
+  `release/gtm-advanced` (PR #52), `docs/after-52` (PR #53),
+  `docs/www-live` (PR #54), `release/clarity` (PR #55), `docs/after-55`. `feature/homepage-redesign` and
   the two `cloudflare/workers-autoconfig*` branches are also stale.
 - **`release/main-markdown`** — merged into `main` via PR #46 (Markdown for
   the maintenance page, `favicon.ico`, first real `wrangler.jsonc` on
