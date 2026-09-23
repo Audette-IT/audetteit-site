@@ -26,17 +26,23 @@ Copy should read as one capable person, not a company.
 
 ## Current live state
 
-- **Hosting:** Cloudflare Pages (migrated off Vercel — Vercel is no longer relevant to
-  this project at all; don't touch the Vercel connector for this repo).
+- **Hosting:** a Cloudflare **Worker with static assets** named `audetteit-site`
+  (not classic Pages — migrated off Vercel; Vercel is irrelevant now, don't touch
+  that connector). Deploys come from Workers Builds on git push.
 - **Live site (`main`):** currently a single maintenance page (`public/index.html`)
   — dark theme, brand blue accent, "We'll be right back" notice. This is
   intentional; the real multi-page redesign is merged into **`dev`** (see below)
   but has **not** been promoted to `staging` or `main` yet — don't confuse
   branches when checking what's actually live vs. in progress.
 - **Repo:** `Audette-IT/audetteit-site` on GitHub, default branch `main`.
-- `functions/index.js` — a Cloudflare Pages Function that serves a Markdown version
-  of the homepage when a request sends `Accept: text/markdown` (a free-tier stand-in
-  for Cloudflare's paid "Markdown for Agents" zone feature — see issue #43).
+- **Correction (found this session):** `main` still contains `functions/index.js`,
+  but that is a *Pages Functions* convention and this project is a
+  static-assets-only Worker (the dashboard literally says "Worker that only has
+  static assets") — so it has **never run**. Earlier notes/tracker entries that
+  called the Markdown-for-Agents stand-in "live" were wrong; it was never
+  verified (outbound network to audetteit.com is blocked from these sessions).
+  It's fixed properly on `dev` (see "Site architecture" below) and becomes real
+  once `dev` is promoted.
 - `public/robots.txt` and `public/sitemap.xml` are live.
 - Logo/favicons were recropped tight to the actual shield glyph (`public/assets/
   logo-mark.png`, `favicon-32.png`, `favicon-16.png`, `apple-touch-icon.png`,
@@ -78,7 +84,11 @@ infrastructure:
 - Sharp corners (2–4px radius), hairline borders, no soft `rounded-2xl` + shadow
   treatment
 - One signal accent color (blue) used sparingly — status dots, links, one blinking
-  cursor — not decorative icon-in-rounded-square badges everywhere
+  cursor — not decorative icon-in-rounded-square badges everywhere. **Light-mode
+  signal is `#0074A8`, not the brand `#0090CC`**: `#0090CC` measured 3.22:1 as
+  link text and 3.58:1 for white-on-button, failing WCAG AA; `#0074A8` is the
+  closest blue that passes everywhere (4.65–5.17:1). Dark mode keeps `#2FD1FF`
+  (11:1). Don't "fix" it back.
 - Services shown as a dense manifest/spec list with status tags, not icon cards
 - Process shown as a connected pipeline diagram (nodes + line), not numbered cards
 - A static example "monitoring console" panel as the hero's visual anchor, clearly
@@ -91,14 +101,10 @@ history has the exact URLs if needed again.
 
 ## Homepage redesign — now real files, not just an artifact
 
-The redesign (Home / Services / Contact) is implemented for real as
-`public/index.html`, `public/services.html`, `public/contact.html`. It's
-merged into **`dev`** (built on `feature/homepage-redesign`, which still
-exists but is no longer where changes should land — edit `dev` directly now).
-Not yet promoted to `staging` or `main`. `public/style.css` was removed
-(dead — nothing references it once the redesign uses inline `<style>` per
-page, same convention as the maintenance page). `functions/index.js`'s
-Markdown-negotiation stand-in was updated to match the new homepage copy.
+The redesign (Home / Services / Contact / Privacy) is implemented for real in
+`public/`. It's merged into **`dev`** (built on `feature/homepage-redesign`,
+which still exists but is no longer where changes should land — edit `dev`
+directly now). Not yet promoted to `staging` or `main`.
 
 The Claude Artifact versions (below) were the design/review draft that this was
 built from — the repo files are now the source of truth going forward, not the
@@ -114,13 +120,58 @@ files on `dev` for any further changes**, not the artifacts.
   - Contact page shows the real email (`michael.audette@audetteit.com`) only —
     phone, city, and the footer "run by ___" name were deliberately removed,
     not left as placeholders. Re-add only if the user actually asks.
-  - Not wired to a backend yet (contact form) — that's issue #24.
+  - The artifact's contact form was a non-functional mock; the real one on `dev`
+    works (see "Site architecture").
 - **Issue tracker artifact** (still the canonical live source — this one is NOT
   superseded, keep using it) — https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy
   - Every issue's full body is the exact GitHub text (verified byte-for-byte),
     grouped by area, expandable, with status pills strictly tied to actual
     open/closed GitHub state (never invent a "Done" status without actually
     closing the issue).
+
+## Site architecture (on `dev`)
+
+- **`wrangler.jsonc`** — explicit Worker config (previously there was none, and
+  Cloudflare auto-detected a static-assets-only setup). `assets.directory` is
+  `./public` so repo files (CLAUDE.md, README, etc.) are never served;
+  `run_worker_first: ["/"]` means only the homepage runs through code.
+- **`worker/index.js`** — serves `/`: Markdown when `Accept: text/markdown`,
+  otherwise the static homepage. Sets the security headers itself and
+  `Vary: Accept`, because `public/_headers` is **not** applied to responses that
+  pass through Worker code. Its `SECURITY_HEADERS` must stay in sync with the
+  `/*` block in `public/_headers`.
+- **`public/_headers`** — CSP (`script-src 'self'`, no inline scripts allowed),
+  nosniff, `X-Frame-Options: DENY`, Referrer-Policy, Permissions-Policy, HSTS
+  (deliberately *without* `includeSubDomains`, so a future HTTP-only self-hosted
+  subdomain isn't broken). `/assets/*` cached 1 day (not fingerprinted).
+- **Clean URLs.** Workers serves `/services`, `/contact`, `/privacy`; the
+  `.html` forms 307-redirect. All links, canonicals, `og:url`s, and the sitemap
+  use clean URLs — don't reintroduce `.html` links.
+- **`public/js/site.js`** — all page JS (mobile menu toggle, contact form),
+  external because the CSP forbids inline scripts. Lives in `/js/`, not
+  `/assets/`, so it isn't caught by the 1-day asset cache.
+- **Contact form** — no backend. Validates name/email/message/consent, has a
+  honeypot field, then opens the visitor's email app via `mailto:` pre-filled to
+  `michael.audette@audetteit.com`. Honest about that on the page. A real
+  server-side send would need an email API + secret (not available here).
+- **`public/privacy.html`** — short plain-language note (#27). States there's no
+  analytics and no cookies — **if analytics (#30) or any cookie-setting embed is
+  ever added, update this page first.** Also discloses Google Fonts + Cloudflare.
+- **`public/site.webmanifest`** — icons for home-screen shortcuts (#34).
+- **SEO** — canonical, Open Graph, Twitter card on every page; `WebSite` JSON-LD
+  on the homepage only. Deliberately no `Person`/`Organization` schema — the
+  user removed their name from the site, and it's not a registered business.
+- **Accessibility** — skip link, visible `:focus-visible` rings, `aria-hidden`
+  on decorative elements, working mobile menu with `aria-expanded` (before this,
+  the hamburger had no JS and mobile visitors couldn't navigate at all).
+- **CI** — `.github/workflows/ci.yml`: htmlhint, `scripts/check-links.py`
+  (internal link checker), manifest/sitemap validation, `wrangler deploy
+  --dry-run`. All pass locally.
+- **`ASSETS.md`** — asset provenance (#39). Logo rights are still **unconfirmed**
+  — needs the user.
+- **Verified locally** with `npx wrangler dev` + Playwright/Chromium: 4 pages ×
+  phone/desktop × light/dark, zero horizontal overflow, no CSP violations,
+  mobile menu and form validation exercised end to end.
 
 ## Branch structure
 
@@ -168,10 +219,10 @@ promotion flow the user specified:
   merged-in homepage redesign (real `index.html`/`services.html`/`contact.html`,
   not just the maintenance page). Not yet promoted to `staging` or `main`.
 - **Feature branches** — branch off `dev`, merge back into `dev`.
-- **Local dev hosting** — the user is setting this up themselves to avoid
-  burning Cloudflare build minutes on every feature-branch push (e.g.
-  `npx wrangler pages dev public/`, or any static file server — this is plain
-  HTML/CSS/JS plus one Pages Function in `functions/`, no build step needed).
+- **Local dev hosting** — `npx wrangler dev` from the repo root runs the real
+  Worker + assets exactly as deployed (the old `wrangler pages dev` advice was
+  wrong for a Worker). No build step. Doing this locally instead of pushing
+  feature branches avoids burning Cloudflare build minutes.
 
 **Cloudflare project settings still need manual verification in the dashboard**
 (none of this is scriptable from here): confirm **Production branch** is `main`,

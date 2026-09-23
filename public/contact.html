@@ -8,6 +8,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Get in touch with Audette IT.">
+<link rel="canonical" href="https://audetteit.com/contact">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Contact | Audette IT">
+<meta property="og:description" content="Get in touch with Audette IT.">
+<meta property="og:url" content="https://audetteit.com/contact">
+<meta property="og:image" content="https://audetteit.com/assets/logo-mark.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Contact | Audette IT">
+<meta name="twitter:description" content="Get in touch with Audette IT.">
+<meta name="twitter:image" content="https://audetteit.com/assets/logo-mark.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#0074A8">
 <style>
   :root {
     --bg: #F1F3F5;
@@ -16,7 +28,7 @@
     --line: #D6DDE2;
     --text: #12161A;
     --text-dim: #64707A;
-    --signal: #0090CC;
+    --signal: #0074A8;
     --signal-text: #FFFFFF;
     --ok: #157A4F;
     --ok-bg: #E1F3EA;
@@ -77,12 +89,6 @@
   .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
 
   .wrap { max-width: 1120px; margin: 0 auto; padding-inline: 24px; }
-
-  .review-banner {
-    background: #1a1f26; color: #cbd8e3; font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.76rem; text-align: center; padding: 8px 16px; border-bottom: 1px solid #2a323c;
-  }
-  .review-banner strong { color: #6bd2ff; }
 
   /* ---------- Header ---------- */
   header.site {
@@ -156,7 +162,7 @@
     background: var(--surface); border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
   }
   .console-head {
-    display: flex; justify-content: space-between; align-items: center;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
     padding: 10px 14px; border-bottom: 1px solid var(--line);
     font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--text-dim);
     letter-spacing: 0.03em; text-transform: uppercase;
@@ -254,10 +260,46 @@
     .menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
     .contact-grid { grid-template-columns: 1fr; }
     .manifest-row { grid-template-columns: 1fr; row-gap: 6px; }
+    .manifest-row .status { justify-self: start; }
     .pipeline { flex-direction: column; gap: 22px; }
     .pipe-step { padding-right: 0; padding-left: 20px; }
     .pipe-line { display: none; }
   }
+
+  /* ---------- Accessibility ---------- */
+  .skip-link {
+    position: absolute; left: -9999px; top: 0; z-index: 999;
+    background: var(--signal); color: var(--signal-text);
+    padding: 10px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem;
+    border-radius: 0 0 4px 0;
+  }
+  .skip-link:focus { left: 0; }
+
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--signal); outline-offset: 2px;
+  }
+
+  /* ---------- Mobile menu ---------- */
+  @media (max-width: 860px) {
+    header.site.menu-open .nav-links {
+      display: flex; flex-direction: column; gap: 0;
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: var(--bg); border-bottom: 1px solid var(--line);
+      padding-inline: 24px;
+    }
+    header.site.menu-open .nav-links a {
+      padding-block: 14px; border-top: 1px solid var(--line); font-size: 0.95rem;
+    }
+  }
+
+  /* ---------- Contact form states ---------- */
+  .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .form-error {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem;
+    color: var(--warn); background: var(--warn-bg);
+    padding: 8px 10px; border-radius: 3px; margin: 0;
+  }
+  .inline-link { color: var(--signal); text-decoration: underline; text-underline-offset: 2px; }
 </style>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -266,29 +308,30 @@
 
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
 <header class="site">
   <div class="wrap nav">
-    <a class="brand" href="index.html">
+    <a class="brand" href="/">
       <img src="assets/logo-mark.png" alt="Audette IT">
       <span class="word">AUDETTE_IT</span>
     </a>
-    <nav class="nav-links">
-      <a href="index.html">home</a>
-      <a href="services.html">services</a>
-      <a href="contact.html" class="active" aria-current="page">contact</a>
+    <nav class="nav-links" id="primary-nav" aria-label="Primary">
+      <a href="/">home</a>
+      <a href="/services">services</a>
+      <a href="/contact" class="active" aria-current="page">contact</a>
     </nav>
     <div class="nav-cta">
-      <a class="btn btn-primary" href="contact.html">Contact us</a>
-      <button class="menu-toggle" aria-label="Menu">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <a class="btn btn-primary" href="/contact">Contact us</a>
+      <button class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
     </div>
   </div>
 </header>
-<main id="top">
+<main id="main-content">
   <section class="hero" style="border-bottom:1px solid var(--line);">
     <div class="wrap" style="padding-block: 52px 44px;">
-      <span class="eyebrow"><span class="dot"></span>Contact</span>
+      <span class="eyebrow"><span class="dot" aria-hidden="true"></span>Contact</span>
       <h1 style="max-width: 24ch; font-size: clamp(1.6rem, 3vw, 2.1rem);">Tell me what you're running</h1>
       <p class="lede" style="margin-bottom:0;">A quick fix, an ongoing setup, or something more involved &mdash; send the details and I'll follow up.</p>
     </div>
@@ -301,16 +344,21 @@
           <div class="contact-row"><span class="label">Email</span><span class="value">michael.audette@audetteit.com</span></div>
         </div>
       </div>
-      <form class="contact-form" onsubmit="return false;">
-        <div class="field"><label for="name">Name</label><input id="name" type="text" placeholder="Jane Smith"></div>
-        <div class="field"><label for="email">Email</label><input id="email" type="email" placeholder="jane@company.com"></div>
-        <div class="field"><label for="message">What's going on?</label><textarea id="message" rows="4" placeholder="Tell me about your setup and what you need."></textarea></div>
-        <label class="consent-row">
-          <input type="checkbox">
-          <span>I'm okay with this info being used to follow up with me. <span class="mono">[placeholder: privacy link]</span></span>
+      <form class="contact-form" id="contact-form" novalidate>
+        <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" placeholder="Jane Smith" autocomplete="name" required></div>
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="jane@example.com" autocomplete="email" required></div>
+        <div class="field"><label for="message">What's going on?</label><textarea id="message" name="message" rows="4" placeholder="Tell me about your setup and what you need." required></textarea></div>
+        <div class="hp-field" aria-hidden="true">
+          <label for="website">Leave this empty</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <label class="consent-row" for="consent">
+          <input id="consent" name="consent" type="checkbox" required>
+          <span>I'm okay with this info being used to follow up with me. See the <a href="/privacy" class="inline-link">privacy note</a>.</span>
         </label>
+        <p class="form-error" id="form-error" role="alert" hidden></p>
         <button class="btn btn-primary" type="submit" style="justify-content:center;">Send message</button>
-        <span class="form-note">[placeholder: not wired to a backend yet &mdash; tracked in issue #24]</span>
+        <span class="form-note">Opens your email app with the message filled in &mdash; nothing is sent until you hit send there.</span>
       </form>
     </div>
   </section>
@@ -320,12 +368,13 @@
   <div class="wrap footer-grid">
     <span class="footer-copy">AUDETTE_IT &middot; personal IT help, not a registered business</span>
     <div class="footer-links">
-      <a href="index.html">home</a>
-      <a href="services.html">services</a>
-      <a href="contact.html">contact</a>
-      <a href="#">privacy [placeholder]</a>
+      <a href="/">home</a>
+      <a href="/services">services</a>
+      <a href="/contact">contact</a>
+      <a href="/privacy">privacy</a>
     </div>
   </div>
 </footer>
+<script src="js/site.js" defer></script>
 </body>
 </html>

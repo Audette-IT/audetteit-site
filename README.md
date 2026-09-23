@@ -15,28 +15,35 @@ homepage/services/contact redesign is merged here. Not yet promoted to
 feature/*  →  dev  →  staging  →  main
 ```
 
-- `main` — production (Cloudflare Pages deploys from here). Currently a
+- `main` — production (the Cloudflare Worker deploys from here). Currently a
   maintenance page while the full rewrite is in progress.
-- `staging` — pre-production, gets a Cloudflare Pages preview deployment.
+- `staging` — pre-production, gets a Cloudflare Worker preview.
 - `dev` — this branch. Integrates finished feature work before promotion.
 - `feature/*` — one branch per unit of work, merged back into `dev`.
 
 ## Structure
 
 ```
-/public
-  index.html      # Home
-  services.html   # Everyday help + infrastructure/advanced capabilities
-  contact.html    # Contact form + real contact info
-  robots.txt
-  sitemap.xml
-  /assets         # Logo, favicons
-/functions
-  index.js        # Cloudflare Pages Function — serves Markdown on `/`
-                    when requested with `Accept: text/markdown`
+/public              # everything served to visitors
+  index.html         # Home
+  services.html      # Everyday help + infrastructure/advanced   -> /services
+  contact.html       # Contact form (opens your email app)        -> /contact
+  privacy.html       # Plain-language privacy note                -> /privacy
+  _headers           # Security + cache headers for static files
+  site.webmanifest, robots.txt, sitemap.xml
+  /js/site.js        # Mobile menu + contact form behavior
+  /assets            # Logo, favicons
+/worker/index.js     # Handles "/" only: Markdown for Accept: text/markdown
+wrangler.jsonc       # Cloudflare Worker config
+scripts/check-links.py  # Internal link checker (run in CI)
+ASSETS.md            # Where every image came from
 ```
 
-No build step — plain static HTML/CSS/JS, deployed via Cloudflare Pages.
+No build step. Run it locally exactly as deployed:
+
+```
+npx wrangler dev
+```
 
 ## Design direction
 
@@ -47,6 +54,5 @@ SaaS-template look. See `CLAUDE.md` for the reasoning and sources.
 ## Status
 
 Not yet promoted to `staging` or `main` (both still show the maintenance
-page). Placeholders still open: real business/service list still being
-built out (see `services.html`), contact form not wired to a backend yet
-(tracked as GitHub issue #24).
+page). Still open: the service list will grow as more gets built out, and
+the logo's rights need confirming (`ASSETS.md`).

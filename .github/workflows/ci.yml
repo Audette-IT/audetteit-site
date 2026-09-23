@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [dev, staging, main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Lint HTML
+        run: npx --yes htmlhint@1 "public/**/*.html"
+
+      - name: Check internal links
+        run: python3 scripts/check-links.py
+
+      - name: Validate manifest and sitemap
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('public/site.webmanifest', 'utf8'))"
+          python3 -c "import xml.dom.minidom; xml.dom.minidom.parse('public/sitemap.xml')"
+
+      - name: Validate Worker config and bundle
+        run: npx --yes wrangler@4 deploy --dry-run --outdir dist
