@@ -287,6 +287,20 @@ promotion flow the user specified:
   wrong for a Worker). No build step. Doing this locally instead of pushing
   feature branches avoids burning Cloudflare build minutes.
 
+**Verified 2026-09-23 via PR #48's checks:** the Cloudflare "Workers Builds:
+audetteit-site" preview build of `dev` succeeded, so the new `wrangler.jsonc` +
+Worker setup builds on Cloudflare. **GitHub Actions CI has never run** — no
+`CI` workflow run exists for any push to `dev`/`staging` or for PR #48, only
+the GitHub Pages workflow. Likely Actions is disabled or restricted for the
+repo (Settings → Actions → General); needs the user to check.
+
+**PR #48** (`dev` → `main`, opened by the user from the Claude Code UI) is
+titled "Promote dev redesign to staging" but targets `main`: merging it would
+launch the full redesign. Asked the user whether it's meant as the launch PR
+or should be closed; don't merge or retitle it without an answer. `main` was
+merged into `dev` (keeping `dev`'s files, tree unchanged) to clear its merge
+conflict.
+
 **Cloudflare project settings still need manual verification in the dashboard**
 (none of this is scriptable from here): confirm **Production branch** is `main`,
 confirm `staging` actually produces a preview deployment once something is
