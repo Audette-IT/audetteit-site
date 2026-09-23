@@ -29,7 +29,7 @@ Copy should read as one capable person, not a company.
 - **Hosting:** a Cloudflare **Worker with static assets** named `audetteit-site`
   (not classic Pages — migrated off Vercel; Vercel is irrelevant now, don't touch
   that connector). Deploys come from Workers Builds on git push.
-- **Live site (`main`):** currently a single maintenance page (`public/index.html`)
+- **Live site (`main`, last changed by PR #46):** currently a single maintenance page (`public/index.html`)
   — dark theme, brand blue accent, "We'll be right back" notice. Since
   2026-09-23 it also serves Markdown (`/index.md`, `Accept: text/markdown` on
   `/`), `llms.txt`, `llms-full.txt`, and `/favicon.ico`. This is
@@ -263,15 +263,22 @@ promotion flow the user specified:
          "policies": [{ "decision": "allow", "include": [{ "email": { "email": "michael.audette@audetteit.com" } }] }]
        }'
      ```
-- **`release/main-markdown`** — **merged into `main` on 2026-09-23 with the
-  user's approval** (fast-forward). Production is still the maintenance page,
-  now with: `wrangler.jsonc` + `worker/index.js` (Markdown on `/` via
+- **`release/main-markdown`** — merged into `main` on 2026-09-23 by the user
+  through PR #46 (https://github.com/Audette-IT/audetteit-site/pull/46), merge
+  commit `d626514`. Production is still the maintenance page, now with:
+  `wrangler.jsonc` + `worker/index.js` (Markdown on `/` via
   `Accept: text/markdown`), `public/index.md`, `llms.txt`, `llms-full.txt`,
   sitemap `lastmod`, `/favicon.ico` (for Google Search), and the dead
   `functions/index.js` removed. No security headers/CSP on `main` yet (those
   arrive when `staging` is promoted). This was the first real `wrangler.jsonc`
-  on production. If the Cloudflare production build fails, check the build
-  log first. The branch can be deleted once the deploy is confirmed.
+  on production; the Cloudflare production build result hasn't been checked
+  from here (no dashboard access). No GitHub checks ran on PR #46, because
+  `.github/workflows/ci.yml` only exists on `dev`/`staging` until they're
+  promoted. The branch has no more work to do and can be deleted.
+- **`claude/stoic-gates-w5906b`** (harness branch) — **not yet synced** with
+  `main` after PR #46. It differs from `main` only by an older README, so a
+  plain merge of `main` into it (keeping `main`'s README) brings it level.
+  Pushing it doesn't touch production.
 - **`dev`** — active development branch. Has diverged from `main`: carries the
   merged-in homepage redesign (real `index.html`/`services.html`/`contact.html`,
   not just the maintenance page). Promoted to `staging`; not yet to `main`.
