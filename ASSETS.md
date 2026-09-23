@@ -6,6 +6,7 @@ Update this whenever an asset is added or replaced (GitHub issue #39).
 | File (in `public/assets/`) | Source | Rights |
 |---|---|---|
 | `logo-mark.png` | Cropped from the shield logo image the owner supplied in-session (2000×2000 JPEG). | **Unconfirmed** — owner to confirm they created it or hold rights to it. |
+| `favicon.ico` (in `public/`, served at `/favicon.ico`) | Generated from `logo-mark.png`: 16, 32, and 48px in one file. Google Search needs a favicon at the site root, 48px or a multiple of it. | Follows `logo-mark.png`. |
 | `favicon-32.png`, `favicon-16.png` | Resized from `logo-mark.png`. | Follows `logo-mark.png`. |
 | `apple-touch-icon.png` | Resized from `logo-mark.png`. | Follows `logo-mark.png`. |
 | `faviconlogo.png` | Resized from `logo-mark.png` (192×192, used by `site.webmanifest`). | Follows `logo-mark.png`. |
