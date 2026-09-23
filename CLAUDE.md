@@ -275,9 +275,12 @@ promotion flow the user specified:
   from here (no dashboard access). No GitHub checks ran on PR #46, because
   `.github/workflows/ci.yml` only exists on `dev`/`staging` until they're
   promoted. The branch has no more work to do and can be deleted.
+- **PR #47** (CLAUDE.md docs update for `main`) — merged by Claude on
+  2026-09-23 at the user's request ("merge 47"), merge commit `4c44fe2`. `main`'s
+  CLAUDE.md matches `dev`'s as of that merge, minus this bullet.
 - **`claude/stoic-gates-w5906b`** (harness branch) — synced with `main` after
-  PR #46 (merged `main` in, kept `main`'s README; files identical to `main` at
-  `d626514`). Re-sync it the same way whenever `main` changes.
+  PR #47 (merged `main` in, kept `main`'s README; files identical to `main` at
+  `4c44fe2`). Re-sync it the same way whenever `main` changes.
 - **`dev`** — active development branch. Has diverged from `main`: carries the
   merged-in homepage redesign (real `index.html`/`services.html`/`contact.html`,
   not just the maintenance page). Promoted to `staging`; not yet to `main`.
