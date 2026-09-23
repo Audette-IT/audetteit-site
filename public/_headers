@@ -1,0 +1,9 @@
+# Markdown twin points search engines at the HTML page as the canonical copy.
+/index.md
+  Content-Type: text/markdown; charset=utf-8
+  Link: <https://audetteit.com/>; rel="canonical"
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
