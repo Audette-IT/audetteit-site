@@ -192,6 +192,19 @@ files on `dev` for any further changes**, not the artifacts.
   nosniff, `X-Frame-Options: DENY`, Referrer-Policy, Permissions-Policy, HSTS
   (deliberately *without* `includeSubDomains`, so a future HTTP-only self-hosted
   subdomain isn't broken). `/assets/*` cached 1 day (not fingerprinted).
+- **`www` → apex.** `worker/index.js` 301-redirects `www.audetteit.com` to
+  `https://audetteit.com` (same path and query), but only for requests that
+  reach the Worker: the page routes in `run_worker_first`. As of 2026-09-23,
+  `www.audetteit.com` has **no DNS record** (it didn't resolve), so the owner
+  has to attach it in the dashboard: Workers & Pages → `audetteit-site` →
+  Settings → Domains & Routes → Add → Custom domain → `www.audetteit.com`.
+  Cloudflare then creates the DNS record and certificate. It was deliberately
+  **not** declared under `routes` in `wrangler.jsonc`: wrangler replaces the
+  Worker's whole custom-domain set on deploy, and how the apex is attached
+  couldn't be checked from here, so a config-managed list risked detaching
+  `audetteit.com`. If the domains ever move into `wrangler.jsonc`, list the apex
+  **and** `www`. Optional: a dashboard Redirect Rule ("Redirect from WWW to
+  root" template) also covers static-asset URLs on `www`.
 - **Clean URLs.** Workers serves `/services`, `/contact`, `/privacy`; the
   `.html` forms 307-redirect. All links, canonicals, `og:url`s, and the sitemap
   use clean URLs — don't reintroduce `.html` links.
