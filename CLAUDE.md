@@ -65,7 +65,7 @@ Copy should read as one capable person, not a company.
   pages (Home, Services, How it works, About, Contact, Privacy), a new logo
   and new favicons. The owner approved the preview ("i like it, stage it"),
   it went `dev` → `staging`, then the owner said "push it to main". It
-  shipped through PR #64 from branch `release/room-guide` (`staging` with
+  shipped through PR #65 from branch `release/room-guide` (`staging` with
   `main`'s README).
 
 ## GitHub project tracking
@@ -117,13 +117,13 @@ Copy should read as one capable person, not a company.
   - **#60** (owner-created 2026-09-24, no milestone): fix spelling, grammar
     and tone across site copy, casual and plain-language. Overlaps #23.
     **Closed 2026-09-24:** all copy was rewritten in the "I" voice as part
-    of the #61 redesign, live via PR #64.
+    of the #61 redesign, live via PR #65.
   - **#61** (owner-created 2026-09-24, no milestone): make the design more
     professional and strip remaining "AI slop" patterns, suggesting the
     `/grill-me` and `/impeccable` skills. The owner's comment adds: redesign
     the logo, update the favicons, and hand the new logo files to the owner.
     **Closed 2026-09-24:** the "room guide" redesign, six pages, new logo
-    and favicons, live via PR #64. The logo files were handed to the owner
+    and favicons, live via PR #65. The logo files were handed to the owner
     in chat.
 - **Comment authorship:** the GitHub connector posts as the owner's account
   (`mjaudettejr`), so Claude's comments and the owner's look the same on
@@ -143,7 +143,7 @@ Copy should read as one capable person, not a company.
 
 **Current direction: the "room guide" (draft D), approved by the owner on
 2026-09-24** ("i really like it especially the logo i just think we should
-have separate pages tho"). Built as six separate pages; live since 2026-09-24 (PR #64). It replaced
+have separate pages tho"). Built as six separate pages; live since 2026-09-24 (PR #65). It replaced
 the "ops console" look, which the owner found not professional enough (#61).
 
 How we got here (via `/grill-me` and four drafts):
@@ -414,7 +414,7 @@ promotion flow the user specified:
   don't allow bypassing even for admins.
 - **`staging`** — has its own README. Promoted to `main` on 2026-09-23
   (launch). `dev` (the room guide redesign) was merged in on 2026-09-24 and
-  promoted to `main` the same day (PR #64). Next promotion: merge `dev` in,
+  promoted to `main` the same day (PR #65). Next promotion: merge `dev` in,
   review the preview, then PR to `main`. The site is deployed as
   a Cloudflare **Worker** named `audetteit-site` (account
   `b7a46df8571aa32900c3155b464416ab`, worker ID
@@ -452,7 +452,7 @@ promotion flow the user specified:
   `release/gtm-advanced` (PR #52), `docs/after-52` (PR #53),
   `docs/www-live` (PR #54), `release/clarity` (PR #55), `docs/after-55`
   (PR #56), `release/tag-gateway` (PR #57), `docs/after-57`,
-  `release/room-guide` (PR #64), `wip/redesign-a-floor-plan` (rejected draft A). `feature/homepage-redesign` and
+  `release/room-guide` (PR #65), `wip/redesign-a-floor-plan` (rejected draft A). `feature/homepage-redesign` and
   the two `cloudflare/workers-autoconfig*` branches are also stale.
 - **`release/main-markdown`** — merged into `main` via PR #46 (Markdown for
   the maintenance page, `favicon.ico`, first real `wrangler.jsonc` on
