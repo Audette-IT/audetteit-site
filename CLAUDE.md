@@ -463,8 +463,10 @@ pushed to it, and decide on a custom domain alias for staging if wanted.
   Recommended: turn GitHub Pages off in Settings → Pages. The site is served by
   the Cloudflare Worker, not GitHub Pages.
 
-## Project skills (`.claude/skills/`, on `dev`)
+## Project skills (`.claude/skills/`, on every branch)
 
+On `main` via PR #63, and synced to `staging`, `dev` and
+`claude/stoic-gates-w5906b`, so any new session on this repo loads them.
 Installed 2026-09-24 for issue #61 (the owner named them in the issue), copied
 from upstream, not written here:
 - **`grill-me`** + **`grilling`** from `mattpocock/skills` (MIT, commit
