@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!-- Audette IT "room guide" page for projects OUTSIDE audetteit.com (apps, help desk, audetteit.net).
+     Copy room-guide.css, app-extras.css (apps only), room-guide.js and logo.svg next to this file, or fix the paths.
+     No GTM or consent banner: add analytics only if Michael asks, with its own consent banner and privacy note.
+     Replace every UPPERCASE placeholder. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAGE TITLE · Audette IT</title>
+<meta name="description" content="ONE-SENTENCE DESCRIPTION">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<meta name="theme-color" content="#0074A8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700;900&family=Red+Hat+Text:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="room-guide.css">
+<link rel="stylesheet" href="app-extras.css">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="/">
+      <img src="logo.svg" alt="" width="40" height="44">
+      <span><b>Audette IT</b><small>DESCRIPTOR, E.G. HELP DESK</small></span>
+    </a>
+    <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <nav class="nav-links" id="primary-nav" aria-label="Main">
+      <a href="/" aria-current="page">SECTION</a>
+      <a href="/other">SECTION</a>
+      <a class="btn btn-solid" href="/new">MAIN ACTION</a>
+    </nav>
+  </div>
+</header>
+<main id="main-content">
+  <div class="wrap page-intro">
+    <h1>PAGE HEADING</h1>
+    <p class="lede">One or two short first-person sentences.</p>
+  </div>
+
+  <section class="band">
+    <div class="wrap">
+      <!-- components from references/components.md, app patterns from references/apps.md -->
+    </div>
+  </section>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <span>Audette IT · Home tech help in Las Vegas</span>
+    <div class="footer-links">
+      <a href="mailto:michael.audette@audetteit.com">michael.audette@audetteit.com</a>
+      <a href="https://audetteit.com/">audetteit.com</a>
+    </div>
+  </div>
+</footer>
+<script src="room-guide.js" defer></script>  <!-- mobile menu, room pins, contact form; add your own app JS as another external file -->
+</body>
+</html>
