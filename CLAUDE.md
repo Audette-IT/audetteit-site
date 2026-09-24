@@ -128,6 +128,8 @@ Copy should read as one capable person, not a company.
   anything without it is the owner's.
 - The Issue Tracker artifact was last re-synced from the API on 2026-09-24
   02:05 UTC: 26 issues (#21–#44, #60, #61), 18 done / 5 in progress / 3 open.
+  Updated 02:56 UTC: #60/#61 are now "in progress" and show the new
+  progress comments (18 done / 7 in progress / 1 open).
   It now shows **every comment verbatim** under each issue, labeled "You"
   or "Claude" by that footer. #60/#61 sit in a "Post-launch polish" group.
   Source: scratchpad `tracker.html`, rebuilt by `rebuild_tracker.py` from
