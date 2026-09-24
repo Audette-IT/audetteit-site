@@ -32,11 +32,13 @@ was checked against the code, GitHub and the live site on that date.
 5. **Before any push:** run the repo checks (section 8.2). Before a design or
    copy change goes live, run the browser QA (section 8.3) and show the owner a
    preview (section 8.4).
-6. **Scheduled follow-up already set:** an SEO check for #25 fires
-   **2026-09-26 23:08 UTC** (Routine `trig_01LhJJBWV6ZDJ5foRQbcmqFG`). It is
-   bound to the *original* session (`session_01LR2y4cu2zi21QRgiomcc14`), not to
-   new ones. If you're in a new session after that date and #25 is still open,
-   do the check yourself (steps in the #25 entry, section 10).
+6. **Scheduled follow-ups for #25 (SEO):** one check fires **2026-09-26
+   23:08 UTC** (Routine `trig_01LhJJBWV6ZDJ5foRQbcmqFG`, bound to the original
+   session `session_01LR2y4cu2zi21QRgiomcc14`). Another fires **2026-09-27
+   16:00 UTC** (`trig_01SfagBXWmwVy2SuSCUBKGk4`, bound to
+   `session_01Krc8Vpb3N5XkVGZgo7vhTx`). Neither reaches new sessions. If
+   you're in a new session after those dates and #25 is still open, do the
+   check yourself (steps in the #25 entry, section 10).
 
 ## 2. Hard rules
 
@@ -564,7 +566,10 @@ numbers share the same sequence.
     opengraph.xyz preview of `/` and `/services`.
   - Then comment with the evidence and close it. If pages are missing,
     suggest "Request indexing" in Search Console and re-check in 3 days.
-  - A Routine does this on 2026-09-26 (section 1).
+  - **Checked 2026-09-24** (comment on #25): link previews pass for `/` and
+    `/services`, but only the homepage is indexed (with its current title).
+    The owner was asked to use Request indexing for the other five pages.
+  - Routines re-check this on 2026-09-26 and 2026-09-27 (section 1).
 - **#32 CI.** The workflow exists and passes locally, but GitHub never runs
   it: "Actions has been disabled for this user" (an account/org-level block,
   likely billing or a new-account restriction). The owner has to check the
