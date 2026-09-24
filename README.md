@@ -78,6 +78,5 @@ house as the homepage figure. See `CLAUDE.md` for the details.
 
 ## Status
 
-Live since 2026-09-23. The redesign (#60/#61) is on `dev` and not live yet.
-Still open: the service list will grow as more gets
-built out, and the logo's rights need confirming (`ASSETS.md`).
+Live since 2026-09-23; the "room guide" redesign (#60/#61) went live on
+2026-09-24. Still open: the service list will grow as more gets built out.
