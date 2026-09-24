@@ -6,7 +6,7 @@ Not a registered business.
 
 **Branch:** `main` — production. Live at https://audetteit.com, deployed by
 Cloudflare Workers Builds on every push. Changes arrive by pull request from
-`staging`. See `CLAUDE.md` for full project context.
+`staging`. Start with `CLAUDE.md`: it's the full handoff for new sessions.
 
 ## Branch flow
 
@@ -38,6 +38,8 @@ feature/*  →  dev  →  staging  →  main
 wrangler.jsonc       # Cloudflare Worker config
 scripts/check-links.py  # Link + Markdown-coverage checker (run in CI)
 scripts/build-llms.py   # Regenerates public/llms-full.txt
+tools/               # Local helpers (not deployed): browser QA, icons,
+                     # Artifact preview, issue-tracker sync
 ASSETS.md            # Where every image came from
 ```
 

@@ -40,6 +40,7 @@ worker = (ROOT / "worker" / "index.js").read_text()
 wrangler = (ROOT / "wrangler.jsonc").read_text()
 sitemap = (PUBLIC / "sitemap.xml").read_text()
 llms = (PUBLIC / "llms.txt").read_text()
+headers = (PUBLIC / "_headers").read_text()
 for page in sorted(PUBLIC.glob("*.html")):
     route = "/" if page.stem == "index" else f"/{page.stem}"
     md = f"/{page.stem}.md"
@@ -49,6 +50,10 @@ for page in sorted(PUBLIC.glob("*.html")):
         f"not in run_worker_first in wrangler.jsonc": f'"{route}"' in wrangler,
         f"not in sitemap.xml": f"<loc>{SITE}{route}</loc>" in sitemap,
         f"not linked from llms.txt": f"({SITE}{md})" in llms,
+        # Direct /<page>.md requests are static assets, so the canonical Link
+        # header back to the HTML page has to come from public/_headers.
+        f"no {md} block with a canonical Link in public/_headers":
+            f'{md}\n  Content-Type: text/markdown; charset=utf-8\n  Link: <{SITE}{route}>; rel="canonical"' in headers,
     }
     broken += [f"{page.name}: {msg}" for msg, ok in checks.items() if not ok]
 
@@ -56,7 +61,6 @@ for page in sorted(PUBLIC.glob("*.html")):
 # public/_headers and worker/index.js (they set the CSP for different paths).
 import base64, hashlib
 INLINE = re.compile(r"<script>(.*?)</script>", re.S)
-headers = (PUBLIC / "_headers").read_text()
 for page in sorted(PUBLIC.glob("*.html")):
     for js in INLINE.findall(page.read_text()):
         h = "'sha256-" + base64.b64encode(hashlib.sha256(js.encode()).digest()).decode() + "'"

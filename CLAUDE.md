@@ -5,557 +5,736 @@
 > change to this repo must update this file in the same session as part of that
 > change** — not as a separate later cleanup. That includes: pushing code/content
 > to `main`, changing what's live vs. drafted, creating/closing/editing GitHub
-> issues, publishing or updating either Artifact linked below, resolving an open
-> question in the list below, or changing the design direction. Stale sections
-> (dead links, outdated status, resolved "open questions" left unresolved on paper)
-> are a bug — fix them in the same commit as the change that caused them, don't
-> defer it. If you're an agent reading this and about to make such a change,
-> plan the CLAUDE.md update as part of that change up front, not as an afterthought.
+> issues, publishing or updating an Artifact linked below, resolving an open
+> question, or changing the design direction. Stale sections (dead links,
+> outdated status, resolved questions left open on paper) are a bug — fix them in
+> the same commit as the change that caused them. Plan the CLAUDE.md update as
+> part of the change up front, not as an afterthought.
 
-## What this actually is
+Last full rewrite: **2026-09-24** (handoff for new sessions). Everything below
+was checked against the code, GitHub and the live site on that date.
 
-Audette IT is **personal/family IT help, not a licensed or registered business.** The
-owner is more advanced than typical "family tech support" — capable of real
-infrastructure work (network design, Active Directory/domain setups, self-hosted
-services, security hardening) in addition to everyday troubleshooting (wifi, slow
-computers, printers, locked accounts, parental controls on kids' devices).
+---
 
-This matters for every future decision: don't reintroduce corporate-MSP framing,
-fabricated business details, formal legal boilerplate, or "enterprise" language.
-Copy should read as one capable person, not a company.
+## 1. Start here (new session checklist)
 
-## Current live state
+1. **Read sections 2 (hard rules) and 3 (what this is).** They override
+   generic habits.
+2. **Where things stand:** the site is live at https://audetteit.com with the
+   "room guide" design (six pages). The open work is listed in section 10.
+   **Nothing is half-built.**
+3. **Find the right branch.** New work starts on `dev` (see section 8). A new
+   cloud session is usually handed its own `claude/...` branch: treat it as a
+   scratch/sync branch, not part of the promotion flow.
+4. **The owner reads issues in the Issue Tracker artifact**
+   (https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy), not on GitHub. Any issue
+   change → re-sync it (`tools/sync-tracker.py`, section 8.6).
+5. **Before any push:** run the repo checks (section 8.2). Before a design or
+   copy change goes live, run the browser QA (section 8.3) and show the owner a
+   preview (section 8.4).
+6. **Scheduled follow-up already set:** an SEO check for #25 fires
+   **2026-09-26 23:08 UTC** (Routine `trig_01LhJJBWV6ZDJ5foRQbcmqFG`). It is
+   bound to the *original* session (`session_01LR2y4cu2zi21QRgiomcc14`), not to
+   new ones. If you're in a new session after that date and #25 is still open,
+   do the check yourself (steps in the #25 entry, section 10).
 
-- **Hosting:** a Cloudflare **Worker with static assets** named `audetteit-site`
-  (not classic Pages — migrated off Vercel; Vercel is irrelevant now, don't touch
-  that connector). Deploys come from Workers Builds on git push.
-- **Live site (`main`): the full redesign went live on 2026-09-23** — the
-  maintenance page is gone. Launched at the user's request ("we need everything
-  from stage to main and the site needs to go live no maintenance") by
-  promoting `staging` → `main` through PR #49
-  (https://github.com/Audette-IT/audetteit-site/pull/49, merge commit
-  `915d16e`; branch `launch` = `staging` + `main` merged in with `-s ours` +
-  a production README). `dev` and `staging` were then synced with `main`,
-  each keeping its own README. Live pages:
-  Home, Services, Contact, Privacy, with Markdown twins, `llms.txt`,
-  `llms-full.txt`, security headers, sitemap, and `favicon.ico`. A second
-  release the same day added Google Tag Manager behind the cookie consent
-  banner (#30/#38) and a `www` → apex redirect. `www.audetteit.com` works
-  (Cloudflare Redirect Rule + proxied DNS record; see "Site architecture"). Not verified
-  from here: outbound requests to audetteit.com are blocked in these sessions,
-  so the owner should load the site once and check the Cloudflare production
-  build.
-- **Repo:** `Audette-IT/audetteit-site` on GitHub, default branch `main`.
-- **Correction (found this session):** `main` (and `staging`, before the
-  promotion) contained `functions/index.js`,
-  but that is a *Pages Functions* convention and this project is a
-  static-assets-only Worker (the dashboard literally says "Worker that only has
-  static assets") — so it has **never run**. Earlier notes/tracker entries that
-  called the Markdown-for-Agents stand-in "live" were wrong; it was never
-  verified (outbound network to audetteit.com is blocked from these sessions).
-  `functions/` was removed from `main` on 2026-09-23 and replaced with a real
-  Worker (`wrangler.jsonc` + `worker/index.js`).
-- `public/robots.txt`, `public/sitemap.xml`, `llms.txt`, and `llms-full.txt`
-  are live.
-- Logo/favicons were recropped tight to the actual shield glyph (`public/assets/
-  logo-mark.png`, `favicon-32.png`, `favicon-16.png`, `apple-touch-icon.png`,
-  `faviconlogo.png`) — no more CSS `scale()`/`transform-origin` cropping hacks.
+## 2. Hard rules
 
-- **"Room guide" redesign live on `main` (2026-09-24)** for #60/#61: six
-  pages (Home, Services, How it works, About, Contact, Privacy), a new logo
-  and new favicons. The owner approved the preview ("i like it, stage it"),
-  it went `dev` → `staging`, then the owner said "push it to main". It
-  shipped through PR #65 from branch `release/room-guide` (`staging` with
-  `main`'s README). Production build succeeded at 04:19 UTC. Confirmed
-  live via Firecrawl: `/how-it-works` serves the new page, with the
-  consent banner.
+- **Never push or merge to `main` without asking the owner first — no
+  exceptions** (content, assets, config, docs, all of it). Stage the change on
+  `dev`/`staging` or a PR, then ask. The owner's go-ahead has looked like
+  "push it to main", "yes merge it" or "merge 47".
+- **Don't invent business facts.** Use only the confirmed facts in section 3.
+  No prices, hours, phone numbers, reviews, credentials, city beyond Las
+  Vegas, or last name.
+- **No corporate/MSP framing.** Audette IT is one person, not a company.
+- **Don't mark anything "done" without verifying it** (live check via
+  Firecrawl, a build check run, or the owner's confirmation). Earlier notes
+  once called an unverified feature "live", and it had never run (section 11).
+- **Every GitHub comment Claude posts ends with the footer**
+  `---` / `_Generated by [Claude Code](https://claude.ai/code)_`. The
+  connector posts as the owner's account, so the footer is the only way to
+  tell Claude's comments from theirs.
+- **Keep the tracker artifact in sync** with every issue change, with issue
+  text copied word for word.
+- **Design decisions are settled** (section 5). Don't restart the design, and
+  don't "fix" the light-mode blue back to `#0090CC`.
+- **Don't switch the site's canonical host to `www`.** The owner chose to move
+  their AD domain instead (#67).
+- **Don't start #68 (design skill) or close #25 (SEO) early.** Each has a
+  gate, listed in section 10.
+- **Don't run the `impeccable` skill's launcher** (it downloads a binary)
+  unless the owner agrees.
+- **Don't touch the Vercel connector.** Vercel is the old host and is
+  irrelevant.
 
-## GitHub project tracking
+## 3. What this is
 
-- **Milestone:** "Full Site Launch" (#1) —
-  https://github.com/Audette-IT/audetteit-site/milestone/1
-- The GitHub connector's Issues permission was broken for most of the first session
-  (`403 Resource not accessible by integration`) until the user re-authorized it via
-  claude.ai connector settings. If issue writes fail again with that error, that's
-  the fix — a connector-level permission problem, not something fixable in-session.
-- **The user often can't see GitHub issues rendering in their browser** (root cause
-  never fully diagnosed — data was always confirmed correct via the API). Because of
-  this, the canonical place to read full issue details is the **Issue Tracker
-  artifact** (link below), which embeds the exact, verbatim body text pulled
-  straight from the GitHub API for every issue — not a paraphrase. When adding or
-  editing issues, keep that artifact in sync and keep bodies word-for-word accurate.
-- Current issue numbering: originals #4–#20 were recreated as #21–#37 early on (don't
-  be confused if old numbers are referenced anywhere) and closed as duplicates. Test
-  issue #3 is closed. Treat #21 onward as the real set.
-- #41 and #42 (business registration details, formal legal/compliance review) are
-  **closed as not planned** — not applicable without a registered business.
-- #27 was simplified from "Privacy Policy + Terms of Service" to just a short
-  informal privacy note.
-- **Build-out on `dev` (commit f113b4b) closed as completed:** #21, #22, #24,
-  #26, #27, #28, #29, #33, #35, #36, #40 (each has a closing comment on GitHub
-  saying what was done). #37 was already closed. All of it went live with the
-  2026-09-23 launch.
-- **#39 (asset rights) closed 2026-09-24:** the owner confirmed they hold the
-  rights to the shield logo, and `ASSETS.md` now says so.
-- **Closed 2026-09-23 after live verification** (via Firecrawl, since
-  audetteit.com itself is unreachable from these sessions): #31 (securityheaders.com
-  grade **A+**), #34 (favicon/manifest served), #30 (GTM + GA4 + Clarity via
-  GTM), #38 (consent banner).
-- **Still open, and why** (each has a progress comment on GitHub):
-  - #23 copy: waiting on the owner's tone/voice review.
-  - #25 SEO: everything is served and was confirmed live. The owner will verify
-    with Search Console and a link-preview debugger in a few days (indexing
-    lag), then close it. Don't close it before that.
-  - #32 CI: the workflow is registered and active, but GitHub Actions has
-    **never run it**. After the owner enabled Actions in repo settings, a push
-    still produced no run, and a direct `workflow_dispatch` via the API
-    returned **"Actions has been disabled for this user."** That's an
-    account/org-level block (billing/payment issue or GitHub restricting a new
-    account), not the repo toggle. The owner needs to check the Audette-IT org
-    Actions policy and billing, or contact GitHub Support.
-  - #43 Markdown for Agents: Pro-plan feature; the Worker stand-in covers
-    every page, plus `.md` twins and `llms.txt`/`llms-full.txt`.
-  - #44 self-hosted help desk: standing reminder.
-  - **#67** (created 2026-09-24 at the owner's request): fix the DNS records on
-    the owner's **home** DNS server so `audetteit.com`/`www` resolve to
-    Cloudflare inside the home network (no stale Vercel records; mirror or
-    forward a split-DNS zone). It's outside the repo, and only the owner can
-    do it. The issue is a checklist.
-  - **#60** (owner-created 2026-09-24, no milestone): fix spelling, grammar
-    and tone across site copy, casual and plain-language. Overlaps #23.
-    **Closed 2026-09-24:** all copy was rewritten in the "I" voice as part
-    of the #61 redesign, live via PR #65.
-  - **#61** (owner-created 2026-09-24, no milestone): make the design more
-    professional and strip remaining "AI slop" patterns, suggesting the
-    `/grill-me` and `/impeccable` skills. The owner's comment adds: redesign
-    the logo, update the favicons, and hand the new logo files to the owner.
-    **Closed 2026-09-24:** the "room guide" redesign, six pages, new logo
-    and favicons, live via PR #65. The logo files were handed to the owner
-    in chat.
-- **Comment authorship:** the GitHub connector posts as the owner's account
-  (`mjaudettejr`), so Claude's comments and the owner's look the same on
-  GitHub. Claude's comments end with the "Generated by Claude Code" footer;
-  anything without it is the owner's.
-- The Issue Tracker artifact was last re-synced from the API on 2026-09-24
-  02:05 UTC: 26 issues (#21–#44, #60, #61; #67 added later), 18 done / 5 in progress / 3 open.
-  Updated 04:25 UTC: #60/#61 closed by PR #65 and shown as done with
-  their comments (20 done / 5 in progress / 1 open).
-  Then #39 closed as well (21 done / 4 in progress / 1 open).
-  Then #67 (home DNS) added as open (21 done / 4 in progress / 2 open).
-  It now shows **every comment verbatim** under each issue, labeled "You"
-  or "Claude" by that footer. #60/#61 sit in a "Post-launch polish" group.
-  Source: scratchpad `tracker.html`, rebuilt by `rebuild_tracker.py` from
-  per-issue API fetches. The `/issues` list endpoint only returns 3 items for
-  this token, so fetch issues one by one.
+- **Audette IT = Michael's personal tech help**, not a licensed or registered
+  business. He's more advanced than typical "family tech support": everyday
+  fixes (wifi, slow computers, printers, TVs, accounts, parental controls) *and*
+  real infrastructure (network design, Active Directory/domains, self-hosted
+  services, security hardening).
+- **Contact:** `michael.audette@audetteit.com` is the only contact detail on
+  the site. Phone, street/city details and a "run by" name were deliberately
+  removed. Re-add only if the owner asks.
+- **Confirmed facts for copy (from `/grill-me`, 2026-09-24). Use only these:**
+  - first name **Michael** only
+  - **in person around Las Vegas, or remote from anywhere** (don't name the
+    remote tool)
+  - **paid, with a quote before any work**
+  - computers and laptops: includes hardware work (e.g. swapping a drive,
+    adding memory)
+  - phones and tablets: **digital help only** (setup, settings, apps,
+    parental controls), **no physical repairs**
+  - TVs and smart home are in scope
+  - services: *Everyday* = wifi and devices, slow computers, new computer
+    setup, backups, printers, TVs and smart home, accounts and software,
+    parental controls. *Bigger jobs* = network design, Active Directory,
+    self-hosted services, security hardening.
+- **Voice:** first person ("I"), casual, plain English, short sentences.
+- **Owner:** GitHub account `mjaudettejr` (repo owner org `Audette-IT`).
 
-## Design direction (already decided — don't restart from scratch)
+## 4. Current state (2026-09-24)
 
-**Current direction: the "room guide" (draft D), approved by the owner on
-2026-09-24** ("i really like it especially the logo i just think we should
-have separate pages tho"). Built as six separate pages; live since 2026-09-24 (PR #65). It replaced
-the "ops console" look, which the owner found not professional enough (#61).
+- **Live:** https://audetteit.com serves the **"room guide" redesign**: Home,
+  Services, How it works (with FAQ), About, Contact and Privacy.
+  - It shipped via **PR #65** (production build succeeded 04:19 UTC) and was
+    confirmed live with Firecrawl.
+  - Also live: a Markdown twin of every page, `llms.txt`/`llms-full.txt`, the
+    sitemap (all six pages; the owner resubmitted it in Search Console on
+    2026-09-24), `robots.txt`, favicons from the new logo, the cookie banner,
+    GTM (GA4 + Clarity), the Tag Gateway and security headers (A+ on
+    securityheaders.com, checked 2026-09-23).
+- **Hosting:** a Cloudflare **Worker with static assets**, `audetteit-site`,
+  built by Workers Builds on every git push (section 7). It's not classic
+  Pages, and not Vercel any more.
+- **Repo:** `Audette-IT/audetteit-site`, default branch `main`.
+- **Branches:** `main` = production. `dev` and `staging` match `main` except
+  their own READMEs, plus whatever the latest docs/tools change adds.
+  `claude/stoic-gates-w5906b` matches `main`.
+- **Home network problem (#67):** the owner's AD domain is also called
+  `audetteit.com`, so devices inside the house can't load the site. That's
+  outside the repo. The owner is moving AD to `ad.audetteit.com` (#67 in
+  section 10).
 
-How we got here (via `/grill-me` and four drafts):
-- Brief: warm and personal, competent and precise, modern but not flashy.
-  "I" voice. Keep the blue. Light and dark mode.
-- Draft A ("floor plan") was built in full and rejected as "too modern".
-  It's parked on branch `wip/redesign-a-floor-plan`, not pushed further.
-  Draft C was also too modern, and the owner dislikes a chat/text-thread
-  motif. The owner liked A (the floor plan) and B ("quick start" guide
-  feel). D combines them.
-- Draft artifacts (reference only, the repo is the source of truth): A
-  https://claude.ai/artifact/VGNK2aqvB6sSYLTPXQvRSw, B
-  https://claude.ai/artifact/AuSs6Fp4zf374FJ8dufRyv, C
-  https://claude.ai/artifact/MLct3zL3WuK81UTvc5wL8Y, **D (approved)**
-  https://claude.ai/artifact/7cKQaJZ3nnvpAsfyn3FqhC.
-- **Built-site preview artifact** (all six `dev` pages in one page, the menu
-  switches between them; GTM/consent stripped, since it's a preview):
-  https://claude.ai/artifact/A279VNAj3QAxTAv9axKF2x. It's a snapshot of
-  commit `4f66c61`; rebuild it from `public/` if the pages change before
-  review.
+## 5. Design system: "room guide" (decided, live)
 
-What D is (all in `public/css/site.css`):
-- **Type:** Red Hat Display (headings, weight 900 for big ones) and Red Hat
-  Text (body), from Google Fonts.
-- **Look of a printed quick-start guide:** heavy 3px black rules between
-  sections, white paper, thin hairlines inside lists, pill buttons. The
-  "How it works" band is a solid blue field.
-- **Color:** ink `#1A1E23`, site blue `#0074A8` (light) for links and the
-  blue field, yellow `#FFD23F` highlights (`h1 mark`, room letters, FAQ
-  +/−). **Light-mode blue stays `#0074A8`, not the brand `#0090CC`**:
-  `#0090CC` fails WCAG AA as link text (3.22:1) and white-on-button
-  (3.58:1). Don't "fix" it back. Dark mode has its own tokens.
-- **Homepage figure:** "Fig. 1", a black-line floor plan of a house with
-  yellow lettered room pins A–F (living room, kitchen, office, kids' room,
-  hall closet/router, garage). Clicking a letter shows what I help with in
-  that room (`public/js/site.js`, `rooms` object). It's labeled
-  "Illustration".
-- **Services** as two plain tables/lists ("Everyday" and "Bigger jobs"), not
-  icon cards. "Good to know" notes: where, devices, cost.
-- **Logo:** `public/assets/logo.svg`, a redraw that keeps the original's
-  split blue/navy shield, white "A" and circuit traces, plus a yellow wifi
-  arc. All favicons are rendered from it (see `ASSETS.md`).
+**Approved by the owner on 2026-09-24** ("i really like it especially the logo
+i just think we should have separate pages tho") and live since PR #65. The
+source of truth is the repo files, mainly `public/css/site.css`.
 
-Facts the owner confirmed for copy (don't invent more): first name Michael
-only; in person around Las Vegas or remote from anywhere (don't name the
-remote tool); paid, with a quote before any work; computers and laptops get
-hardware work too; phones and tablets get digital help only (setup,
-settings, apps, parental controls), no physical repairs; TVs and smart home
-are in scope.
+- **Feel:** a printed quick-start guide. White paper, **heavy 3px black rules**
+  between sections, thin hairlines inside lists, pill buttons. One solid
+  **blue field** band ("How it works"), used sparingly.
+- **Type:** **Red Hat Display** for headings (900 for big ones) and **Red Hat
+  Text** for body, from Google Fonts (`family=Red+Hat+Display:wght@500;700;900&family=Red+Hat+Text:wght@400;500;700`).
+- **Color tokens** (`:root` in `site.css`; dark mode has its own block under
+  `prefers-color-scheme: dark`):
+  - light: `--paper #FFFFFF`, `--paper-2 #F2F4F6`, `--ink #1A1E23`,
+    `--ink-soft #545D66`, `--rule #1A1E23`, `--hair #D9DEE3`, `--blue #0074A8`,
+    `--blue-field #006A9C`, `--on-blue #FFFFFF`, `--on-blue-soft #EAF5FB`,
+    `--mark #FFD23F`, `--mark-ink #1A1E23`, `--draw #1A1E23`,
+    `--draw-soft #8A949E`, `--error #A3261B`
+  - dark: `--paper #111418`, `--paper-2 #181C21`, `--ink #ECEFF2`,
+    `--ink-soft #A7B0B9`, `--rule #ECEFF2`, `--hair #2A3037`, `--blue #6CC6F0`,
+    `--blue-field #0A4F74`, `--on-blue-soft #D5ECF8`, `--draw #ECEFF2`,
+    `--draw-soft #7E8993`, `--error #FF8A7E` (the others are the same as light)
+  - **Light-mode blue is `#0074A8`, never the brand `#0090CC`**. `#0090CC`
+    fails WCAG AA as link text (3.22:1) and white-on-button (3.58:1).
+  - **Yellow `#FFD23F` is only for highlights:** the `h1 mark` box, the room
+    letters and the FAQ +/−.
+- **Homepage figure, "Fig. 1":** a black-line floor plan of a house (inline
+  SVG, classes `pl`/`pd`/`pw`/`pt`), labeled "Illustration".
+  - Yellow lettered `.room-pin` buttons A–F: living room (TV/streaming),
+    kitchen (smart home), office (computer/printer), kids' room (parental
+    controls), hall closet (the router, pressed by default), garage (the
+    deeper stuff).
+  - Clicking one updates `#room-letter`/`#room-name`/`#room-text`. The text
+    lives in the `rooms` object in `public/js/site.js`.
+- **Components** (class names in `site.css`):
+  - header and nav: `header.site`, `.brand`, `.nav-links`, `.menu-toggle`
+    (the mobile menu is at 860px or narrower)
+  - buttons: `.btn`, `.btn-solid`
+  - hero and page intros: `.hero`, `.lede`, `.actions`, `.where`,
+    `.page-intro`
+  - figure: `.figure`, `.plan-stage`, `.room-info`, `.callout`, `.fig-cap`
+  - sections: `section.band`, `.band-head`, `.parts` (Everyday / Bigger jobs
+    tables and lists), `.steps-field` + `.steps`, `.notes`/`.note` (Where /
+    Devices / Cost), `.split`, `.prose`, `.faq` (details/summary), `.more`
+  - contact: `.support`/`.addr-row`/`.addr`, `.contact-grid`, `.stack`,
+    `.contact-form`, `.field`, `.consent-row`, `.form-error`
+  - footer and helpers: `footer.site`, `.footer-links`, `.sr-only`,
+    `.skip-link`
+  - `.btn-ghost` is used by the cookie banner (`consent.css` reuses the site
+    tokens)
+- **Logo:** `public/assets/logo.svg` (viewBox 40×44). A redraw of the
+  owner's original shield that keeps its elements:
+  - a split shield, `#1FA6E0` on the left and `#0B2545` on the right
+  - circuit traces in `#3BB9EE`
+  - a white "A"
+  - plus a yellow `#FFC23D` wifi arc and dot
+  - Every icon is rendered from it (`tools/render-icons.js`). The rights are
+    confirmed (#39, `ASSETS.md`).
+  - The owner was given `audette-it-logo.svg`,
+    `audette-it-logo-1000x1100.png`, `audette-it-mark-1024.png` and
+    `audette-it-icon-180-white.png`. The renderer recreates the PNGs in
+    `tools/qa-out/logo/`.
+- **Don'ts** (anti-slop, from what the owner rejected):
+  - no icon-in-rounded-square card grids, gradients or emoji bullets
+  - no numbered 01/02/03 unless it's a real sequence
+  - no chat/text-thread motif
+  - no "ops console" look
+  - nothing "too modern" or slick
+  - no stock photos or decorative circuit art
+- **How we got here** (so nobody repeats it):
+  1. Redesign 1: a generic hero + icon cards + numbered steps. Called out as
+     "AI slop".
+  2. Redesign 2: "ops console" (IBM Plex Mono, a fake monitoring panel).
+     Launched 2026-09-23, then found not professional enough (#61).
+  3. `/grill-me` produced the brief: warm and personal, competent and
+     precise, modern but not flashy, "I" voice, keep the blue, light + dark.
+  4. Drafts A ("floor plan"), B ("quick start"), C ("text me") and D ("room
+     guide") went out as artifacts. A was built in full and rejected as "too
+     modern" (it's parked on `wip/redesign-a-floor-plan`). C was too modern,
+     and the owner dislikes the text-thread motif. The owner liked A + B, so D
+     combines them. D was approved, then rebuilt as separate pages.
+- **Anti-slop sources** worth re-reading before design work:
+  `funboy322/avoid-ai-design`, Vercel's `web-interface-guidelines`, the
+  "Anti-Slop Framework" article.
 
-Anti-slop sources worth re-reading before more design work: the
-`funboy322/avoid-ai-design` checklist, Vercel's `web-interface-guidelines`,
-and the "Anti-Slop Framework" article.
+## 6. Site architecture
 
-## Homepage redesign — now real files, not just an artifact
+```
+public/                  # the ONLY folder that is served (assets.directory)
+  index.html, services.html, how-it-works.html, about.html, contact.html, privacy.html
+  index.md, services.md, how-it-works.md, about.md, contact.md, privacy.md   # Markdown twins
+  llms.txt               # index of the Markdown pages
+  llms-full.txt          # all twins in one file; GENERATED by scripts/build-llms.py
+  _headers               # security headers + .md canonical Links for static responses
+  sitemap.xml, robots.txt, site.webmanifest, favicon.ico
+  css/site.css           # the whole design system
+  css/consent.css        # cookie banner (uses site tokens)
+  js/consent.js          # consent defaults + banner; FIRST script in every <head>
+  js/site.js             # mobile menu, floor-plan room picker, contact form
+  assets/                # logo.svg (master) + rendered PNG icons
+worker/index.js          # runs for page routes only: Markdown negotiation + security headers
+wrangler.jsonc           # Worker config
+scripts/check-links.py   # CI: links, page coverage, _headers canonical blocks, CSP hashes
+scripts/build-llms.py    # regenerates llms-full.txt (--check in CI)
+tools/                   # local helpers, not deployed (section 8)
+.github/workflows/ci.yml # CI definition (never runs: Actions blocked, see #32)
+.claude/skills/          # grill-me, grilling, impeccable (section 13)
+ASSETS.md                # asset provenance and rights
+```
 
-> **Superseded (2026-09-24):** this section describes the first
-> (ops-console) redesign. `main` now has the "room
-> guide" redesign with six pages (Home, Services, How it works, About,
-> Contact, Privacy); see "Design direction". Edit the HTML files directly,
-> since they are the source of truth now (the drafts were generated by a
-> throwaway script).
-
-The redesign (Home / Services / Contact / Privacy) is implemented for real in
-`public/`. It's merged into **`dev`** (built on `feature/homepage-redesign`,
-which still exists but is no longer where changes should land — edit `dev`
-directly now). Live on `main` since the 2026-09-23 launch.
-
-The Claude Artifact versions (below) were the design/review draft that this was
-built from — the repo files are now the source of truth going forward, not the
-artifacts. Keep the artifacts around for reference/history, but **edit the real
-files on `dev` for any further changes**, not the artifacts.
-
-- **Homepage redesign artifact** (original draft, now superseded by the real
-  files above) — https://claude.ai/artifact/Vj8Pvwbi5uY8SZEhKSFpxq
-  - Services split into two honest tiers: **Everyday help** (wifi, slow computers,
-    printers, accounts, parental controls) and **Infrastructure & advanced**
-    (network design, Active Directory/domains, self-hosted services, security
-    hardening) — same split carried into the real files.
-  - Contact page shows the real email (`michael.audette@audetteit.com`) only —
-    phone, city, and the footer "run by ___" name were deliberately removed,
-    not left as placeholders. Re-add only if the user actually asks.
-  - The artifact's contact form was a non-functional mock; the real one on `dev`
-    works (see "Site architecture").
-- **Issue tracker artifact** (still the canonical live source — this one is NOT
-  superseded, keep using it) — https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy
-  - Every issue's full body is the exact GitHub text (verified byte-for-byte),
-    grouped by area, expandable, with status pills strictly tied to actual
-    open/closed GitHub state (never invent a "Done" status without actually
-    closing the issue).
-
-## Site architecture (live on `main`)
-
-- **`wrangler.jsonc`** — explicit Worker config (previously there was none, and
-  Cloudflare auto-detected a static-assets-only setup). `assets.directory` is
-  `./public` so repo files (CLAUDE.md, README, etc.) are never served;
-  `run_worker_first` lists the page routes (`/`, `/services`,
-  `/how-it-works`, `/about`, `/contact`, `/privacy`), so only those run
-  through code.
-- **Markdown for every page (user requirement: "in all deployments we need
-  markdown for all pages then detailed docs and the sitemap and index").**
-  Each page has a hand-written twin in `public/` (`index.md`, `services.md`,
-  `contact.md`, `privacy.md`, `how-it-works.md`, `about.md`), served three ways: directly at `/<page>.md`,
-  via `Accept: text/markdown` on the normal URL (Worker), and bundled in
-  `public/llms-full.txt` (the "detailed docs", generated by
-  `scripts/build-llms.py`, never hand-edited). `public/llms.txt` is the index.
-  HTML pages link their twin with `<link rel="alternate" type="text/markdown">`;
-  Markdown responses send `Link: rel="canonical"` back to the HTML so search
-  engines don't treat them as duplicates. **When page copy changes, update the
-  `.md` twin in the same change and rerun `build-llms.py`** — CI fails if
-  `llms-full.txt` is stale or any page lacks its twin/route/sitemap/llms entry.
-- **`worker/index.js`** — runs for the page routes only
-  (`run_worker_first` in `wrangler.jsonc` must match `MARKDOWN_PAGES`):
-  returns the page's `.md` twin when `Accept: text/markdown`, otherwise the
-  static HTML. Sets the security headers itself and
-  `Vary: Accept`, because `public/_headers` is **not** applied to responses that
-  pass through Worker code. Its `SECURITY_HEADERS` must stay in sync with the
-  `/*` block in `public/_headers`.
-- **`public/_headers`** — CSP (`script-src 'self'`, no inline scripts allowed),
-  nosniff, `X-Frame-Options: DENY`, Referrer-Policy, Permissions-Policy, HSTS
-  (deliberately *without* `includeSubDomains`, so a future HTTP-only self-hosted
-  subdomain isn't broken). `/assets/*` cached 1 day (not fingerprinted).
-- **`www` → apex: working since 2026-09-23 (confirmed by the owner).** It's
-  handled at Cloudflare's edge, not in the repo:
-  - **Redirect Rule** (zone `audetteit.com` → Rules → Redirect Rules,
-    "Redirect from WWW to root" template), named `Redirect www to root`:
-    wildcard `https://www.audetteit.com/*` → `https://audetteit.com/${1}`,
-    301, preserve query string. It covers every path, static assets included.
-  - **DNS:** `A www 192.0.2.1`, **proxied** (orange cloud). That's a
-    discard placeholder: the rule answers at the edge, so the IP is never
-    contacted. It must stay proxied, or `www` stops working.
-  - `worker/index.js` also 301s `www.audetteit.com` to the apex, but only as
-    a backup. With the rule in place, `www` requests never reach the Worker.
-  - The domains were deliberately **not** put under `routes` in
-    `wrangler.jsonc`: wrangler replaces the Worker's whole custom-domain set
-    on deploy, which could detach `audetteit.com`. If domains ever move into
-    `wrangler.jsonc`, list the apex **and** `www`, and remove the `www` DNS
-    record first (a custom domain can't be created over an existing record).
-- **Clean URLs.** Workers serves `/services`, `/contact`, `/privacy`; the
-  `.html` forms 307-redirect. All links, canonicals, `og:url`s, and the sitemap
-  use clean URLs — don't reintroduce `.html` links.
-- **`public/js/site.js`** — all page JS (mobile menu toggle, contact form),
-  external because the CSP forbids inline scripts. Lives in `/js/`, not
-  `/assets/`, so it isn't caught by the 1-day asset cache.
-- **Contact form** — no backend. Validates name/email/message/consent, has a
-  honeypot field, then opens the visitor's email app via `mailto:` pre-filled to
-  `michael.audette@audetteit.com`. Honest about that on the page. A real
-  server-side send would need an email API + secret (not available here).
-- **`public/privacy.html`** — short plain-language note (#27). Discloses the
-  opt-in Google Analytics/Tag Manager setup, its `_ga` cookies, the
-  localStorage consent record, Google Fonts, and Cloudflare. **Any new
-  tracking or cookie-setting embed must be added here (and to `privacy.md`)
-  in the same change.**
-- **Google Tag Manager + cookie consent (#30, #38)** — Consent Mode
-  **"advanced"** (owner's choice, 2026-09-23, so Google's "Test your website"
-  checker and Tag Assistant detect the tag). Every page's `<head>` starts
-  with `<script src="/js/consent.js">`, which sets all Consent Mode signals to
-  `denied` (and to `analytics_storage: granted` if the visitor accepted
-  before), then Google's **exact** GTM snippet for `GTM-TKBJX8F5`. The
-  `<noscript>` GTM iframe comes right after `<body>`. GTM loads for everyone,
-  but GA sets no cookies until the visitor clicks Accept. Before that it only
-  sends cookieless pings, and `privacy.html`/`privacy.md` say so. The banner is
-  built by `consent.js` and styled by `public/css/consent.css`. The choice
-  lives in localStorage key `audetteit-consent`, and the footer "cookie
-  settings" button (`data-cookie-settings`) reopens the banner. Decline pushes
-  `analytics_storage: denied` and clears `_ga*` cookies. GA4 itself is
-  configured inside the GTM container, not in the repo.
-  **Microsoft Clarity** (project `ymzkuz40tm`) is also loaded **by GTM**, as a
-  tag in the container, not by a snippet in the repo. The owner explicitly
-  cancelled the direct inline snippet. `consent.js` defines the `window.clarity`
-  queue and sends `clarity('consentv2', {ad_Storage:'denied',
-  analytics_Storage: <choice>})` at startup and again on window `load` (in
-  case the GTM template replaced the queue), plus on every banner click.
-  Decline also clears `_clck`/`_clsk`. For this to hold outside the EEA, the
-  Clarity project's **Settings → Setup → Cookies** must be **off** (consent
-  mode). The banner and privacy page name both GA and Clarity.
-  **CSP:** the inline snippet is allowed by its hash
-  (`'sha256-UyV5Au11KVQu7NJLru7rrbyHqm2Q7abUOBcVvlNvgFo='`), not
-  `'unsafe-inline'`, plus `https://*.googletagmanager.com` (script/img/connect),
-  `https://*.google-analytics.com` and `https://*.analytics.google.com`
-  (img/connect), `https://*.clarity.ms` (script/img/connect) and
-  `https://c.bing.com` (img/connect) for Clarity, and
-  `frame-src https://www.googletagmanager.com` (noscript).
-  All of this is in **both** `public/_headers` and `worker/index.js`. **If the
-  snippet changes by even one character, the hash changes.**
-  `scripts/check-links.py` (CI) fails when any inline script's hash is missing
-  from either CSP. A GTM "Custom HTML" tag would be blocked by the CSP, so
-  stick to built-in tag types.
-- **Cloudflare Google Tag Gateway: ON (owner wants it), allowed by CSP
-  hashes (PR #57, live 2026-09-23 21:32 UTC).** Cloudflare injects two fixed inline scripts at the very top of
-  every page's `<head>`, *after* the Worker runs (the Worker can't remove or
-  reorder them, and there's no per-path exclusion): one pushes `GTM-TKBJX8F5`
-  into `window.google_tags_first_party`; the other pushes
-  `set developer_id.dY2E1Nz` and async-loads GTM first-party from `/epez/`
-  (same origin, so `'self'` covers it and its collection calls). Their CSP
-  hashes are `'sha256-L7128Ucn8Uz1AVKkbXZh64Cp6i4V2MW7KQbAv84MBq0='` and
-  `'sha256-l6WiYX1ug7tDF6hFBAEd08DFrf7YxBn+kEWIYJDSnLI='`, in both CSPs. They
-  were computed from the live injected text (2026-09-23) and verified by
-  simulating the injection in Chromium. **If Cloudflare ever changes the
-  injected text** (new measurement path, tag ID, or developer ID), those
-  hashes stop matching and browsers silently block the gateway. Re-scrape the
-  live page (Firecrawl `rawHtml`, `maxAge: 0`) and recompute them.
-  `check-links.py` can't catch this because the scripts aren't in the repo.
-  **Consent ordering:** the gateway's loader runs before `consent.js`, so GTM
-  could start before the site's "denied" defaults. That's solved **inside the
-  GTM container** (published by the owner 2026-09-23, version "Consent
-  defaults in GTM"), so it no longer matters which script loads first. See
-  "GTM container configuration" below. Keep `consent.js` either way: it
-  runs the banner, the Accept/Decline updates, and Clarity's consent API.
-- **GTM container configuration (`GTM-TKBJX8F5`, lives in Google Tag
-  Manager, not the repo):**
-  - **Template:** "Consent Mode (Google + Microsoft tags)" by
-    gtm-templates-simo-ahava (Community Template Gallery). Also
-    "Microsoft Clarity - Official".
-  - **Variable `LS - audetteit-consent`** (Custom JavaScript): returns
-    `localStorage.getItem('audetteit-consent')` (null if storage is blocked).
-    **If the localStorage key in `consent.js` is ever renamed, update this
-    variable too.**
+- **`wrangler.jsonc`:** `assets.directory` is `./public`, so repo files are
+  never served. `run_worker_first` is `["/", "/services", "/how-it-works",
+  "/about", "/contact", "/privacy"]`, so only page routes run through code.
+  It must match `MARKDOWN_PAGES` in `worker/index.js`.
+- **`worker/index.js`:**
+  - Returns the page's `.md` twin when the request sends `Accept:
+    text/markdown` (with `Link: rel="canonical"` back to the HTML), otherwise
+    the static HTML.
+  - Sets `SECURITY_HEADERS` itself, because **`_headers` is not applied to
+    responses that pass through Worker code**. It must stay identical to the
+    `/*` block in `public/_headers`.
+  - Adds `Vary: Accept`.
+  - Also 301s `www` → apex (a backup only; the Cloudflare rule answers first).
+- **`public/_headers`:**
+  - HSTS is deliberately **without `includeSubDomains`** (future HTTP-only
+    self-hosted subdomains).
+  - Also: nosniff, `X-Frame-Options: DENY`, Referrer-Policy and
+    Permissions-Policy.
+  - `/assets/*` is cached 1 day, because the files aren't fingerprinted.
+  - One block per `.md` twin sets `Content-Type: text/markdown` and the
+    canonical `Link`. `check-links.py` enforces this since 2026-09-24,
+    because the redesign's two new pages were missing it.
+- **Markdown for every page** (the owner's requirement: "in all deployments
+  we need markdown for all pages then detailed docs and the sitemap and
+  index"). Each twin is served three ways:
+  - at `/<page>.md`
+  - via `Accept: text/markdown` on the normal URL
+  - inside `llms-full.txt`
+  - **When copy changes, update the twin in the same change, then run
+    `python3 scripts/build-llms.py`.**
+  - **Adding a page touches 7 places**, all enforced by `check-links.py`:
+    1. the `.html` page
+    2. its `.md` twin
+    3. `MARKDOWN_PAGES`
+    4. `run_worker_first`
+    5. `sitemap.xml`
+    6. `llms.txt`
+    7. a `_headers` block
+    - also add it to `PAGES` in `scripts/build-llms.py`
+- **Clean URLs.** `/services` etc.; the `.html` forms 307-redirect. All
+  links, canonicals, `og:url`s and the sitemap use clean URLs.
+- **CSP:**
+  - `script-src 'self'` plus three hashes and `https://*.googletagmanager.com
+    https://*.clarity.ms`. There's no `'unsafe-inline'` for scripts, so **all
+    page JS must live in external files**.
+  - `style-src` allows `'unsafe-inline'` and Google Fonts; `font-src` is
+    `fonts.gstatic.com`.
+  - img/connect allow the GA, GTM, Clarity and `c.bing.com` hosts;
+    `frame-src https://www.googletagmanager.com`.
+  - The hashes:
+    - `'sha256-UyV5Au11KVQu7NJLru7rrbyHqm2Q7abUOBcVvlNvgFo='`: Google's exact
+      GTM snippet. **If it changes by one character, the hash changes.**
+      `check-links.py` fails if any inline script's hash is missing from
+      either CSP.
+    - `'sha256-L7128Ucn8Uz1AVKkbXZh64Cp6i4V2MW7KQbAv84MBq0='` and
+      `'sha256-l6WiYX1ug7tDF6hFBAEd08DFrf7YxBn+kEWIYJDSnLI='`: the two
+      scripts Cloudflare's Tag Gateway injects (below). `check-links.py`
+      can't see them.
+- **Every page's `<head>`:**
+  1. `<script src="/js/consent.js">` first.
+  2. Google's **exact** GTM snippet (`GTM-TKBJX8F5`).
+  3. Meta tags, the favicon links (`/favicon.ico` first, `sizes="48x48"`),
+     the canonical, `rel="alternate" type="text/markdown"`, OG/Twitter tags
+     (image: `logo-mark.png`), the manifest, `theme-color #0074A8`, Google
+     Fonts and `site.css`.
+  4. `WebSite` JSON-LD (homepage only; deliberately no Person/Organization
+     schema).
+  5. `consent.css`.
+  - The GTM `<noscript>` iframe goes right after `<body>`, then the skip link.
+- **Cookie consent + GTM** (#30, #38; Consent Mode **"advanced"**, the
+  owner's choice):
+  - GTM loads for everyone. `consent.js` sets every Consent Mode signal to
+    `denied` (`analytics_storage` is `granted` only if the visitor accepted
+    before), so GA sets **no cookies until Accept**. Before that it sends
+    cookieless pings only.
+  - The choice is stored in localStorage key **`audetteit-consent`**. The
+    footer's "Cookie settings" button (`data-cookie-settings`) reopens the
+    banner.
+  - Decline clears `_ga*`, `_clck` and `_clsk`.
+  - **Microsoft Clarity** (project `ymzkuz40tm`) is loaded **by GTM**, not by
+    a repo snippet (the owner cancelled the inline snippet). `consent.js`
+    queues `clarity('consentv2', {ad_Storage:'denied', analytics_Storage:
+    <choice>})` at startup, again on window `load`, and on every banner
+    click.
+  - The Clarity project's Settings → Setup → Cookies must stay **off**.
+  - A GTM "Custom HTML" tag would be blocked by the CSP. Use built-in tag
+    types only.
+- **Cloudflare Google Tag Gateway: ON** (the owner wants it; PR #57).
+  - Cloudflare injects two inline scripts at the top of every `<head>`
+    *after* the Worker runs. One pushes `GTM-TKBJX8F5` into
+    `google_tags_first_party`. The other sets `developer_id.dY2E1Nz` and
+    loads GTM first-party from `/epez/` (same origin).
+  - Their hashes are in both CSPs. **If Cloudflare ever changes the injected
+    text, browsers silently block it.** Re-scrape the live page (Firecrawl
+    `rawHtml`, `maxAge: 0`) and recompute the hashes.
+  - The gateway loads before `consent.js`. That's safe because consent
+    defaults are also set **inside GTM** (below).
+- **GTM container `GTM-TKBJX8F5`** (lives in Google Tag Manager, configured
+  by the owner, version "Consent defaults in GTM", 2026-09-23):
+  - **Templates:** "Consent Mode (Google + Microsoft tags)" by
+    gtm-templates-simo-ahava, and "Microsoft Clarity - Official".
+  - **Variable `LS - audetteit-consent`** (Custom JS): returns
+    `localStorage.getItem('audetteit-consent')`. **If the localStorage key
+    is renamed, update this variable.**
   - **Trigger `Consent Init - accepted before`:** Consent Initialization,
-    fires when `LS - audetteit-consent` equals `granted`.
-  - **Tag `Consent - Default`** (Consent Mode template, command Default):
-    `ad_storage`, `analytics_storage`, `ad_user_data`, `ad_personalization`
-    = denied, "wait for update" 500 ms, Microsoft Consent Mode off. Trigger:
-    **Consent Initialization - All Pages**.
-  - **Tag `Consent - Update (accepted before)`** (command Update):
-    `analytics_storage` = granted only, Microsoft Consent Mode off. Trigger:
-    `Consent Init - accepted before`. **Never attach it to "Consent
-    Initialization - All Pages"**: that would grant analytics to every
-    visitor, including people who declined.
-  - **Tag `Audette IT Website`** (Google tag / GA4) on Initialization - All
-    Pages, relying on built-in consent checks. **Tag `Microsoft Clarity -
-    Official`** on All Pages, with no extra consent requirement, because
-    Clarity gets the choice from `consent.js` via `consentv2`. Microsoft
-    Consent Mode stays off in the template so Clarity doesn't get two sets of
-    signals.
-- **`public/site.webmanifest`** — icons for home-screen shortcuts (#34).
-- **`public/favicon.ico`** — at the site root because Google Search (and
-  browsers that ignore `<link>` tags) request `/favicon.ico` directly. Holds
-  16/32/48px generated from `logo-mark.png`; Google needs 48px or a multiple of
-  it. Linked first on every page with `sizes="48x48"`.
-- **SEO** — canonical, Open Graph, Twitter card on every page; `WebSite` JSON-LD
-  on the homepage only. Deliberately no `Person`/`Organization` schema — the
-  user removed their name from the site, and it's not a registered business.
-- **Accessibility** — skip link, visible `:focus-visible` rings, `aria-hidden`
-  on decorative elements, working mobile menu with `aria-expanded` (before this,
-  the hamburger had no JS and mobile visitors couldn't navigate at all).
-- **CI** — `.github/workflows/ci.yml`: htmlhint, `scripts/check-links.py`
-  (internal links + Markdown coverage), `build-llms.py --check`,
-  manifest/sitemap validation, `wrangler deploy
-  --dry-run`. All pass locally.
-- **`ASSETS.md`** — asset provenance (#39). Logo rights **confirmed** by the
-  owner on 2026-09-24 ("it is confirmed"). #39 is closed.
-- **Verified locally** with `npx wrangler dev` + Playwright/Chromium: 4 pages ×
-  phone/desktop × light/dark, zero horizontal overflow, no CSP violations,
-  mobile menu and form validation exercised end to end.
+    when that variable equals `granted`.
+  - **Tag `Consent - Default`:** all four signals `denied`, "wait for
+    update" 500 ms, Microsoft Consent Mode off, on **Consent Initialization -
+    All Pages**.
+  - **Tag `Consent - Update (accepted before)`:** `analytics_storage`
+    granted, on `Consent Init - accepted before` only. **Never attach it to
+    "Consent Initialization - All Pages"**: that would grant analytics to
+    everyone.
+  - **Tag `Audette IT Website`** (GA4) on Initialization - All Pages, using
+    the built-in consent checks.
+  - **Tag `Microsoft Clarity - Official`** on All Pages, with no extra
+    consent requirement (Clarity gets the choice via `consentv2`).
+- **Contact form:** there's no backend. It validates name, email, message
+  and the consent checkbox, has a honeypot field (`website`), then opens a
+  `mailto:` to `michael.audette@audetteit.com`. The page says so honestly. A
+  real server-side send would need an email API and a secret.
+- **Privacy page** (`privacy.html` + `privacy.md`, #27): a short
+  plain-language note. **Any new tracking, cookie or third-party embed must
+  be added there in the same change.**
+- **Icons:** `favicon.ico` (16/32/48, at the root because Google Search
+  requests it directly), `favicon-16/32.png`, `apple-touch-icon.png` (180 on
+  white), `faviconlogo.png` (192, used by the manifest) and `logo-mark.png`
+  (512, the OG image). All are rendered from `logo.svg`.
+- **Accessibility:** a skip link, `:focus-visible` rings (yellow),
+  `aria-hidden` on decorative SVG, a mobile menu with `aria-expanded`, room
+  pins with `aria-pressed`, a labeled form and AA contrast in both themes.
+  Zero axe violations (2026-09-24).
+- **Removed on purpose** (don't bring back): the fake "All Systems
+  Operational" status block (#28), the dead Employee Portal button (#29), and
+  the third-party Zammad chat widget from `help.audetteit.net` (#36; its
+  future is #44).
 
-## Branch structure
+## 7. Cloudflare, DNS and GitHub settings (outside the repo)
 
-Feature branch(es) &rarr; `dev` &rarr; `staging` &rarr; `main`, matching the
-promotion flow the user specified:
-- **`main`** — production, protected. Should be locked down with GitHub branch
-  protection (require PRs, no direct pushes) — **not yet configured**: the GitHub
-  App lacks the "Administration" permission needed to set this via API (same
-  `403 Resource not accessible by integration` pattern as the Issues permission
-  originally did). Either grant that permission the same way Issues was granted,
-  or the user sets it manually in GitHub Settings &rarr; Branches. Recommended
-  rule: require PR before merging, require status checks once CI exists (#32),
-  don't allow bypassing even for admins.
-- **`staging`** — has its own README. Promoted to `main` on 2026-09-23
-  (launch). `dev` (the room guide redesign) was merged in on 2026-09-24 and
-  promoted to `main` the same day (PR #65). Next promotion: merge `dev` in,
-  review the preview, then PR to `main`. The site is deployed as
-  a Cloudflare **Worker** named `audetteit-site` (account
-  `b7a46df8571aa32900c3155b464416ab`, worker ID
-  `c8969d22263a484bae64aa2436af8e93`) — not classic Pages — so it uses Workers
-  Builds preview behavior, not Pages preview deployments. Every push to a
-  non-production branch auto-builds a Preview by default once Preview Builds
-  are enabled; no per-branch config needed as long as `main` stays the
-  Production branch. **Two manual dashboard steps still needed** (no tool in
-  this session can touch Worker/Pages project or Access settings —
-  Cloudflare tools here are scoped to D1/R2/KV/Workers-code/Hyperdrive only):
-  1. **Workers & Pages → `audetteit-site` → Settings → Build → Branch
-     control**: confirm Production branch = `main`, Enable Preview Builds is
-     on. Optionally restrict which branches get previews to just `staging` if
-     `dev`/feature branches firing previews too is unwanted.
-  2. **Lock previews behind Cloudflare Access**: same Worker → **Access** tab
-     → Protect this Worker behind Access → scope **Previews only** (not "All
-     traffic", which would also lock production) → set an authentication
-     policy → Apply Access. API equivalent (needs a real
-     `CLOUDFLARE_API_TOKEN`, not available in this session):
+- **Worker `audetteit-site`:** account `b7a46df8571aa32900c3155b464416ab`
+  ("Michael.audette@audetteit.com's Account"), worker ID
+  `c8969d22263a484bae64aa2436af8e93`.
+  - The Cloudflare MCP sees three accounts, so pass `account_id`. Its tools
+    here cover Workers code, D1, R2, KV and Hyperdrive, but **not** Worker
+    settings, Access, DNS or rules.
+- **Workers Builds:**
+  - Every push builds. `main` is production, and other branches get preview
+    builds.
+  - It runs **one build at a time**, branch previews queue ahead of
+    production, and superseded commits are skipped. **Avoid a burst of
+    branch pushes right before a release.**
+  - To see what production runs: the "Workers Builds: audetteit-site" check
+    run on the `main` commit, or `workers_get_worker_code`.
+- **Owner's dashboard to-dos** (can't be done from a session):
+  1. Worker → Settings → Build → Branch control: confirm Production branch =
+     `main` and Preview Builds on. Optionally previews for `staging` only.
+  2. Lock previews behind **Cloudflare Access**: Worker → Access → "Previews
+     only" (not "All traffic") → policy → Apply. API equivalent (needs a
+     real `CLOUDFLARE_API_TOKEN`):
      ```
      curl "https://api.cloudflare.com/client/v4/accounts/b7a46df8571aa32900c3155b464416ab/access/apps" \
-       --request POST \
-       --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-       --json '{
-         "type": "self_hosted",
-         "name": "Access for audetteit-site previews",
-         "destinations": [{ "type": "preview_worker", "worker_id": "c8969d22263a484bae64aa2436af8e93" }],
-         "policies": [{ "decision": "allow", "include": [{ "email": { "email": "michael.audette@audetteit.com" } }] }]
-       }'
+       --request POST --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+       --json '{"type":"self_hosted","name":"Access for audetteit-site previews",
+         "destinations":[{"type":"preview_worker","worker_id":"c8969d22263a484bae64aa2436af8e93"}],
+         "policies":[{"decision":"allow","include":[{"email":{"email":"michael.audette@audetteit.com"}}]}]}'
      ```
-- **Finished branches to delete** (all merged; the git proxy here returns 403
-  on branch deletes, so the owner deletes them in GitHub → Branches):
-  `release/main-markdown` (PR #46), `docs/main-after-46` (PR #47), `launch`
-  (PR #49), `release/analytics-www` (PR #50), `docs/after-50` (PR #51),
-  `release/gtm-advanced` (PR #52), `docs/after-52` (PR #53),
-  `docs/www-live` (PR #54), `release/clarity` (PR #55), `docs/after-55`
-  (PR #56), `release/tag-gateway` (PR #57), `docs/after-57`,
-  `release/room-guide` (PR #65), `wip/redesign-a-floor-plan` (rejected draft A). `feature/homepage-redesign` and
-  the two `cloudflare/workers-autoconfig*` branches are also stale.
-- **`release/main-markdown`** — merged into `main` via PR #46 (Markdown for
-  the maintenance page, `favicon.ico`, first real `wrangler.jsonc` on
-  production). Superseded by the launch. The user asked to delete it, but the
-  git proxy returns 403 on branch deletes and no GitHub tool here deletes
-  branches. The owner has to delete it (e.g. "Delete branch" on PR #46).
-- **PR #47** (CLAUDE.md docs update for `main`) — merged by Claude on
-  2026-09-23 at the user's request ("merge 47"), merge commit `4c44fe2`. `main`'s
-  CLAUDE.md matches `dev`'s as of that merge, minus this bullet.
-- **`claude/stoic-gates-w5906b`** (harness branch) — synced with `main` after
-  PR #47 (merged `main` in, kept `main`'s README; files identical to `main` at
-  `4c44fe2`). Re-sync it the same way whenever `main` changes.
-- **`dev`** — active development branch. Everything on it as of 2026-09-23 is
-  live. New work: feature branch → `dev` → `staging` → PR to `main`.
-- **Feature branches** — branch off `dev`, merge back into `dev`.
-- **Local dev hosting** — `npx wrangler dev` from the repo root runs the real
-  Worker + assets exactly as deployed (the old `wrangler pages dev` advice was
-  wrong for a Worker). No build step. Doing this locally instead of pushing
-  feature branches avoids burning Cloudflare build minutes.
+  3. **GitHub Pages is publishing `staging`** (a `pages-build-deployment` run
+     on 2026-09-23). Turn it off in GitHub → Settings → Pages. The site is
+     served by the Worker.
+- **`www` → apex** (working since 2026-09-23):
+  - Cloudflare **Redirect Rule** "Redirect www to root":
+    `https://www.audetteit.com/*` → `https://audetteit.com/${1}`, 301,
+    preserving the query string.
+  - DNS **`A www 192.0.2.1`, proxied** (a placeholder the rule answers in
+    front of; it must stay proxied).
+  - Domains are deliberately **not** in `wrangler.jsonc` `routes`: a deploy
+    replaces the Worker's whole custom-domain set and could detach the apex.
+    If they ever move there, list the apex **and** `www`, and delete the
+    `www` DNS record first.
+- **Public DNS answers** (from `1.1.1.1`, 2026-09-24): `audetteit.com` →
+  `104.21.9.228`, `172.67.161.97`, plus IPv6 `2606:4700:3030::ac43:a161` and
+  `2606:4700:3036::6815:9e4`.
+- **GitHub:**
+  - Branch protection on `main` is **not configured**: the app lacks the
+    Administration permission. The owner can set it in Settings → Branches
+    (require a PR, and status checks once CI runs).
+  - **Actions is blocked at the account level** ("Actions has been disabled
+    for this user"), so CI has never run (#32).
 
-**Verified 2026-09-23 via PR #48's checks:** the Cloudflare "Workers Builds:
-audetteit-site" preview build of `dev` succeeded, so the new `wrangler.jsonc` +
-Worker setup builds on Cloudflare. **GitHub Actions CI has never run.** The
-cause is an account/org-level block ("Actions has been disabled for this
-user"); see #32 under "GitHub project tracking".
+## 8. Workflows
 
-**PR #48** (`dev` → `main`, opened from the Claude Code UI and mislabeled as
-"to staging") was closed on 2026-09-23 at the user's request; launch went
-`staging` → `main` instead. When `main` has commits a branch lacks (merge
-commits, docs), `git merge -s ours origin/main` on that branch clears the
-conflict only if `main`'s side has nothing new. Check `git diff` first.
+### 8.1 Branches and promotion
+```
+feature/* (optional) → dev → staging → release PR → main
+```
+- **`dev`:** day-to-day work. **`staging`:** pre-production (Cloudflare
+  preview). **`main`:** production.
+- **Each branch keeps its own `README.md`.** `CLAUDE.md`, `ASSETS.md` and
+  everything else should be identical across `dev`, `staging` and `main`.
+- **Promote `dev` → `staging`:** `git merge --no-ff origin/dev` on `staging`,
+  and on a README conflict keep `staging`'s README (`git checkout --ours
+  README.md`).
+- **Release to `main`** (only after the owner says so):
+  1. `git checkout -B release/<name> origin/staging`, then
+     `git checkout origin/main -- README.md`.
+  2. Update `CLAUDE.md` to say it's live. **Create the PR first, then write
+     its number into docs.** A guessed number was wrong once.
+  3. Push, open the PR (`mcp__github__create_pull_request`), and merge with
+     `mcp__github__merge_pull_request` (pass `expectedHeadSha`). A direct
+     `git push origin main` is blocked by the permission classifier anyway.
+  4. Watch the "Workers Builds" check run on the merge commit, then confirm
+     live with Firecrawl (`maxAge: 0`).
+  5. **Sync back:** on `dev` and `staging`, `git merge --no-ff --no-commit
+     origin/main`, restore that branch's README, take `main`'s `CLAUDE.md`,
+     commit and push. Make the session branch equal to `main`.
+  - `Closes #N` in the PR body auto-closes issues when it merges.
+- **Docs-only changes to `main`** go the same way (a `docs/<name>` branch
+  from `main`, a PR, ask, merge).
+- **Local copies of `dev`/`staging`/`main` can go stale.** Always `git
+  fetch` and work from `origin/<branch>`.
 
-**Deploy timing (learned 2026-09-23):** Workers Builds runs one build at a
-time, and preview builds from pushes to `dev`/`staging`/other branches queue
-ahead of production. It also skips superseded commits: the PR #50 merge got no
-build of its own because PR #51 merged 48s later, and #51's build (which
-included #50) went live at 20:49 UTC, several minutes after the merge. To see
-what production is really running, fetch the deployed code with the
-Cloudflare MCP `workers_get_worker_code` (`audetteit-site`) or read the
-"Workers Builds" check run on the `main` commit. Avoid a burst of branch
-pushes right before a release.
+### 8.2 Checks: run before every push
+```
+python3 scripts/check-links.py          # links, 7-place page coverage, _headers blocks, CSP hashes
+python3 scripts/build-llms.py --check   # llms-full.txt up to date (run without --check to regenerate)
+npx --yes htmlhint@1 "public/**/*.html"
+npx --yes wrangler@4 deploy --dry-run --outdir /tmp/dist
+python3 -c "import json,xml.dom.minidom as m;json.load(open('public/site.webmanifest'));m.parse('public/sitemap.xml')"
+```
+These are the same steps as `.github/workflows/ci.yml`. CI itself never
+runs (#32), so running them locally is the only gate.
 
-**Cloudflare project settings still need manual verification in the dashboard**
-(none of this is scriptable from here): confirm **Production branch** is `main`,
-confirm `staging` actually produces a preview deployment once something is
-pushed to it, and decide on a custom domain alias for staging if wanted.
+### 8.3 Local server + browser QA
+- **Run the real Worker locally:**
+  `npx --yes wrangler@4 dev --port 8795 --ip 127.0.0.1` (use
+  `run_in_background`). There's no build step.
+- **Run the QA:** `cd tools && npm install && node site-qa.js`.
+  - It covers 6 pages × 390/1366px × light/dark: overflow, CSP errors, JS
+    errors, axe (WCAG 2.1 AA + best practice), the banner, the mobile menu,
+    the room picker, form validation and the FAQ.
+  - Screenshots go to `tools/qa-out/`. It exits 1 on failure. It last passed
+    with zero issues on 2026-09-24.
+- **Stopping wrangler:** don't put `pkill -f wrangler` in the same shell
+  command that started it. It matches its own shell and kills the command
+  (exit 144). Find PIDs with
+  `ps -eo pid,args | awk '/workerd|wrangler/ && !/awk/'`, then `kill` them in
+  a separate call.
+- Screenshots in cloud sessions use **fallback fonts** (Google Fonts is
+  blocked). Look at real fonts on the Cloudflare preview or the live site.
 
-## Open questions for the user (don't guess these)
+### 8.4 Showing the owner a design
+- The owner reviews **Artifacts**, not code.
+  `python3 tools/build-preview.py` bundles every page into
+  `tools/qa-out/preview.html` (page links become in-page tabs; no GTM or
+  banner). Publish it with the Artifact tool.
+- To keep the owner's existing link, republish to
+  https://claude.ai/artifact/A279VNAj3QAxTAv9axKF2x (pass `url`).
+- For new directions, draft 2–4 options as separate artifacts **before**
+  building. Building draft A in full before approval was wasted work.
 
-- Whether/when to build the self-hosted help desk (issue #44 — standing reminder,
-  no deadline) to replace the third-party Zammad widget at `help.audetteit.net`.
-- Full list of services beyond what's drafted — more will likely get added as
-  they're built out (noted as a placeholder on the Services page).
-- Tone/voice sign-off on the rewritten copy (#23).
-- **GitHub Pages is publishing `staging`.** Its `pages-build-deployment`
-  workflow ran on `staging` on 2026-09-23 (triggered by the `audetteit`
-  account), so the Pages source appears to have been switched to `staging`.
-  That publishes staging publicly on github.io, outside Cloudflare Access.
-  Recommended: turn GitHub Pages off in Settings → Pages. The site is served by
-  the Cloudflare Worker, not GitHub Pages.
+### 8.5 Logo and icon changes
+Edit `public/assets/logo.svg`, then `cd tools && node render-icons.js`. It
+rewrites all PNGs and `favicon.ico`, and puts large hand-off PNGs in
+`tools/qa-out/logo/`. Send those to the owner with `SendUserFile`.
+Re-rendering the current logo reproduces the committed PNGs byte for byte.
+Only `favicon.ico` differs, because it's re-packed.
 
-## Project skills (`.claude/skills/`, on every branch)
+### 8.6 Issues and the tracker
+- **Reading issues via the API:**
+  - `GITHUB_TOKEN` is set, so plain `curl`/`urllib` to `api.github.com`
+    works for reads.
+  - The `/issues` **list** endpoint returns only ~3 items for this token, so
+    fetch issues **one by one** (`/issues/N`).
+  - The issue's `comments` count reads **0** even when there are comments.
+    Always fetch `/issues/N/comments`.
+- **Writing:** use `mcp__github__issue_write` (create/update/close; set
+  `state_reason`) and `mcp__github__add_issue_comment`. **Always add the
+  footer.** If writes return `403 Resource not accessible by integration`,
+  the owner has to re-authorize the GitHub connector in claude.ai settings.
+- **Tracker artifact:** https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy. It
+  holds every issue's exact body and every comment (labeled "You" or
+  "Claude" by the footer), grouped by area, with status pills.
+  1. Artifact tool `action: "read"` with that `url`. The result names the
+     saved HTML file.
+  2. `python3 tools/sync-tracker.py <that file> /tmp/tracker.html`. It
+     strips the platform wrapper from the saved file (otherwise a republish
+     double-wraps the page) and updates the footer's count and sync time.
+  3. Hand-edit an item's `"note"` or `"s"` (`open`/`progress`) in the output
+     if needed. Closed issues are always `done`.
+  4. Republish with the Artifact tool, passing the same `url`.
+  - Last synced 2026-09-24 14:36 UTC with this tool: **28 issues, 21 done / 5
+    in progress / 2 open.**
 
-On `main` via PR #63, and synced to `staging`, `dev` and
-`claude/stoic-gates-w5906b`, so any new session on this repo loads them.
-Installed 2026-09-24 for issue #61 (the owner named them in the issue), copied
-from upstream, not written here:
-- **`grill-me`** + **`grilling`** from `mattpocock/skills` (MIT, commit
-  `c55ee46`). `grill-me` is user-invoked only (`/grill-me`) and just hands off
-  to `grilling`, which interviews the owner in numbered rounds of questions
-  with recommended answers.
-- **`impeccable`** from `pbakaus/impeccable` `plugin/skills/impeccable`
-  (Apache-2.0, v4.3.1, commit `e0881d2`). This is the skill folder only: its
-  **edit hook was deliberately not installed** (no `settings.local.json`
-  changes). Its `scripts/impeccable` launcher downloads a prebuilt binary from
-  the project's GitHub releases on first run. Don't run it unless the owner
-  agrees; the skill documents a fallback (read PRODUCT.md/DESIGN.md directly)
-  when the launcher isn't used.
-- When using `impeccable` here, the existing "Design direction" section and
-  the owner's answers from `/grill-me` are the brief. Don't let its
-  "go bold" defaults override decisions already made.
-- To update: re-copy from upstream and bump the commit hashes above.
+### 8.7 Checking the live site
+- Sessions **can't reach audetteit.com directly**. Use Firecrawl
+  (`firecrawl_scrape`, `maxAge: 0`; `rawHtml` for exact markup and injected
+  scripts).
+- Build status: GitHub check runs
+  (`/repos/Audette-IT/audetteit-site/commits/<sha>/check-runs`).
+- Deployed Worker code: Cloudflare MCP `workers_get_worker_code`
+  (`scriptName: audetteit-site`, `account_id` above).
 
-## Working conventions established this session
+## 9. Session environment: what works and what doesn't
 
-- **Never push to `main` without asking the user first — no exceptions.** This
-  supersedes the earlier "push directly to main" convention from this same
-  session; that convention is retired. Commit locally / stage the change, then
-  explicitly ask before running `git push origin ... main`. This applies to
-  every kind of change (content, assets, config, docs) — none of it is exempt
-  just because it seems small or low-risk.
-- Draft anything content/design-significant (new page layouts, copy) for review
-  first (Artifact or the `staging` preview) — don't push unreviewed design
-  changes to the live site. Republishing an Artifact is not a `main` push and doesn't
-  need to wait on approval — it's a separate, private preview channel.
-- Also push to `claude/stoic-gates-w5906b` alongside `main` once approved, to
-  keep it in sync (harness convention from the original task setup).
+| Works | Doesn't (and the workaround) |
+|---|---|
+| `git push` to any branch | Deleting remote branches (proxy 403). The owner deletes them in GitHub → Branches |
+| GitHub MCP tools (PRs, issues, merge) | `gh` CLI isn't available. Use the MCP tools |
+| `GITHUB_TOKEN` + REST reads | Issue list endpoint (only 3 items) and issue comment counts (read 0). Fetch per issue |
+| Merging PRs via MCP after the owner's OK | Direct `git push origin main` (blocked by the permission classifier) |
+| Firecrawl scrape/search of the live site | Direct requests to audetteit.com, `cloudflare-dns.com` (DoH), Google Fonts, Cloudflare API (no token) |
+| `npx wrangler@4 dev`, dry-run deploys | GitHub Actions (account-level block, #32) |
+| Playwright with the pre-installed Chromium (`/opt/pw-browsers/chromium-1194`, Playwright 1.56.1) | `playwright install` (don't; it's pre-installed) |
+| Artifacts (publish/read/republish), `SendUserFile` | `mailto:` links inside artifacts may do nothing |
+| Routines (`send_later`, `create_trigger`) for follow-ups | A Routine fires into the session that made it, not into new sessions |
+
+- **Stop hook:** a session can't end its turn with uncommitted changes. Park
+  unfinished work on a `wip/...` branch instead of pushing half-done work to
+  `dev`.
+- The scratchpad is wiped when a session ends. Anything reusable belongs in
+  `tools/` (that's why it exists).
+
+## 10. Issues
+
+Milestone "Full Site Launch" (#1). The real issues are **#21 onward**: #4–#20
+were duplicates recreated as #21–#37, and #3 was a connectivity test. PR
+numbers share the same sequence.
+
+**Open:**
+- **#23 Copy review.** The copy was rewritten twice (the second time via #60)
+  and is live on all six pages. **Waiting only on the owner's tone/voice
+  sign-off.** Close it when they approve.
+- **#25 SEO.** Everything is served (canonicals, OG/Twitter, sitemap,
+  robots, JSON-LD). **Gate:** all six pages indexed with current titles, and
+  link previews show the new logo.
+  - To check: Firecrawl `firecrawl_search "site:audetteit.com"`, then an
+    opengraph.xyz preview of `/` and `/services`.
+  - Then comment with the evidence and close it. If pages are missing,
+    suggest "Request indexing" in Search Console and re-check in 3 days.
+  - A Routine does this on 2026-09-26 (section 1).
+- **#32 CI.** The workflow exists and passes locally, but GitHub never runs
+  it: "Actions has been disabled for this user" (an account/org-level block,
+  likely billing or a new-account restriction). The owner has to check the
+  org's Actions policy and billing, or contact GitHub Support.
+- **#43 Markdown for Agents.** It's a Cloudflare Pro feature. The Worker
+  stand-in (Accept negotiation, `.md` twins, `llms*.txt`) covers the need.
+  Open as a someday item.
+- **#44 Self-hosted help desk.** A standing reminder (replace the old Zammad
+  at `help.audetteit.net`). No deadline.
+- **#67 Home DNS (AD).** Diagnosed and decided (section 11 has the story).
+  The owner is moving AD to **`ad.audetteit.com`** (a new forest plus a
+  device migration, not a `rendom` rename).
+  - The full plan is in the #67 comments.
+  - **Quick fix first:** repoint the stale internal `www` CNAME (Vercel) to
+    `www.audetteit.com.cdn.cloudflare.net`, or A records to the Cloudflare
+    IPs.
+  - `ad.audetteit.com` stays internal (no Cloudflare records).
+  - **Close when** `nslookup audetteit.com` inside the house matches
+    `1.1.1.1`.
+  - **Asked the owner, no answer yet:** are all four apex IPs
+    (`192.168.4.59/.166/.31/.141`) separate DCs? How many PCs and users? Is
+    there AD CS, file shares with ACLs, or LDAP-based apps? Are the DCs
+    physical or VMs?
+- **#68 Design skill.** Make `audette-it-design` (`.claude/skills/`, via
+  `skill-creator`) from the finished site. **Gate:** the owner says the
+  design is final, #23 and #25 are closed, and it's all live. The issue has
+  the exact file list, the contents, the prompts and 5 test prompts.
+
+**Closed:**
+- **As completed:** #21, #22, #24, #26, #27, #28, #29, #30, #31, #33, #34,
+  #35, #36, #37, #38, #39, #40, #60, #61. Each has a closing comment saying
+  what was done.
+- **As not planned:** #41 and #42 (business/legal details, compliance
+  review). They don't apply without a registered business.
+
+**PR history** (for context):
+- #1/#2: Cloudflare's own autoconfig, May 2026 (#2 merged).
+- #45: closed. #46: Markdown on the maintenance page. #48: closed; it was
+  mislabeled and replaced by #49.
+- **#49: launch** (2026-09-23).
+- #50: GTM + www redirect. #52: Google's exact GTM snippet. #55: Clarity via
+  GTM. #57: Tag Gateway CSP.
+- #63: project skills.
+- **#65: room guide redesign** (2026-09-24).
+- #66: docs, logo rights, #67.
+- **#69: handoff:** this CLAUDE.md rewrite, `tools/`, and the `.md`
+  canonical-header fix.
+- #47, #51, #53, #54, #56, #58, #59, #62 and #64 were docs-only.
+
+## 11. Lessons learned (failures, fixes, and what worked)
+
+**Failures and their fixes, so they don't repeat:**
+1. **The first redesign was a generic AI template** (hero + icon cards +
+   numbered steps) and was called "AI slop". **The second ("ops console")
+   launched, then read as unprofessional** (#61). *Fix:* a proper brief via
+   `/grill-me`, then 4 artifact drafts, and the owner picked. *Lesson:* get
+   the brief and compare drafts before building.
+2. **Draft A was fully built before approval, then rejected** ("too
+   modern"). *Lesson:* build only after an approved draft. Also ask about
+   page structure early: the owner wanted **separate pages**, not one long
+   page.
+3. **`functions/index.js` never ran.** It's a *Pages* convention, and this is
+   a Worker. Notes had called it "live" without checking. *Fix:*
+   `wrangler.jsonc` + `worker/index.js`. *Lesson:* verify before claiming.
+4. **`_headers` doesn't apply to Worker responses.** *Fix:* the Worker sets
+   the same security headers.
+5. **The new pages missed their `_headers` canonical blocks** (found
+   2026-09-24). *Fix:* added, and `check-links.py` now enforces it.
+6. **Brand blue `#0090CC` failed contrast.** *Fix:* `#0074A8` in light mode.
+7. **Nav button text was invisible** (a `.nav-links a` color rule beat
+   `.btn-solid`). *Fix:* a more specific selector. *Lesson:* run axe in both
+   themes.
+8. **Consent vs. the Tag Gateway:** Cloudflare's injected scripts were
+   blocked by the CSP, and they load before `consent.js`. *Fix:* CSP hashes
+   (PR #57), plus consent defaults inside the GTM container.
+9. **Workers Builds skipped a production build** (PR #50 got none because
+   #51 merged 48s later). *Lesson:* don't burst pushes before a release, and
+   verify via the check run.
+10. **A guessed PR number went into the docs** (#64 instead of #65).
+    *Lesson:* create the PR, then write its number.
+11. **Tooling gaps:**
+    - The Issues permission was 403 until the owner re-authorized the
+      connector.
+    - Branch deletes always return 403.
+    - Actions is disabled for the account.
+    - The owner can't see GitHub issues rendering, which is why the tracker
+      artifact exists.
+12. **Home devices couldn't load the site.** The AD domain is also named
+    `audetteit.com` (split-brain DNS). The apex resolves to the domain
+    controllers, and `www` was a stale Vercel CNAME. *Fix, in progress:*
+    move AD to `ad.audetteit.com` (#67).
+13. **`pkill -f wrangler` killed its own shell** (exit 144). Kill by PID in
+    a separate call.
+14. **Helper scripts lived only in the scratchpad** and would have been lost.
+    *Fix:* `tools/`.
+
+**What worked:**
+- The Worker + Markdown twins + `llms*.txt` setup.
+- An A+ security headers grade with a strict CSP (hashes, not
+  `unsafe-inline`).
+- Consent Mode "advanced" with the GTM-side defaults.
+- The www redirect at the edge.
+- The `/grill-me` → drafts-as-artifacts → approve → build flow.
+- The room guide design and the logo redraw (both approved first try after
+  the drafts).
+- Zero-violation browser QA.
+- Stage on `dev`/`staging`, release PR, verify build, sync branches.
+- The tracker artifact as the owner's issue view.
+
+## 12. Artifacts (all private to the owner)
+
+| What | Link | Status |
+|---|---|---|
+| **Issue Tracker** | https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy | **Canonical, keep in sync** |
+| Built-site preview (all pages) | https://claude.ai/artifact/A279VNAj3QAxTAv9axKF2x | Rebuild with `tools/build-preview.py` |
+| Draft D "room guide" (approved) | https://claude.ai/artifact/7cKQaJZ3nnvpAsfyn3FqhC | History |
+| Draft A "floor plan" | https://claude.ai/artifact/VGNK2aqvB6sSYLTPXQvRSw | Rejected |
+| Draft B "quick start" | https://claude.ai/artifact/AuSs6Fp4zf374FJ8dufRyv | Rejected (feel reused in D) |
+| Draft C "text me" | https://claude.ai/artifact/MLct3zL3WuK81UTvc5wL8Y | Rejected |
+| Ops-console homepage draft | https://claude.ai/artifact/Vj8Pvwbi5uY8SZEhKSFpxq | Superseded |
+
+## 13. Project skills (`.claude/skills/`, on every branch)
+
+Installed 2026-09-24 for #61 (PR #63). They're copied from upstream, not
+written here:
+- **`grill-me`** + **`grilling`**, from `mattpocock/skills` (MIT, commit
+  `c55ee46`). `/grill-me` hands off to `grilling`, which interviews the owner
+  in numbered rounds with recommended answers. That's how the room guide
+  brief was made.
+- **`impeccable`**, from `pbakaus/impeccable` `plugin/skills/impeccable`
+  (Apache-2.0, v4.3.1, commit `e0881d2`). Skill folder only; its edit hook
+  was **not** installed. Its `scripts/impeccable` launcher downloads a
+  binary, so **don't run it without the owner's OK**. Use the documented
+  fallback. Section 5 of this file is the brief, so don't let its "go bold"
+  defaults override it.
+- **Planned:** `audette-it-design` (#68, gated).
+- To update: re-copy from upstream and bump the hashes above.
+
+## 14. Branches
+
+- **Active:**
+  - `main` (production), `dev` (work), `staging` (pre-production), each
+    with its own README.
+  - `claude/stoic-gates-w5906b`: the first session's branch, kept equal to
+    `main`. New sessions get their own `claude/...` branch. Keep it synced
+    with `main` the same way.
+- **Parked:** `wip/redesign-a-floor-plan` (draft A, rejected; keep for
+  reference or delete).
+- **Finished, for the owner to delete** (all merged into `main`; sessions
+  can't delete branches):
+  - release branches: `launch`, `release/analytics-www`,
+    `release/gtm-advanced`, `release/clarity`, `release/tag-gateway`,
+    `release/room-guide`, `release/handoff`
+  - docs branches: `docs/main-after-46`, `docs/after-50`, `docs/after-52`,
+    `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
+    `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`
+  - other: `chore/add-skills`, `cloudflare/workers-autoconfig-2`
+- **Stale, not merged, safe to delete:** `feature/homepage-redesign`
+  (superseded) and `cloudflare/workers-autoconfig` (PR #1, closed).
+  `release/main-markdown` (PR #46) is already gone.
+
+## 15. Open questions for the owner (don't guess these)
+
+- Tone/voice sign-off on the copy (#23).
+- More services? The list will grow as they're built out.
+- Whether and when to build the self-hosted help desk (#44).
+- The #67 AD details (four questions in section 10).
+- When the design counts as "final" (unblocks #68).
+- The dashboard to-dos in section 7: Branch control, Access for previews,
+  turning off GitHub Pages, and `main` branch protection.
