@@ -66,7 +66,9 @@ Copy should read as one capable person, not a company.
   and new favicons. The owner approved the preview ("i like it, stage it"),
   it went `dev` → `staging`, then the owner said "push it to main". It
   shipped through PR #65 from branch `release/room-guide` (`staging` with
-  `main`'s README).
+  `main`'s README). Production build succeeded at 04:19 UTC. Confirmed
+  live via Firecrawl: `/how-it-works` serves the new page, with the
+  consent banner.
 
 ## GitHub project tracking
 
@@ -131,8 +133,8 @@ Copy should read as one capable person, not a company.
   anything without it is the owner's.
 - The Issue Tracker artifact was last re-synced from the API on 2026-09-24
   02:05 UTC: 26 issues (#21–#44, #60, #61), 18 done / 5 in progress / 3 open.
-  Updated 02:56 UTC: #60/#61 are now "in progress" and show the new
-  progress comments (18 done / 7 in progress / 1 open).
+  Updated 04:25 UTC: #60/#61 closed by PR #65 and shown as done with
+  their comments (20 done / 5 in progress / 1 open).
   It now shows **every comment verbatim** under each issue, labeled "You"
   or "Claude" by that footer. #60/#61 sit in a "Post-launch polish" group.
   Source: scratchpad `tracker.html`, rebuilt by `rebuild_tracker.py` from
