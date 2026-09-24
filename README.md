@@ -6,7 +6,8 @@ Not a registered business.
 
 **Branch:** `staging` — pre-production. Pushes here build a Cloudflare Worker
 preview (meant to sit behind Cloudflare Access) for a final look before
-promotion to `main`. See `CLAUDE.md` for full project context.
+promotion to `main`. Start with `CLAUDE.md`: it's the full handoff for new
+sessions.
 
 ## Branch flow
 
@@ -14,9 +15,9 @@ promotion to `main`. See `CLAUDE.md` for full project context.
 feature/*  →  dev  →  staging  →  main
 ```
 
-This branch was promoted to `main` on 2026-09-23 (PR #49). It now also has
-the "room guide" redesign from `dev` (#60/#61, staged 2026-09-24), which isn't
-live yet. Next: review the preview, then open a PR to `main`.
+Promotions so far: the launch (PR #49, 2026-09-23) and the "room guide"
+redesign (PR #65, 2026-09-24), both live. Next time: merge `dev` in, review
+the preview, then open a release PR to `main` (steps in `CLAUDE.md`).
 
 ## Structure
 
@@ -42,6 +43,8 @@ live yet. Next: review the preview, then open a PR to `main`.
 wrangler.jsonc       # Cloudflare Worker config
 scripts/check-links.py  # Link + Markdown-coverage checker (run in CI)
 scripts/build-llms.py   # Regenerates public/llms-full.txt
+tools/               # Local helpers (not deployed): browser QA, icons,
+                     # Artifact preview, issue-tracker sync
 ASSETS.md            # Where every image came from
 ```
 
