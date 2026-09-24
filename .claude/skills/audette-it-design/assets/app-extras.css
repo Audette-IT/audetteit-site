@@ -1,0 +1,63 @@
+/* Audette IT "room guide": add-ons for web apps (help desk, dashboards, audetteit.net).
+   Load AFTER room-guide.css. Uses only the room-guide tokens: no new colors. */
+
+/* App sections: a panel is a titled block under a 3px rule, not a floating card. */
+.panel { border-top: 3px solid var(--rule); padding-top: 16px; }
+.panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.panel-head h2 { font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; }
+.panel-head p { color: var(--ink-soft); font-size: 0.92rem; }
+
+/* Data table: hairline rows, 3px rule under the header row, numbers align. */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.97rem; }
+.data-table th { text-align: left; font: 700 0.8rem/1.2 "Red Hat Display", sans-serif; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); padding: 10px 12px 10px 0; border-bottom: 3px solid var(--rule); }
+.data-table td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--hair); vertical-align: top; }
+.data-table td.num, .data-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.data-table tbody tr:hover { background: var(--paper-2); }
+.table-scroll { overflow-x: auto; }
+
+/* Status: always a word plus a shape, never color alone. */
+.status { display: inline-flex; align-items: center; gap: 6px; font: 700 0.85rem/1 "Red Hat Display", sans-serif; white-space: nowrap; }
+.status::before { content: ""; width: 10px; height: 10px; border-radius: 50%; border: 2px solid currentColor; flex: none; }
+.status-ok { color: var(--ink); }
+.status-ok::before { background: currentColor; }                         /* filled dot: working / done */
+.status-info { color: var(--blue); }                                     /* hollow blue dot: in progress / waiting */
+.status-attention { color: var(--mark-ink); background: var(--mark); padding: 4px 8px; border-radius: 999px; } /* yellow pill: needs you */
+.status-attention::before { border-radius: 2px; }
+.status-problem { color: var(--error); }
+.status-problem::before { border-radius: 2px; transform: rotate(45deg); background: currentColor; } /* diamond: broken */
+.status-off { color: var(--ink-soft); }                                  /* hollow grey dot: unknown / not checked */
+
+/* Stat: one big number with a plain label. No sparkline chrome, no trend arrows unless real. */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: clamp(16px, 3vw, 32px); }
+.stat { border-top: 3px solid var(--rule); padding-top: 12px; }
+.stat .v { font: 900 2.6rem/1 "Red Hat Display", sans-serif; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.stat .l { color: var(--ink-soft); font-size: 0.92rem; margin-top: 6px; }
+
+/* Messages: bordered like the support box; errors use the error token for the border. */
+.alert { border: 2px solid var(--rule); border-radius: 6px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
+.alert .callout { margin-top: 0; }
+.alert-problem { border-color: var(--error); }
+.alert-problem strong { color: var(--error); }
+
+/* Empty state: says what to do next, in Michael's voice. */
+.empty { border: 2px dashed var(--hair); border-radius: 6px; padding: clamp(24px, 4vw, 40px); text-align: center; color: var(--ink-soft); }
+.empty h2, .empty h3 { color: var(--ink); font-size: 1.2rem; margin-bottom: 6px; }
+
+/* Side navigation for apps with several sections. Current item = 3px yellow underline, like the site nav. */
+.app-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: clamp(24px, 4vw, 48px); padding-block: clamp(24px, 4vw, 48px); }
+.side-nav { display: grid; align-content: start; border-top: 3px solid var(--rule); }
+.side-nav a { padding: 11px 0; border-bottom: 1px solid var(--hair); color: var(--ink); text-decoration: none; font-weight: 500; }
+.side-nav a:hover { text-decoration: underline; }
+.side-nav a[aria-current="page"] { font-weight: 700; text-decoration: underline; text-decoration-thickness: 3px; text-decoration-color: var(--mark); }
+
+/* Selects match inputs. */
+.field select { background: var(--paper-2); border: 2px solid var(--hair); border-radius: 6px; padding: 12px 14px; color: var(--ink); font: inherit; }
+.field select:focus { outline: 3px solid var(--mark); outline-offset: 1px; border-color: var(--rule); }
+
+/* Dialog */
+dialog.dlg { border: 3px solid var(--rule); border-radius: 6px; padding: clamp(20px, 3vw, 32px); background: var(--paper); color: var(--ink); max-width: min(560px, calc(100vw - 32px)); }
+dialog.dlg::backdrop { background: rgba(17, 20, 24, 0.5); }
+
+@media (max-width: 860px) {
+  .app-layout { grid-template-columns: minmax(0, 1fr); }
+}
