@@ -583,9 +583,12 @@ numbers share the same sequence.
   The owner is moving AD to **`ad.audetteit.com`** (a new forest plus a
   device migration, not a `rendom` rename).
   - The full plan is in the #67 comments.
-  - **Quick fix first:** repoint the stale internal `www` CNAME (Vercel) to
-    `www.audetteit.com.cdn.cloudflare.net`, or A records to the Cloudflare
-    IPs.
+  - **Quick fix first:** replace the stale internal `www` CNAME (Vercel)
+    with two `A` records, `104.21.9.228` and `172.67.161.97`. Don't use
+    `www.audetteit.com.cdn.cloudflare.net`: it doesn't resolve, because it
+    only exists for partial (CNAME) setups (checked 2026-09-24, corrected on
+    #67). This only stops `www` going to Vercel; the site still won't load at
+    home until the AD move.
   - `ad.audetteit.com` stays internal (no Cloudflare records).
   - **Close when** `nslookup audetteit.com` inside the house matches
     `1.1.1.1`.
@@ -618,8 +621,8 @@ numbers share the same sequence.
 - #66: docs, logo rights, #67.
 - **#69: handoff:** this CLAUDE.md rewrite, `tools/`, and the `.md`
   canonical-header fix.
-- #47, #51, #53, #54, #56, #58, #59, #62, #64, #70 (#23 closed) and #71
-  (#25 SEO check) were docs-only.
+- #47, #51, #53, #54, #56, #58, #59, #62, #64, #70 (#23 closed), #71
+  (#25 SEO check) and #72 (#67 quick-fix correction) were docs-only.
 
 ## 11. Lessons learned (failures, fixes, and what worked)
 
@@ -728,7 +731,7 @@ written here:
   - docs branches: `docs/main-after-46`, `docs/after-50`, `docs/after-52`,
     `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
     `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`,
-    `docs/close-23`, `docs/seo-check-25`
+    `docs/close-23`, `docs/seo-check-25`, `docs/dns-fix-67`
   - other: `chore/add-skills`, `cloudflare/workers-autoconfig-2`
 - **Stale, not merged, safe to delete:** `feature/homepage-redesign`
   (superseded) and `cloudflare/workers-autoconfig` (PR #1, closed).
