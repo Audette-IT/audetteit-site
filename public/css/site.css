@@ -1,0 +1,187 @@
+/* Audette IT: "room guide". Quick-start manual look with the floor plan as Fig. 1.
+   Shared styles for every page. */
+:root {
+  --paper: #FFFFFF;
+  --paper-2: #F2F4F6;
+  --ink: #1A1E23;
+  --ink-soft: #545D66;
+  --rule: #1A1E23;
+  --hair: #D9DEE3;
+  --blue: #0074A8;
+  --blue-field: #006A9C;
+  --on-blue: #FFFFFF;
+  --on-blue-soft: #EAF5FB;
+  --mark: #FFD23F;
+  --mark-ink: #1A1E23;
+  --draw: #1A1E23;
+  --draw-soft: #8A949E;
+  --error: #A3261B;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #111418; --paper-2: #181C21; --ink: #ECEFF2; --ink-soft: #A7B0B9; --rule: #ECEFF2; --hair: #2A3037;
+    --blue: #6CC6F0; --blue-field: #0A4F74; --on-blue: #FFFFFF; --on-blue-soft: #D5ECF8;
+    --mark: #FFD23F; --mark-ink: #1A1E23; --draw: #ECEFF2; --draw-soft: #7E8993; --error: #FF8A7E;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 1.0625rem/1.6 "Red Hat Text", "Segoe UI", system-ui, sans-serif; }
+::selection { background: var(--mark); color: var(--mark-ink); }
+a { color: var(--blue); text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--mark); outline-offset: 3px; }
+h1, h2, h3 { font-family: "Red Hat Display", "Segoe UI", system-ui, sans-serif; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.92em; }
+.skip-link { position: absolute; left: -9999px; top: 0; z-index: 99; background: var(--mark); color: var(--mark-ink); padding: 10px 16px; font-weight: 700; }
+.skip-link:focus { left: 0; }
+
+/* Header */
+header.site { position: relative; border-bottom: 3px solid var(--rule); }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+.brand { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; }
+.brand img { width: 40px; height: 44px; display: block; }
+.brand b { font: 900 1.3rem/1 "Red Hat Display", sans-serif; letter-spacing: -0.01em; display: block; }
+.brand small { font-size: 0.8rem; color: var(--ink-soft); display: block; margin-top: 4px; }
+.nav-links { display: flex; gap: clamp(14px, 2.5vw, 28px); align-items: center; font-weight: 500; }
+.nav-links a { color: var(--ink); text-decoration: none; }
+.nav-links a:hover { text-decoration: underline; }
+.nav-links a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 3px; text-decoration-color: var(--mark); }
+.nav-links a.btn, .nav-links a.btn:hover, .nav-links a.btn[aria-current="page"] { color: var(--paper); text-decoration: none; padding: 10px 18px; }
+.menu-toggle { display: none; background: none; border: 2px solid var(--rule); border-radius: 8px; padding: 8px; color: var(--ink); cursor: pointer; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; font: 700 1rem/1 "Red Hat Display", sans-serif; padding: 14px 22px; border-radius: 999px; text-decoration: none; border: 2px solid var(--rule); color: var(--ink); background: transparent; cursor: pointer; }
+.btn:hover { background: var(--paper-2); }
+.btn-solid { background: var(--ink); color: var(--paper); }
+.btn-solid:hover { background: var(--blue); border-color: var(--blue); color: #FFFFFF; }
+
+/* Hero (home) */
+.hero { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: clamp(28px, 5vw, 60px); align-items: center; padding-block: clamp(32px, 6vw, 72px); }
+.hero h1 { font-size: clamp(2.4rem, 5.6vw, 4.4rem); font-weight: 900; line-height: 1; letter-spacing: -0.03em; }
+h1 mark { background: var(--mark); color: var(--mark-ink); padding-inline: 6px; border-radius: 4px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.lede { margin-top: 22px; font-size: 1.15rem; color: var(--ink-soft); max-width: 40ch; }
+.actions { margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap; }
+.where { margin-top: 20px; color: var(--ink-soft); font-size: 0.95rem; }
+
+/* Figure: floor plan */
+.figure { margin: 0; border: 2px solid var(--rule); border-radius: 6px; padding: clamp(12px, 2vw, 20px); background: var(--paper); }
+.plan-stage { position: relative; }
+.plan-stage svg { display: block; width: 100%; height: auto; }
+.plan-stage .pl { stroke: var(--draw); }
+.plan-stage .pd { stroke: var(--draw-soft); }
+.plan-stage .pw { stroke: var(--blue); }
+.plan-stage .pt { fill: var(--ink-soft); font-family: "Red Hat Text", system-ui, sans-serif; font-weight: 700; }
+.room-pin { position: absolute; transform: translate(-50%, -50%); width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--rule); background: var(--mark); color: var(--mark-ink); font: 900 0.95rem/1 "Red Hat Display", sans-serif; cursor: pointer; padding: 0; transition: transform .18s cubic-bezier(.16,1,.3,1); }
+.room-pin:hover { transform: translate(-50%, -50%) scale(1.12); }
+.room-pin[aria-pressed="true"] { background: var(--ink); color: var(--mark); border-color: var(--mark); }
+.room-info { display: flex; gap: 12px; align-items: flex-start; border-top: 1px solid var(--hair); margin-top: 12px; padding-top: 12px; min-height: 92px; }
+.room-info h2 { font-size: 1.05rem; }
+.room-info p { color: var(--ink-soft); font-size: 0.97rem; margin-top: 2px; }
+.callout { flex: none; display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--mark); color: var(--mark-ink); font: 900 0.85rem/1 "Red Hat Display", sans-serif; margin-top: 2px; }
+.fig-cap { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--ink-soft); border-top: 1px solid var(--hair); margin-top: 10px; padding-top: 10px; gap: 12px; flex-wrap: wrap; }
+
+/* Page intro (inner pages) */
+.page-intro { padding-block: clamp(32px, 5vw, 64px); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: clamp(20px, 5vw, 64px); align-items: end; }
+.page-intro h1 { font-size: clamp(2.3rem, 5vw, 3.8rem); font-weight: 900; line-height: 1; letter-spacing: -0.03em; }
+.page-intro .lede { margin-top: 0; }
+
+/* Sections */
+section.band { padding-block: clamp(56px, 8vw, 96px); border-top: 3px solid var(--rule); }
+.band-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; margin-bottom: 36px; }
+.band-head h2 { font-size: clamp(1.9rem, 3.8vw, 2.9rem); font-weight: 900; letter-spacing: -0.02em; line-height: 1.02; }
+.band-head p { color: var(--ink-soft); max-width: 46ch; }
+.more { margin-top: 28px; font-weight: 700; }
+
+.parts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 4vw, 56px); }
+.parts h2, .parts h3 { font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; padding-bottom: 10px; border-bottom: 3px solid var(--rule); }
+.parts table { width: 100%; border-collapse: collapse; }
+.parts th, .parts td { padding-block: 13px; border-bottom: 1px solid var(--hair); vertical-align: top; text-align: left; }
+.parts th { width: 42%; font-weight: 700; padding-right: 16px; }
+.parts td { color: var(--ink-soft); }
+.parts ul { list-style: none; margin: 0; padding: 0; }
+.parts li { padding-block: 11px; border-bottom: 1px solid var(--hair); font-weight: 700; }
+
+.steps-field { background: var(--blue-field); color: var(--on-blue); }
+.steps-field .band-head p, .steps-field .more a { color: var(--on-blue-soft); }
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; margin: 0; padding: 0; list-style: none; background: rgba(255,255,255,0.3); border: 2px solid rgba(255,255,255,0.3); border-radius: 6px; overflow: hidden; }
+.steps li { background: var(--blue-field); padding: clamp(20px, 3vw, 32px); }
+.steps .n { font: 900 4.5rem/0.9 "Red Hat Display", sans-serif; letter-spacing: -0.04em; }
+.steps h3 { font-size: 1.3rem; margin-top: 16px; }
+.steps p { color: var(--on-blue-soft); margin-top: 8px; }
+
+.notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); }
+.note { border-top: 3px solid var(--rule); padding-top: 16px; }
+.note h2, .note h3 { display: flex; gap: 10px; align-items: center; font-size: 1.15rem; }
+.note :is(h2, h3) svg { flex: none; }
+.note p { margin-top: 8px; color: var(--ink-soft); }
+
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+.split h2 { font-size: clamp(1.7rem, 3.2vw, 2.4rem); font-weight: 900; letter-spacing: -0.02em; line-height: 1.05; }
+.prose { max-width: 68ch; }
+.prose h2 { font-size: 1.45rem; margin-top: 40px; margin-bottom: 10px; }
+.prose h2:first-child { margin-top: 0; }
+.prose p + p { margin-top: 14px; }
+
+.faq { max-width: 860px; border-top: 3px solid var(--rule); }
+.faq details { border-bottom: 1px solid var(--hair); }
+.faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 16px; align-items: center; padding-block: 18px; font: 700 1.15rem/1.3 "Red Hat Display", sans-serif; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; flex: none; display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--mark); color: var(--mark-ink); font: 900 1.1rem/1 "Red Hat Display", sans-serif; }
+.faq details[open] summary::after { content: "\2212"; }
+.faq details p { color: var(--ink-soft); padding-bottom: 18px; max-width: 64ch; }
+
+/* Support box (contact band) */
+.support { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 28px; align-items: center; border: 3px solid var(--rule); border-radius: 6px; padding: clamp(24px, 4vw, 48px); }
+.support h2 { font-size: clamp(1.9rem, 3.6vw, 2.8rem); font-weight: 900; line-height: 1.02; letter-spacing: -0.02em; }
+.support p { color: var(--ink-soft); margin-top: 12px; max-width: 44ch; }
+.addr-row { display: grid; gap: 12px; }
+.addr { font: 700 1.1rem/1.3 "Red Hat Display", sans-serif; word-break: break-all; padding: 14px 16px; background: var(--paper-2); border-radius: 6px; color: var(--ink); }
+a.addr:hover { color: var(--blue); }
+
+/* Contact form */
+.contact-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+.stack { display: grid; gap: 28px; align-content: start; }
+.contact-form { border: 3px solid var(--rule); border-radius: 6px; padding: clamp(20px, 3vw, 32px); display: grid; gap: 16px; background: var(--paper); }
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 700; }
+.field input, .field textarea { background: var(--paper-2); border: 2px solid var(--hair); border-radius: 6px; padding: 12px 14px; color: var(--ink); font: inherit; resize: vertical; }
+.field input:focus, .field textarea:focus { outline: 3px solid var(--mark); outline-offset: 1px; border-color: var(--rule); }
+.field input::placeholder, .field textarea::placeholder { color: var(--ink-soft); opacity: 0.85; }
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.consent-row { display: flex; gap: 10px; align-items: flex-start; font-size: 0.95rem; color: var(--ink-soft); }
+.consent-row input { margin-top: 5px; width: 18px; height: 18px; accent-color: var(--blue); flex: none; }
+.form-error { color: var(--error); font-weight: 700; }
+.form-note { font-size: 0.9rem; color: var(--ink-soft); }
+.inline-link { color: var(--blue); }
+
+/* Footer */
+footer.site { border-top: 3px solid var(--rule); margin-top: clamp(56px, 8vw, 96px); padding-block: 28px 44px; font-size: 0.92rem; color: var(--ink-soft); }
+footer.site .wrap { display: flex; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; align-items: center; }
+.footer-links { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+.footer-links a, .footer-links .linklike { color: var(--ink-soft); }
+.footer-links a:hover, .footer-links .linklike:hover { color: var(--blue); }
+
+/* Cookie banner buttons (built by consent.js) */
+.btn-ghost { border-color: var(--rule); color: var(--ink); background: var(--paper); }
+.btn-ghost:hover { background: var(--paper-2); }
+
+@media (max-width: 860px) {
+  .hero, .page-intro, .parts, .support, .split, .contact-grid { grid-template-columns: minmax(0, 1fr); }
+  .steps, .notes { grid-template-columns: minmax(0, 1fr); }
+  .menu-toggle { display: inline-flex; }
+  .nav-links { display: none; }
+  header.site.menu-open .nav-links {
+    display: flex; flex-direction: column; align-items: stretch; gap: 0;
+    position: absolute; top: 100%; left: 0; right: 0; z-index: 20;
+    background: var(--paper); border-bottom: 3px solid var(--rule);
+    padding-inline: clamp(16px, 4vw, 40px); padding-block: 8px 16px;
+  }
+  header.site.menu-open .nav-links a { padding-block: 14px; border-bottom: 1px solid var(--hair); }
+  header.site.menu-open .nav-links a.btn { margin-top: 12px; border-bottom: 2px solid var(--rule); }
+  .parts th { width: 45%; }
+}

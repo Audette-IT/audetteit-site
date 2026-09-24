@@ -11,6 +11,8 @@ OUT = PUBLIC / "llms-full.txt"
 PAGES = [
     ("index.md", "https://audetteit.com/"),
     ("services.md", "https://audetteit.com/services"),
+    ("how-it-works.md", "https://audetteit.com/how-it-works"),
+    ("about.md", "https://audetteit.com/about"),
     ("contact.md", "https://audetteit.com/contact"),
     ("privacy.md", "https://audetteit.com/privacy"),
 ]

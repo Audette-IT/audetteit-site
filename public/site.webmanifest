@@ -1,11 +1,11 @@
 {
   "name": "Audette IT",
   "short_name": "Audette IT",
-  "description": "Personal IT help for family and friends.",
+  "description": "Tech help from one person in Las Vegas.",
   "start_url": "/",
   "scope": "/",
   "display": "browser",
-  "background_color": "#08090C",
+  "background_color": "#F3F5F6",
   "theme_color": "#0074A8",
   "icons": [
     { "src": "/assets/faviconlogo.png", "sizes": "192x192", "type": "image/png" },

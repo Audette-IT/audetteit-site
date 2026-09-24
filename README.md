@@ -24,19 +24,22 @@ feature/*  →  dev  →  staging  →  main
 
 ```
 /public              # everything served to visitors
-  index.html         # Home
-  services.html      # Everyday help + infrastructure/advanced   -> /services
+  index.html         # Home (floor-plan figure)
+  services.html      # Everyday help + bigger jobs               -> /services
+  how-it-works.html  # Steps, in person or remote, FAQ           -> /how-it-works
+  about.html         # About Michael                              -> /about
   contact.html       # Contact form (opens your email app)        -> /contact
   privacy.html       # Plain-language privacy note                -> /privacy
-  index.md, services.md, contact.md, privacy.md  # Markdown twin of each page
+  *.md               # Markdown twin of each page
   llms.txt           # Index of the Markdown pages for AI agents
   llms-full.txt      # All pages in one file (generated, don't hand-edit)
   _headers           # Security + cache headers for static files
   site.webmanifest, robots.txt, sitemap.xml
-  /js/site.js        # Mobile menu + contact form behavior
+  /css/site.css      # All page styles (light + dark)
+  /js/site.js        # Mobile menu, floor-plan room picker, contact form
   /js/consent.js     # Cookie banner; loads Google Tag Manager only after Accept
   /css/consent.css   # Cookie banner styles
-  /assets            # Logo, favicons
+  /assets            # logo.svg (source mark), rendered logo + favicons
 /worker/index.js     # Page routes only: Markdown for Accept: text/markdown
 wrangler.jsonc       # Cloudflare Worker config
 scripts/check-links.py  # Link + Markdown-coverage checker (run in CI)
@@ -69,11 +72,12 @@ npx wrangler dev
 
 ## Design direction
 
-An "ops console" visual language (IBM Plex Mono headlines, sharp corners,
-hairline borders, one sparing signal-blue accent) instead of a generic
-SaaS-template look. See `CLAUDE.md` for the reasoning and sources.
+A "room guide" look (2026-09, issues #60/#61): Red Hat Display/Text, heavy
+black rules, the site blue, yellow highlights, and a hand-drawn floor plan of a
+house as the homepage figure. See `CLAUDE.md` for the details.
 
 ## Status
 
-Live since 2026-09-23. Still open: the service list will grow as more gets
+Live since 2026-09-23. The redesign (#60/#61) is on `dev` and not live yet.
+Still open: the service list will grow as more gets
 built out, and the logo's rights need confirming (`ASSETS.md`).
