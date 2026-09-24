@@ -135,6 +135,12 @@ Copy should read as one capable person, not a company.
     apex as canonical, so **don't switch the site to `www`**. `ad.audetteit.com`
     stays internal-only (no Cloudflare records). Close #67 when
     `nslookup audetteit.com` inside the house matches `1.1.1.1`.
+  - **#68** (created 2026-09-24 at the owner's request): make an
+    `audette-it-design` Claude skill (`.claude/skills/audette-it-design/`, via
+    `skill-creator`) from the finished site. **Blocked until the design is
+    final:** the owner says it's final, #23 and #25 are done, and all of it is
+    live on `main`. The issue lists the exact files, the skill's contents,
+    ready-to-paste prompts and 5 test prompts. Don't start it early.
   - **#60** (owner-created 2026-09-24, no milestone): fix spelling, grammar
     and tone across site copy, casual and plain-language. Overlaps #23.
     **Closed 2026-09-24:** all copy was rewritten in the "I" voice as part
@@ -156,6 +162,7 @@ Copy should read as one capable person, not a company.
   their comments (20 done / 5 in progress / 1 open).
   Then #39 closed as well (21 done / 4 in progress / 1 open).
   Then #67 (home DNS) added; now in progress (21 done / 5 in progress / 1 open).
+  Then #68 (design skill) added as open (21 done / 5 in progress / 2 open).
   It now shows **every comment verbatim** under each issue, labeled "You"
   or "Claude" by that footer. #60/#61 sit in a "Post-launch polish" group.
   Source: scratchpad `tracker.html`, rebuilt by `rebuild_tracker.py` from
