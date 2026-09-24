@@ -609,7 +609,7 @@ numbers share the same sequence.
   #35, #36, #37, #38, #39, #40, #60, #61, #68. Each has a closing comment
   saying what was done. #23 (copy) closed 2026-09-24 after the owner's
   sign-off ("the copy is good"). #68 (design skill) closed 2026-09-24 when the
-  skill merged to `main`; the owner approved the test results ("with the
+  skill merged to `main` (PR #73); the owner approved the test results ("with the
   skill sounds like me i am happy with the skill").
 - **As not planned:** #41 and #42 (business/legal details, compliance
   review). They don't apply without a registered business.
@@ -626,6 +626,7 @@ numbers share the same sequence.
 - #66: docs, logo rights, #67.
 - **#69: handoff:** this CLAUDE.md rewrite, `tools/`, and the `.md`
   canonical-header fix.
+- **#73: the `audette-it-design` skill** (#68, 2026-09-24).
 - #47, #51, #53, #54, #56, #58, #59, #62, #64, #70 (#23 closed), #71
   (#25 SEO check) and #72 (#67 quick-fix correction) were docs-only.
 
@@ -770,7 +771,7 @@ emails, flyers and profiles match the site.
   can't delete branches):
   - release branches: `launch`, `release/analytics-www`,
     `release/gtm-advanced`, `release/clarity`, `release/tag-gateway`,
-    `release/room-guide`, `release/handoff`
+    `release/room-guide`, `release/handoff`, `release/design-skill`
   - docs branches: `docs/main-after-46`, `docs/after-50`, `docs/after-52`,
     `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
     `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`,
