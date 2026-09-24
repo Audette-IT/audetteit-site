@@ -613,6 +613,8 @@ numbers share the same sequence.
 - #63: project skills.
 - **#65: room guide redesign** (2026-09-24).
 - #66: docs, logo rights, #67.
+- **#69: handoff:** this CLAUDE.md rewrite, `tools/`, and the `.md`
+  canonical-header fix.
 - #47, #51, #53, #54, #56, #58, #59, #62 and #64 were docs-only.
 
 ## 11. Lessons learned (failures, fixes, and what worked)
