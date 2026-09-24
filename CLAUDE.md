@@ -594,7 +594,7 @@ numbers share the same sequence.
   The owner is moving AD to **`ad.audetteit.com`** (a new forest plus a
   device migration, not a `rendom` rename).
   - The full plan is in the #67 comments.
-  - **Quick fix first:** replace the stale internal `www` CNAME (Vercel)
+  - **Quick fix (done, see below):** replace the stale internal `www` CNAME (Vercel)
     with two `A` records, `104.21.9.228` and `172.67.161.97`. Don't use
     `www.audetteit.com.cdn.cloudflare.net`: it doesn't resolve, because it
     only exists for partial (CNAME) setups (checked 2026-09-24, corrected on
@@ -603,10 +603,25 @@ numbers share the same sequence.
   - `ad.audetteit.com` stays internal (no Cloudflare records).
   - **Close when** `nslookup audetteit.com` inside the house matches
     `1.1.1.1`.
-  - **Asked the owner, no answer yet:** are all four apex IPs
-    (`192.168.4.59/.166/.31/.141`) separate DCs? How many PCs and users? Is
-    there AD CS, file shares with ACLs, or LDAP-based apps? Are the DCs
-    physical or VMs?
+  - **Owner's answers (2026-09-24):** all four apex IPs
+    (`192.168.4.59/.166/.31/.141`) are separate DCs, bare metal, Windows
+    Server 2025. Joined: 1 member server + 3 PCs. Nothing uses LDAP yet;
+    **Authentik** is planned (build it against `ad.audetteit.com`).
+  - **Updated plan** (latest #67 comment): demote 2 old DCs, build the new
+    forest `ad.audetteit.com` on them, rejoin the 4 machines one at a time,
+    switch DHCP DNS, then retire the other 2 old DCs.
+  - **Quick fix done** (2026-09-24, owner's screenshot): inside the house,
+    `nslookup www.audetteit.com` via DC `192.168.4.59` returns
+    `172.67.161.97` and `104.21.9.228`. The apex still resolves to the DCs,
+    so the site still won't load at home until the AD move.
+  - **Not started yet** (owner confirmed 2026-09-24: "i havent done anything
+    expet the dns reccord for www"): the Tailscale DNS cleanup and the whole
+    move to `ad.audetteit.com`. The move is still the plan. Walk the owner
+    through it step by step when they start.
+  - **Found in the owner's screenshot:** DC `win-i2op82q15qj` registers
+    Tailscale addresses in AD DNS (`100.83.160.98`, `fd7a:115c:a1e0:…`).
+    Advised turning off DNS registration on the Tailscale adapter and
+    deleting those records.
 
 **Closed:**
 - **As completed:** #21, #22, #23, #24, #26, #27, #28, #29, #30, #31, #33, #34,
@@ -792,6 +807,5 @@ emails, flyers and profiles match the site.
 
 - More services? The list will grow as they're built out.
 - Whether and when to build the self-hosted help desk (#44).
-- The #67 AD details (four questions in section 10).
 - The dashboard to-dos in section 7: Branch control, Access for previews,
   turning off GitHub Pages, and `main` branch protection.
