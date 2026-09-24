@@ -583,9 +583,12 @@ numbers share the same sequence.
   The owner is moving AD to **`ad.audetteit.com`** (a new forest plus a
   device migration, not a `rendom` rename).
   - The full plan is in the #67 comments.
-  - **Quick fix first:** repoint the stale internal `www` CNAME (Vercel) to
-    `www.audetteit.com.cdn.cloudflare.net`, or A records to the Cloudflare
-    IPs.
+  - **Quick fix first:** replace the stale internal `www` CNAME (Vercel)
+    with two `A` records, `104.21.9.228` and `172.67.161.97`. Don't use
+    `www.audetteit.com.cdn.cloudflare.net`: it doesn't resolve, because it
+    only exists for partial (CNAME) setups (checked 2026-09-24, corrected on
+    #67). This only stops `www` going to Vercel; the site still won't load at
+    home until the AD move.
   - `ad.audetteit.com` stays internal (no Cloudflare records).
   - **Close when** `nslookup audetteit.com` inside the house matches
     `1.1.1.1`.
