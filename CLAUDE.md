@@ -129,11 +129,12 @@ Copy should read as one capable person, not a company.
     `192.168.4.59/.166/.31/.141` (+9 IPv6); `www` → a stale CNAME to Vercel.
     Told the owner to repoint `www` (CNAME to
     `www.audetteit.com.cdn.cloudflare.net`, or A records to the Cloudflare IPs as
-    a fallback). **Open decision for the owner:** make `www` the canonical host
-    (flip the Cloudflare redirect; the canonicals, sitemap and `og:url` go to
-    `www`; a site change through dev → staging → main), or move AD to a
-    subdomain long-term. Don't change the canonical host without the owner's
-    choice.
+    a fallback). **Decided (owner, 2026-09-24): move AD to
+    `ad.audetteit.com`** via a new forest plus a device migration (not a
+    `rendom` rename); the plan is in the #67 comments. The website keeps the
+    apex as canonical, so **don't switch the site to `www`**. `ad.audetteit.com`
+    stays internal-only (no Cloudflare records). Close #67 when
+    `nslookup audetteit.com` inside the house matches `1.1.1.1`.
   - **#60** (owner-created 2026-09-24, no milestone): fix spelling, grammar
     and tone across site copy, casual and plain-language. Overlaps #23.
     **Closed 2026-09-24:** all copy was rewritten in the "I" voice as part
@@ -154,7 +155,7 @@ Copy should read as one capable person, not a company.
   Updated 04:25 UTC: #60/#61 closed by PR #65 and shown as done with
   their comments (20 done / 5 in progress / 1 open).
   Then #39 closed as well (21 done / 4 in progress / 1 open).
-  Then #67 (home DNS) added as open (21 done / 4 in progress / 2 open).
+  Then #67 (home DNS) added; now in progress (21 done / 5 in progress / 1 open).
   It now shows **every comment verbatim** under each issue, labeled "You"
   or "Claude" by that footer. #60/#61 sit in a "Post-launch polish" group.
   Source: scratchpad `tracker.html`, rebuilt by `rebuild_tracker.py` from
