@@ -116,11 +116,16 @@ Copy should read as one capable person, not a company.
   - #43 Markdown for Agents: Pro-plan feature; the Worker stand-in covers
     every page, plus `.md` twins and `llms.txt`/`llms-full.txt`.
   - #44 self-hosted help desk: standing reminder.
-  - **#67** (created 2026-09-24 at the owner's request): fix the DNS records on
-    the owner's **home** DNS server so `audetteit.com`/`www` resolve to
-    Cloudflare inside the home network (no stale Vercel records; mirror or
-    forward a split-DNS zone). It's outside the repo, and only the owner can
-    do it. The issue is a checklist.
+  - **#67** (created 2026-09-24 at the owner's request): the owner's
+    **Active Directory DNS server** breaks the site for domain-joined and home
+    devices (they can't load audetteit.com; outside the house it works).
+    It's outside the repo, and only the owner can do it. A comment has the
+    diagnosis steps (`%USERDNSDOMAIN%`, `nslookup` inside vs `1.1.1.1`) and
+    fixes. Case A: the AD domain *is* `audetteit.com` (split-brain; the apex
+    resolves to the DCs, and those records must stay; the long-term fix is an
+    AD subdomain). Case B: a stray `audetteit.com` zone/forwarder on the DC
+    (delete it, fix forwarders). Waiting on the owner's `nslookup` output.
+    **Don't guess which case it is.**
   - **#60** (owner-created 2026-09-24, no milestone): fix spelling, grammar
     and tone across site copy, casual and plain-language. Overlaps #23.
     **Closed 2026-09-24:** all copy was rewritten in the "I" voice as part
