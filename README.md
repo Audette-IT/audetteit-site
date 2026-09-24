@@ -4,9 +4,9 @@ Personal IT help for family and friends — everything from everyday
 troubleshooting to real network and Active Directory infrastructure work.
 Not a registered business.
 
-**Branch:** `dev` — integration branch for active development. Everything
-here as of 2026-09-23 is live on `main` (PR #49). See `CLAUDE.md` for full
-project context.
+**Branch:** `dev` — integration branch for active development. The site on
+`main` matches this branch (last release: PR #65, 2026-09-24). Start with
+`CLAUDE.md`: it's the full handoff for new sessions.
 
 ## Branch flow
 
@@ -44,6 +44,8 @@ feature/*  →  dev  →  staging  →  main
 wrangler.jsonc       # Cloudflare Worker config
 scripts/check-links.py  # Link + Markdown-coverage checker (run in CI)
 scripts/build-llms.py   # Regenerates public/llms-full.txt
+tools/               # Local helpers (not deployed): browser QA, icon renderer,
+                     # Artifact preview builder, issue-tracker sync
 ASSETS.md            # Where every image came from
 ```
 
@@ -56,11 +58,11 @@ Every page has a Markdown version, three ways:
 - `llms.txt` (index) and `llms-full.txt` (everything in one file)
 
 When you change a page, update its `.md` twin too, then run
-`python3 scripts/build-llms.py`. Adding a page means adding it in five places,
-all enforced by `scripts/check-links.py` in CI: the `.md` twin,
+`python3 scripts/build-llms.py`. Adding a page means touching seven places,
+all enforced by `scripts/check-links.py`: the page, its `.md` twin,
 `MARKDOWN_PAGES` in `worker/index.js`, `run_worker_first` in
-`wrangler.jsonc`, `sitemap.xml`, and `llms.txt` (plus `PAGES` in
-`scripts/build-llms.py`).
+`wrangler.jsonc`, `sitemap.xml`, `llms.txt`, and a canonical-`Link` block in
+`public/_headers` (plus `PAGES` in `scripts/build-llms.py`).
 
 ## Running locally
 
@@ -69,6 +71,10 @@ No build step. Run it locally exactly as deployed:
 ```
 npx wrangler dev
 ```
+
+Browser QA (all pages, phone + desktop, light + dark, accessibility):
+`cd tools && npm install && node site-qa.js` while `wrangler dev` runs on
+port 8795. See `tools/README.md`.
 
 ## Design direction
 
