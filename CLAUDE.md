@@ -66,7 +66,9 @@ Copy should read as one capable person, not a company.
   and new favicons. The owner approved the preview ("i like it, stage it"),
   it went `dev` → `staging`, then the owner said "push it to main". It
   shipped through PR #65 from branch `release/room-guide` (`staging` with
-  `main`'s README).
+  `main`'s README). Production build succeeded at 04:19 UTC. Confirmed
+  live via Firecrawl: `/how-it-works` serves the new page, with the
+  consent banner.
 
 ## GitHub project tracking
 
@@ -93,6 +95,8 @@ Copy should read as one capable person, not a company.
   #26, #27, #28, #29, #33, #35, #36, #40 (each has a closing comment on GitHub
   saying what was done). #37 was already closed. All of it went live with the
   2026-09-23 launch.
+- **#39 (asset rights) closed 2026-09-24:** the owner confirmed they hold the
+  rights to the shield logo, and `ASSETS.md` now says so.
 - **Closed 2026-09-23 after live verification** (via Firecrawl, since
   audetteit.com itself is unreachable from these sessions): #31 (securityheaders.com
   grade **A+**), #34 (favicon/manifest served), #30 (GTM + GA4 + Clarity via
@@ -109,8 +113,6 @@ Copy should read as one capable person, not a company.
     account/org-level block (billing/payment issue or GitHub restricting a new
     account), not the repo toggle. The owner needs to check the Audette-IT org
     Actions policy and billing, or contact GitHub Support.
-  - #39 asset rights: owner must confirm rights to the shield logo, then update
-    `ASSETS.md`.
   - #43 Markdown for Agents: Pro-plan feature; the Worker stand-in covers
     every page, plus `.md` twins and `llms.txt`/`llms-full.txt`.
   - #44 self-hosted help desk: standing reminder.
@@ -131,8 +133,9 @@ Copy should read as one capable person, not a company.
   anything without it is the owner's.
 - The Issue Tracker artifact was last re-synced from the API on 2026-09-24
   02:05 UTC: 26 issues (#21–#44, #60, #61), 18 done / 5 in progress / 3 open.
-  Updated 02:56 UTC: #60/#61 are now "in progress" and show the new
-  progress comments (18 done / 7 in progress / 1 open).
+  Updated 04:25 UTC: #60/#61 closed by PR #65 and shown as done with
+  their comments (20 done / 5 in progress / 1 open).
+  Then #39 closed as well (21 done / 4 in progress / 1 open).
   It now shows **every comment verbatim** under each issue, labeled "You"
   or "Claude" by that footer. #60/#61 sit in a "Post-launch polish" group.
   Source: scratchpad `tracker.html`, rebuilt by `rebuild_tracker.py` from
@@ -394,8 +397,8 @@ files on `dev` for any further changes**, not the artifacts.
   (internal links + Markdown coverage), `build-llms.py --check`,
   manifest/sitemap validation, `wrangler deploy
   --dry-run`. All pass locally.
-- **`ASSETS.md`** — asset provenance (#39). Logo rights are still **unconfirmed**
-  — needs the user.
+- **`ASSETS.md`** — asset provenance (#39). Logo rights **confirmed** by the
+  owner on 2026-09-24 ("it is confirmed"). #39 is closed.
 - **Verified locally** with `npx wrangler dev` + Playwright/Chromium: 4 pages ×
   phone/desktop × light/dark, zero horizontal overflow, no CSP violations,
   mobile menu and form validation exercised end to end.
@@ -507,7 +510,6 @@ pushed to it, and decide on a custom domain alias for staging if wanted.
 - Full list of services beyond what's drafted — more will likely get added as
   they're built out (noted as a placeholder on the Services page).
 - Tone/voice sign-off on the rewritten copy (#23).
-- Confirming rights to the shield logo (#39).
 - **GitHub Pages is publishing `staging`.** Its `pages-build-deployment`
   workflow ran on `staging` on 2026-09-23 (triggered by the `audetteit`
   account), so the Pages source appears to have been switched to `staging`.
