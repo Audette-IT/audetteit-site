@@ -52,6 +52,9 @@ def check(path, site):
     ext = path.suffix.lower()
     is_logo = ext == ".svg" and "ait-shield" in raw
     code = re.sub(r"<!--.*?-->|/\*.*?\*/", " ", raw, flags=re.S)
+    # The logo may be inlined in a page: its own colors are fine inside its <svg>.
+    code = re.sub(r"<svg\b(?:(?!</svg>).)*?ait-shield.*?</svg>", " ", code, flags=re.S)
+    code = re.sub(r"&#x?[0-9A-Fa-f]+;", " ", code)  # HTML character references aren't colors
 
     if ext in {".html", ".htm", ".css", ".svg"}:
         for m in HEX.finditer(code):
