@@ -1,28 +1,33 @@
-# What I can actually help with
+# What I help with
 
-> Two tiers: quick everyday fixes, and full infrastructure work most family tech support can't touch.
+> Two kinds of help. The everyday fixes that come up in every house, and bigger projects most family tech support can't take on.
 
-## Tier 1: Everyday help
+## Around the house
 
-The stuff that comes up constantly — usually fixable the same day.
+- **Wifi and devices:** Dead spots, dropped connections, and things that won't connect.
+- **Slow computers:** Finding what's actually slowing it down, then fixing that.
+- **New computer setup:** Getting it ready and moving your stuff over from the old one.
+- **Backups:** So your photos and files survive a dead drive.
+- **Printers:** Getting printers and scanners talking to everything again.
+- **TVs and smart home:** Streaming, smart TVs, speakers, cameras and the rest.
+- **Accounts and software:** Locked-out accounts and settings that stopped making sense.
+- **Parental controls:** Screen time and filtering on the kids' devices and the home network.
 
-- **Wifi & devices** — Dead spots, dropped connections, new devices that won't join the network.
-- **Slow computers** — Cleanup, startup bloat, storage, and figuring out what's actually causing the slowdown.
-- **Printers & peripherals** — Getting printers, scanners, and other devices talking to everything else again.
-- **Accounts & software** — Locked-out accounts, confusing settings, software that's stopped making sense.
-- **Parental controls** — Setting up screen time limits, content filtering, and app restrictions on kids' devices.
+## The deeper stuff
 
-## Tier 2: Infrastructure & advanced
+- **Network design:** Planning a home or small-office network properly, from the router out.
+- **Active Directory:** Domains, user accounts and group policy, set up the right way.
+- **Self-hosted services:** Running your own media, backups and tools on hardware you own.
+- **Security hardening:** Firewalls, access control and closing the gaps default setups leave open.
 
-Real infrastructure work — the kind you'd otherwise need to hire an actual IT company for.
+## Not sure which one your problem is?
 
-- **Network design** — Planning and configuring home or small-office networks from the ground up — routing, segmentation, Wi-Fi coverage.
-- **Active Directory / domains** — Setting up and managing domain controllers, user accounts, and group policy — the kind of setup most households never have.
-- **Self-hosted services** — Running your own media, backup, or other services on hardware you actually control, instead of renting everything from someone else.
-- **Security hardening** — Firewalls, access control, and closing the gaps that most default home setups leave wide open.
+You don't need to know. Just tell me what's happening.
 
-This list grows as more gets built out.
+- **Where:** In person around Las Vegas, or remotely from anywhere.
+- **Devices:** Computers and laptops, inside and out. Phones and tablets for setup, settings and parental controls, but no physical repairs.
+- **Cost:** Every job is different, so I'll give you a quote before I start.
 
-## Something that doesn't fit either list?
+## Something acting up?
 
-[Get in touch anyway](https://audetteit.com/contact.md).
+Tell me what's going on. I'll get back to you with what I think it is and what it'd take to fix. Email michael.audette@audetteit.com or use the [contact form](https://audetteit.com/contact.md).

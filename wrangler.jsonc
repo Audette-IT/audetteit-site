@@ -13,7 +13,7 @@
     // Only the HTML page routes go through worker/index.js (Markdown
     // negotiation); everything else is served directly as a static asset.
     // Keep in sync with MARKDOWN_PAGES in worker/index.js.
-    "run_worker_first": ["/", "/services", "/contact", "/privacy"]
+    "run_worker_first": ["/", "/services", "/how-it-works", "/about", "/contact", "/privacy"]
   },
   "previews": {}
 }

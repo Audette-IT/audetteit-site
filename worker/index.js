@@ -23,6 +23,8 @@ const MARKDOWN_PAGES = {
   "/services": "/services.md",
   "/contact": "/contact.md",
   "/privacy": "/privacy.md",
+  "/how-it-works": "/how-it-works.md",
+  "/about": "/about.md",
 };
 
 export default {
