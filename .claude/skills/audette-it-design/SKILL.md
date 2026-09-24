@@ -1,6 +1,15 @@
 ---
 name: audette-it-design
-description: Audette IT's visual and writing style ("room guide"), taken from audetteit.com. Use whenever you make or edit anything for Audette IT or Michael's tech help, including web pages, web apps and dashboards, the help desk, audetteit.net, emails and replies to customers, flyers, social posts, Google Business Profile text, and documents. It keeps everything matching the site: Red Hat type, heavy black rules, #0074A8 blue, yellow highlights, floor-plan illustrations, and first-person plain-English copy from Michael. Use it even when the request only says "match my site", "on brand" or "Audette IT style", or names an Audette IT app without mentioning design.
+description: >-
+  Audette IT's visual and writing style ("room guide"), taken from
+  audetteit.com. Use whenever you make or edit anything for Audette IT or
+  Michael's tech help, including web pages, web apps and dashboards, the help
+  desk, audetteit.net, emails and replies to customers, flyers, social posts,
+  Google Business Profile text, and documents. It keeps everything matching
+  the site: Red Hat type, heavy black rules, #0074A8 blue, yellow highlights,
+  floor-plan illustrations, and first-person plain-English copy from Michael.
+  Use it even when the request only says "match my site", "on brand" or
+  "Audette IT style", or names an Audette IT app without mentioning design.
 ---
 
 # Audette IT design: "room guide"
