@@ -647,8 +647,8 @@ numbers share the same sequence.
   canonical-header fix.
 - **#73: the `audette-it-design` skill** (#68, 2026-09-24).
 - #47, #51, #53, #54, #56, #58, #59, #62, #64, #70 (#23 closed), #71
-  (#25 SEO check), #72 (#67 quick-fix correction) and #74 (Pacific time)
-  were docs-only.
+  (#25 SEO check), #72 (#67 quick-fix correction), #74 (Pacific time) and
+  #75 (#67 status) were docs-only.
 
 ## 11. Lessons learned (failures, fixes, and what worked)
 
@@ -796,7 +796,7 @@ emails, flyers and profiles match the site.
     `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
     `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`,
     `docs/close-23`, `docs/seo-check-25`, `docs/dns-fix-67`,
-    `docs/pacific-time`
+    `docs/pacific-time`, `docs/dns-67-status`
   - other: `chore/add-skills`, `cloudflare/workers-autoconfig-2`
 - **Stale, not merged, safe to delete:** `feature/homepage-redesign`
   (superseded), `cloudflare/workers-autoconfig` (PR #1, closed) and
