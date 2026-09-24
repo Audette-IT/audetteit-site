@@ -1,0 +1,10 @@
+{
+  "skill_name": "audette-it-design",
+  "evals": [
+    {"id": 1, "name": "fridge-flyer", "prompt": "Make a one-page flyer for my fridge magnet: home tech help in Las Vegas, email michael.audette@audetteit.com.", "expected_output": "A printable one-page HTML flyer in the room-guide style (Red Hat type, black rules, one yellow mark, logo), first-person copy using only confirmed facts, no phone number or prices.", "files": []},
+    {"id": 2, "name": "home-networks-page", "prompt": "Add a new page to the site called 'Home networks' about network design and wifi coverage.", "expected_output": "An audetteit.com page using the exact head block and site components, its Markdown twin, and the list of the other repo places to update (MARKDOWN_PAGES, run_worker_first, sitemap, llms.txt, _headers, build-llms.py).", "files": []},
+    {"id": 3, "name": "cracked-screen-email", "prompt": "Write a short reply email to someone asking if I can fix their cracked iPhone screen.", "expected_output": "A short, kind first-person reply that says no to physical phone repairs and offers setup/settings help instead. No prices, no phone number, signed Michael.", "files": []},
+    {"id": 4, "name": "helpdesk-status-page", "prompt": "Design a status page for the self-hosted help desk (#44) that matches the site.", "expected_output": "An HTML status page in the room-guide style using only palette tokens, status shown as word plus shape, no fake 'all systems operational' claims (real checks with last-checked times or clear placeholders).", "files": []},
+    {"id": 5, "name": "google-business-profile", "prompt": "Draft a Google Business Profile description.", "expected_output": "A first-person description within Google's 750-character limit, using only confirmed facts (Las Vegas or remote, everyday list, bigger jobs, quote before work), no emoji, no invented claims.", "files": []}
+  ]
+}
