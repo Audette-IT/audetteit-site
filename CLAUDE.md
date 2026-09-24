@@ -603,10 +603,19 @@ numbers share the same sequence.
   - `ad.audetteit.com` stays internal (no Cloudflare records).
   - **Close when** `nslookup audetteit.com` inside the house matches
     `1.1.1.1`.
-  - **Asked the owner, no answer yet:** are all four apex IPs
-    (`192.168.4.59/.166/.31/.141`) separate DCs? How many PCs and users? Is
-    there AD CS, file shares with ACLs, or LDAP-based apps? Are the DCs
-    physical or VMs?
+  - **Owner's answers (2026-09-24):** all four apex IPs
+    (`192.168.4.59/.166/.31/.141`) are separate DCs, bare metal, Windows
+    Server 2025. Joined: 1 member server + 3 PCs. Nothing uses LDAP yet;
+    **Authentik** is planned (build it against `ad.audetteit.com`).
+  - **Updated plan** (latest #67 comment): demote 2 old DCs, build the new
+    forest `ad.audetteit.com` on them, rejoin the 4 machines one at a time,
+    switch DHCP DNS, then retire the other 2 old DCs.
+  - **Quick fix in progress** (2026-09-24): the owner was adding the `www` A
+    records. Their first attempt had a typo (`104..21.9.228`).
+  - **Found in the owner's screenshot:** DC `win-i2op82q15qj` registers
+    Tailscale addresses in AD DNS (`100.83.160.98`, `fd7a:115c:a1e0:…`).
+    Advised turning off DNS registration on the Tailscale adapter and
+    deleting those records.
 
 **Closed:**
 - **As completed:** #21, #22, #23, #24, #26, #27, #28, #29, #30, #31, #33, #34,
@@ -792,6 +801,5 @@ emails, flyers and profiles match the site.
 
 - More services? The list will grow as they're built out.
 - Whether and when to build the self-hosted help desk (#44).
-- The #67 AD details (four questions in section 10).
 - The dashboard to-dos in section 7: Branch control, Access for previews,
   turning off GitHub Pages, and `main` branch protection.
