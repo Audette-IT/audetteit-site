@@ -603,25 +603,51 @@ numbers share the same sequence.
   - `ad.audetteit.com` stays internal (no Cloudflare records).
   - **Close when** `nslookup audetteit.com` inside the house matches
     `1.1.1.1`.
-  - **Owner's answers (2026-09-24):** all four apex IPs
-    (`192.168.4.59/.166/.31/.141`) are separate DCs, bare metal, Windows
-    Server 2025. Joined: 1 member server + 3 PCs. Nothing uses LDAP yet;
-    **Authentik** is planned (build it against `ad.audetteit.com`).
-  - **Updated plan** (latest #67 comment): demote 2 old DCs, build the new
-    forest `ad.audetteit.com` on them, rejoin the 4 machines one at a time,
-    switch DHCP DNS, then retire the other 2 old DCs.
+  - **AD move IN PROGRESS** (started 2026-09-24 ~11:10 AM PT; walk the
+    owner through one step at a time, read-only checks first; details in the
+    #67 comments from 11:15 AM PT on).
+    - **Only 2 DCs** (the earlier "four DCs / 1 member server" notes were
+      wrong): `WIN-I2OP82Q15QJ` (LAN `192.168.4.59`, single 500 GB NVMe
+      disk, holds **all 5 FSMO roles**) and `HP-Z640SERVER` (`192.168.4.166`
+      on a Hyper-V switch, so it's a **Hyper-V host**; C: on a Samsung SSD
+      with 211 GB free, plus a 1 TB Toshiba (disk 1) that is nearly empty but
+      holds the HP's **EFI boot partition**: never wipe disk 1). Both run
+      Windows Server 2025; replication healthy.
+    - Domain `audetteit.com`, NetBIOS `AUDETTEIT`, `Windows2025Domain`.
+      `192.168.4.31`/`.141` in the apex are **stale records** (neither DC).
+    - **Tailscale:** AD lists `WIN-I2OP82Q15QJ`'s IPv4 as its Tailscale IP
+      `100.83.160.98`; the HP has Tailscale `100.91.184.103`. Fix before any
+      demotion: untick "Register this connection's addresses in DNS" on the
+      Tailscale adapters, delete the records, `ipconfig /registerdns`.
+    - **DHCP is the home router**, so cutover = change the router's DNS.
+    - **Machines to move:** `DESKTOP-AUATMUT`, `DESKTOP-RL6BHNS`,
+      `DESKTOP-V4NRKDB`, `michaels-mac-mi` (a Mac). No separate member
+      server.
+    - **Accounts:** `Administrator`, `mjaudettejr`; `adfs_svc` (AD FS is
+      installed and planned, not in use: rebuild AD FS fresh in the new
+      domain, it can't be migrated; which server runs it is being
+      confirmed); `svc_authentik` (Authentik isn't running: don't recreate).
+    - **GPOs to carry:** `GPO-Servers-Security`, `TV-Server`,
+      `TV Kiosk Lockdown`, `GPO-Workstations-Security`, `DesktopLockdown`.
+      Skip `GPO-Workstations-WSUS` (WSUS unused).
+    - **Done:** inventory; GPO backup to `C:\ADMove\GPOs` on
+      `WIN-I2OP82Q15QJ` (all 8, with HTML reports); DNS zone export
+      (`C:\Windows\System32\dns\audetteit.com.export`).
+    - **Blocked on a backup target:** System State backups failed on both
+      DCs (no `E:`). Proposed: a new `B:` partition in the Toshiba's
+      unallocated space on the HP (don't touch existing partitions), back
+      the HP up there, share a folder and back `WIN-I2OP82Q15QJ` up to it
+      with `wbadmin start backup -allCritical -systemState` to the UNC path.
+    - **Proposed plan (awaiting the owner's OK on VM resources):** build the
+      new forest `ad.audetteit.com` in a **Hyper-V VM on the HP** (~4 GB RAM,
+      2 vCPU, 80 GB) so both old DCs keep running until the end; import the
+      GPOs; recreate `mjaudettejr`; move the 4 machines one at a time; point
+      the router's DNS at the new DC; then retire the old domain and promote
+      both physical servers into `ad.audetteit.com`; rebuild AD FS last.
   - **Quick fix done** (2026-09-24, owner's screenshot): inside the house,
     `nslookup www.audetteit.com` via DC `192.168.4.59` returns
     `172.67.161.97` and `104.21.9.228`. The apex still resolves to the DCs,
     so the site still won't load at home until the AD move.
-  - **Not started yet** (owner confirmed 2026-09-24: "i havent done anything
-    expet the dns reccord for www"): the Tailscale DNS cleanup and the whole
-    move to `ad.audetteit.com`. The move is still the plan. Walk the owner
-    through it step by step when they start.
-  - **Found in the owner's screenshot:** DC `win-i2op82q15qj` registers
-    Tailscale addresses in AD DNS (`100.83.160.98`, `fd7a:115c:a1e0:…`).
-    Advised turning off DNS registration on the Tailscale adapter and
-    deleting those records.
 
 **Closed:**
 - **As completed:** #21, #22, #23, #24, #26, #27, #28, #29, #30, #31, #33, #34,
