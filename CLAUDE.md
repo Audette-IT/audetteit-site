@@ -63,8 +63,10 @@ was checked against the code, GitHub and the live site on that date.
   don't "fix" the light-mode blue back to `#0090CC`.
 - **Don't switch the site's canonical host to `www`.** The owner chose to move
   their AD domain instead (#67).
-- **Don't start #68 (design skill) or close #25 (SEO) early.** Each has a
-  gate, listed in section 10.
+- **Don't close #25 (SEO) early.** Its gate is in section 10.
+- **Use the `audette-it-design` skill** (section 13) for anything made for
+  Audette IT: pages, apps, emails, flyers, profiles. If the site's design or
+  copy changes, update the skill in the same change so the two don't drift.
 - **Don't run the `impeccable` skill's launcher** (it downloads a binary)
   unless the owner agrees.
 - **Don't touch the Vercel connector.** Vercel is the old host and is
@@ -226,7 +228,7 @@ scripts/check-links.py   # CI: links, page coverage, _headers canonical blocks, 
 scripts/build-llms.py    # regenerates llms-full.txt (--check in CI)
 tools/                   # local helpers, not deployed (section 8)
 .github/workflows/ci.yml # CI definition (never runs: Actions blocked, see #32)
-.claude/skills/          # grill-me, grilling, impeccable (section 13)
+.claude/skills/          # grill-me, grilling, impeccable, audette-it-design (section 13)
 ASSETS.md                # asset provenance and rights
 ```
 
@@ -596,10 +598,11 @@ numbers share the same sequence.
     (`192.168.4.59/.166/.31/.141`) separate DCs? How many PCs and users? Is
     there AD CS, file shares with ACLs, or LDAP-based apps? Are the DCs
     physical or VMs?
-- **#68 Design skill.** Make `audette-it-design` (`.claude/skills/`, via
-  `skill-creator`) from the finished site. **Gate:** the owner says the
-  design is final, #25 is closed (#23 already is), and it's all live. The issue has
-  the exact file list, the contents, the prompts and 5 test prompts.
+- **#68 Design skill.** Built 2026-09-24 as `.claude/skills/audette-it-design/`
+  (section 13). The owner asked for it directly (treated as "the design is
+  final") and signed off on the test results ("with the skill sounds like
+  me i am happy with the skill"). On `dev` and `staging`. **Close when** it's
+  merged to `main`.
 
 **Closed:**
 - **As completed:** #21, #22, #23, #24, #26, #27, #28, #29, #30, #31, #33, #34,
@@ -695,6 +698,7 @@ numbers share the same sequence.
 | Draft B "quick start" | https://claude.ai/artifact/AuSs6Fp4zf374FJ8dufRyv | Rejected (feel reused in D) |
 | Draft C "text me" | https://claude.ai/artifact/MLct3zL3WuK81UTvc5wL8Y | Rejected |
 | Ops-console homepage draft | https://claude.ai/artifact/Vj8Pvwbi5uY8SZEhKSFpxq | Superseded |
+| Design skill test run 1 (#68) | https://claude.ai/artifact/U7GJotTExqBoi3iLSQoAE3 | Approved by the owner 2026-09-24 |
 
 ## 13. Project skills (`.claude/skills/`, on every branch)
 
@@ -710,8 +714,36 @@ written here:
   binary, so **don't run it without the owner's OK**. Use the documented
   fallback. Section 5 of this file is the brief, so don't let its "go bold"
   defaults override it.
-- **Planned:** `audette-it-design` (#68, gated).
 - To update: re-copy from upstream and bump the hashes above.
+
+**`audette-it-design`** (#68, written here 2026-09-24 with `skill-creator`;
+the owner approved the test results). Captures the room guide design and
+Michael's voice so other apps, the help desk (#44), **audetteit.net**,
+emails, flyers and profiles match the site.
+- `SKILL.md`: identity and confirmed facts, voice, visual rules, don'ts,
+  accessibility, and which reference to read for which job.
+- `references/`: `tokens.md`, `components.md` (markup from the live pages),
+  `voice.md`, `apps.md` (app UI, status without new colors, charts,
+  audetteit.net, frameworks, email/print) and `website.md` (this repo's
+  rules).
+- `assets/`: `room-guide.css` (a copy of `public/css/site.css`),
+  `app-extras.css` (panels, data tables, status, stats, alerts, side nav,
+  dialog; tokens only), `room-guide.js` (a copy of `public/js/site.js`),
+  `logo.svg`, and `templates/site-page.html` (this site's exact head block)
+  plus `templates/standalone-page.html` (other projects, no GTM).
+- `scripts/check_design.py <files|folders> [--site]`: flags off-palette hex,
+  `#0090CC`, gradients, shadows, emoji, inline scripts, missing fonts,
+  company-speak, phone numbers and prices. It passes on all of `public/` with
+  `--site`.
+- `evals/evals.json`: the 5 test prompts from #68. Run 1: 100% of checks with
+  the skill vs 94% without (the no-skill runs still had this CLAUDE.md).
+- **Keep it in sync:** `assets/room-guide.css`, `room-guide.js` and
+  `logo.svg` are copies. When `public/css/site.css`, `public/js/site.js`,
+  `public/assets/logo.svg`, the page markup or the confirmed facts change,
+  update the skill in the same change.
+- **Outside this repo:** the owner can add it to their Claude account from
+  the packaged `audette-it-design.skill` file (rebuild with skill-creator's
+  `scripts/package_skill.py`).
 
 ## 14. Branches
 
@@ -734,7 +766,8 @@ written here:
     `docs/close-23`, `docs/seo-check-25`, `docs/dns-fix-67`
   - other: `chore/add-skills`, `cloudflare/workers-autoconfig-2`
 - **Stale, not merged, safe to delete:** `feature/homepage-redesign`
-  (superseded) and `cloudflare/workers-autoconfig` (PR #1, closed).
+  (superseded), `cloudflare/workers-autoconfig` (PR #1, closed) and
+  `wip/audette-it-design` (the #68 draft, copied to `dev`).
   `release/main-markdown` (PR #46) is already gone.
 
 ## 15. Open questions for the owner (don't guess these)
@@ -742,6 +775,5 @@ written here:
 - More services? The list will grow as they're built out.
 - Whether and when to build the self-hosted help desk (#44).
 - The #67 AD details (four questions in section 10).
-- When the design counts as "final" (unblocks #68).
 - The dashboard to-dos in section 7: Branch control, Access for previews,
   turning off GitHub Pages, and `main` branch protection.
