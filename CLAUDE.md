@@ -594,7 +594,7 @@ numbers share the same sequence.
   The owner is moving AD to **`ad.audetteit.com`** (a new forest plus a
   device migration, not a `rendom` rename).
   - The full plan is in the #67 comments.
-  - **Quick fix first:** replace the stale internal `www` CNAME (Vercel)
+  - **Quick fix (done, see below):** replace the stale internal `www` CNAME (Vercel)
     with two `A` records, `104.21.9.228` and `172.67.161.97`. Don't use
     `www.audetteit.com.cdn.cloudflare.net`: it doesn't resolve, because it
     only exists for partial (CNAME) setups (checked 2026-09-24, corrected on
@@ -610,8 +610,10 @@ numbers share the same sequence.
   - **Updated plan** (latest #67 comment): demote 2 old DCs, build the new
     forest `ad.audetteit.com` on them, rejoin the 4 machines one at a time,
     switch DHCP DNS, then retire the other 2 old DCs.
-  - **Quick fix in progress** (2026-09-24): the owner was adding the `www` A
-    records. Their first attempt had a typo (`104..21.9.228`).
+  - **Quick fix done** (2026-09-24, owner's screenshot): inside the house,
+    `nslookup www.audetteit.com` via DC `192.168.4.59` returns
+    `172.67.161.97` and `104.21.9.228`. The apex still resolves to the DCs,
+    so the site still won't load at home until the AD move.
   - **Found in the owner's screenshot:** DC `win-i2op82q15qj` registers
     Tailscale addresses in AD DNS (`100.83.160.98`, `fd7a:115c:a1e0:…`).
     Advised turning off DNS registration on the Tailscale adapter and
