@@ -16,81 +16,181 @@ Source: https://audetteit.com/
 
 ## Audette IT
 
-> Personal IT help for family and friends, from everyday fixes to real network and Active Directory work. Not a registered business.
+> Tech help from one person in Las Vegas: everyday fixes like wifi, slow computers, printers and TVs, plus network design, Active Directory and self-hosted services. In person around Las Vegas, or remotely from anywhere.
 
-### Uptime isn't luck. It's a system someone is actually watching.
+### Tech help for every room in your house
 
-Audette IT is one person who knows what they're doing — from forgotten passwords to full network and Active Directory builds, for family and friends who'd rather not guess.
+I'm Michael. I fix the everyday stuff like wifi, slow computers, printers and TVs, and I can build the serious stuff too.
 
-- [Contact](https://audetteit.com/contact.md)
-- [See what I do](https://audetteit.com/services.md)
+- [Get in touch](https://audetteit.com/contact.md)
+- [See what I help with](https://audetteit.com/services.md)
 
-### Coverage: two speeds, everyday help and the deep stuff
+In person around Las Vegas, or remotely from anywhere.
 
-Most requests are a quick fix. Some need a network redesign. Both get the same attention — and unlike most family tech support, the second kind is actually on the table.
+#### Room by room
 
-| Tier | What it covers | Speed |
-|---|---|---|
-| Everyday help | Wifi and device troubleshooting, slow computers, printers, locked-out accounts, parental controls on the kids' devices. | Quick |
-| Infrastructure & advanced | Home network design, Active Directory and domain setups, self-hosted services, real security hardening. | Deep |
+- **Living room:** TV and streaming. Smart TVs, streaming boxes, sound bars, and getting everything onto the right input without three remotes.
+- **Kitchen:** smart home. Smart speakers, doorbells, cameras, and the plugs and lights that stopped responding.
+- **Office:** the computer and printer. Slow computers, new computer setup, backups, and printers that won't print.
+- **Kids' room:** parental controls. Screen time and content filtering on their devices, plus filtering at the router that covers the whole house.
+- **Hall closet:** the router. Wifi that reaches the back bedroom, a network that doesn't drop during calls, and a router that's actually set up securely.
+- **Garage:** the deeper stuff. Network design, a small server or home lab, self-hosted services, and Active Directory when you need it.
 
-[See the full list](https://audetteit.com/services.md)
+### What I help with
 
-### Process: the same four stages, every time
+Most of what I do is the everyday stuff. When you need more than that, I can design and build the kind of setup most homes never get.
 
-Whether it's setting something up for the first time or fixing something that broke tonight.
+**Around the house:** Wifi and devices, Slow computers, New computer setup, Backups, Printers, TVs and smart home, Accounts and software, Parental controls.
 
-1. **Assess** — Figure out what's actually going on before changing anything.
-2. **Deploy** — Roll out the fix or setup in a way that doesn't break what's already working.
-3. **Monitor** — Keep an eye on it afterward instead of disappearing once it's "done."
-4. **Respond** — If it acts up again, it gets triaged and fixed — same process, no starting over.
+**The deeper stuff:** Network design, Active Directory, Self-hosted services, Security hardening.
 
-### Something acting up, or planning something new?
+[More about each of these](https://audetteit.com/services.md)
 
-[Contact](https://audetteit.com/contact.md) — or email michael.audette@audetteit.com.
+### How it works
+
+No tickets and no call center. You talk to me from start to finish.
+
+1. **Tell me what's going on.** Send a quick email or use the contact form. What's broken, or what you want set up, is enough to start.
+2. **I figure out the fix.** I'll reply with what I think is wrong and a quote. Then we pick a time, in person or remote.
+3. **It works, and you know why.** I fix it and explain what I did in plain English, so it's less of a mystery next time.
+
+[Questions people ask](https://audetteit.com/how-it-works.md)
+
+### Who you're dealing with
+
+Just me, Michael. Not a company and not a call center. The person you email is the person who fixes it.
+
+- **Where:** In person around Las Vegas, or remotely from anywhere.
+- **Devices:** Computers and laptops, inside and out. Phones and tablets for setup, settings and parental controls, but no physical repairs.
+- **Cost:** Every job is different, so I'll give you a quote before I start.
+
+### Something acting up?
+
+Tell me what's going on. I'll get back to you with what I think it is and what it'd take to fix. Email michael.audette@audetteit.com or use the [contact form](https://audetteit.com/contact.md).
 
 ---
 
 Source: https://audetteit.com/services
 
-## What I can actually help with
+## What I help with
 
-> Two tiers: quick everyday fixes, and full infrastructure work most family tech support can't touch.
+> Two kinds of help. The everyday fixes that come up in every house, and bigger projects most family tech support can't take on.
 
-### Tier 1: Everyday help
+### Around the house
 
-The stuff that comes up constantly — usually fixable the same day.
+- **Wifi and devices:** Dead spots, dropped connections, and things that won't connect.
+- **Slow computers:** Finding what's actually slowing it down, then fixing that.
+- **New computer setup:** Getting it ready and moving your stuff over from the old one.
+- **Backups:** So your photos and files survive a dead drive.
+- **Printers:** Getting printers and scanners talking to everything again.
+- **TVs and smart home:** Streaming, smart TVs, speakers, cameras and the rest.
+- **Accounts and software:** Locked-out accounts and settings that stopped making sense.
+- **Parental controls:** Screen time and filtering on the kids' devices and the home network.
 
-- **Wifi & devices** — Dead spots, dropped connections, new devices that won't join the network.
-- **Slow computers** — Cleanup, startup bloat, storage, and figuring out what's actually causing the slowdown.
-- **Printers & peripherals** — Getting printers, scanners, and other devices talking to everything else again.
-- **Accounts & software** — Locked-out accounts, confusing settings, software that's stopped making sense.
-- **Parental controls** — Setting up screen time limits, content filtering, and app restrictions on kids' devices.
+### The deeper stuff
 
-### Tier 2: Infrastructure & advanced
+- **Network design:** Planning a home or small-office network properly, from the router out.
+- **Active Directory:** Domains, user accounts and group policy, set up the right way.
+- **Self-hosted services:** Running your own media, backups and tools on hardware you own.
+- **Security hardening:** Firewalls, access control and closing the gaps default setups leave open.
 
-Real infrastructure work — the kind you'd otherwise need to hire an actual IT company for.
+### Not sure which one your problem is?
 
-- **Network design** — Planning and configuring home or small-office networks from the ground up — routing, segmentation, Wi-Fi coverage.
-- **Active Directory / domains** — Setting up and managing domain controllers, user accounts, and group policy — the kind of setup most households never have.
-- **Self-hosted services** — Running your own media, backup, or other services on hardware you actually control, instead of renting everything from someone else.
-- **Security hardening** — Firewalls, access control, and closing the gaps that most default home setups leave wide open.
+You don't need to know. Just tell me what's happening.
 
-This list grows as more gets built out.
+- **Where:** In person around Las Vegas, or remotely from anywhere.
+- **Devices:** Computers and laptops, inside and out. Phones and tablets for setup, settings and parental controls, but no physical repairs.
+- **Cost:** Every job is different, so I'll give you a quote before I start.
 
-### Something that doesn't fit either list?
+### Something acting up?
 
-[Get in touch anyway](https://audetteit.com/contact.md).
+Tell me what's going on. I'll get back to you with what I think it is and what it'd take to fix. Email michael.audette@audetteit.com or use the [contact form](https://audetteit.com/contact.md).
+
+---
+
+Source: https://audetteit.com/how-it-works
+
+## How it works
+
+> No tickets and no call center. You talk to me from the first email to the fix.
+
+1. **Tell me what's going on.** Send a quick email or use the contact form. What's broken, or what you want set up, is enough to start.
+2. **I figure out the fix.** I'll reply with what I think is wrong and a quote. Then we pick a time, in person or remote.
+3. **It works, and you know why.** I fix it and explain what I did in plain English, so it's less of a mystery next time.
+
+### In person or remote, whichever fits
+
+If you're around Las Vegas, I can come to you. That's usually best for wifi coverage, printers, TVs and anything that needs hands on the hardware.
+
+A lot of problems can also be fixed remotely, wherever you are. That works well for slow computers, accounts, software and settings.
+
+### Questions people ask
+
+If yours isn't here, just email me.
+
+#### Do you come to the house?
+
+Yes, around Las Vegas. A lot of things can also be fixed remotely, wherever you are.
+
+#### Can you help remotely?
+
+Yes. Plenty of problems, like slow computers, accounts, software and settings, can be sorted out over a remote connection.
+
+#### Do you fix phones and tablets?
+
+I help with setup, settings, apps and parental controls on them. I don't do physical repairs like screens or batteries.
+
+#### What about computers and laptops?
+
+Yes, Windows or Mac, including hardware work like swapping a drive or adding memory.
+
+#### How much does it cost?
+
+It depends on the job, so I'll give you a quote before I start anything.
+
+#### Is it only for big projects?
+
+No. Most of what I do is everyday stuff like wifi, printers and slow computers. The bigger projects are there when you need them.
+
+### Something acting up?
+
+Tell me what's going on. I'll get back to you with what I think it is and what it'd take to fix. Email michael.audette@audetteit.com or use the [contact form](https://audetteit.com/contact.md).
+
+---
+
+Source: https://audetteit.com/about
+
+## Hi, I'm Michael
+
+> Audette IT is just me. I help people around Las Vegas with their tech, from the everyday stuff to the kind of setup most homes never get.
+
+I'm not a company or a call center. When you email, you're talking to the person who'll actually do the work, and I'll explain what I did in plain English.
+
+Most of what I do is everyday help: wifi, slow computers, printers, TVs, backups and parental controls.
+
+I also do the deeper work most family tech support doesn't: designing networks, setting up Active Directory and domains, running self-hosted services and locking down security.
+
+- **Where:** In person around Las Vegas, or remotely from anywhere.
+- **Devices:** Computers and laptops, inside and out. Phones and tablets for setup, settings and parental controls, but no physical repairs.
+- **Cost:** Every job is different, so I'll give you a quote before I start.
+
+### Something acting up?
+
+Tell me what's going on. I'll get back to you with what I think it is and what it'd take to fix. Email michael.audette@audetteit.com or use the [contact form](https://audetteit.com/contact.md).
 
 ---
 
 Source: https://audetteit.com/contact
 
-## Tell me what you're running
+## Tell me what's going on
 
-> A quick fix, an ongoing setup, or something more involved — send the details and I'll follow up.
+> A quick fix, a new setup or something bigger. Send the details and I'll get back to you with what I think it is and a quote.
 
 **Email:** michael.audette@audetteit.com
+
+- **Where:** In person around Las Vegas, or remotely from anywhere.
+- **Devices:** Computers and laptops, inside and out. Phones and tablets for setup, settings and parental controls, but no physical repairs.
+- **Cost:** Every job is different, so I'll give you a quote before I start.
 
 ### Contact form
 
@@ -101,7 +201,7 @@ The form at https://audetteit.com/contact asks for:
 - **What's going on?**
 - A checkbox: "I'm okay with this info being used to follow up with me." (see the [privacy note](https://audetteit.com/privacy.md))
 
-It opens your email app with the message filled in — nothing is sent until you hit send there. Emailing the address above directly works just as well.
+This opens your email app with the message filled in. Nothing is sent until you hit send there. Emailing the address above directly works just as well.
 
 ---
 
@@ -113,7 +213,7 @@ Source: https://audetteit.com/privacy
 
 ### The contact form
 
-The form on the [contact page](https://audetteit.com/contact.md) doesn't send anything to a server. When you hit send, it opens your own email app with your name, email, and message filled in — nothing leaves your device until you send that email yourself. Once it arrives, I use it only to reply to you.
+The form on the [contact page](https://audetteit.com/contact.md) doesn't send anything to a server. When you hit send, it opens your own email app with your name, email, and message filled in. Nothing leaves your device until you send that email yourself. Once it arrives, I use it only to reply to you.
 
 ### Analytics and cookies
 

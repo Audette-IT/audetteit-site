@@ -46,3 +46,26 @@
       '&body=' + encodeURIComponent(body);
   });
 })();
+
+(function floorPlan() {
+  var pins = document.querySelectorAll('.pin[data-room]');
+  if (!pins.length) return;
+  var rooms = {
+    living: ['Living room: TV and streaming', 'Smart TVs, streaming boxes, sound bars, and getting everything onto the right input without three remotes.'],
+    kitchen: ['Kitchen: smart home', 'Smart speakers, doorbells, cameras, and the plugs and lights that stopped responding.'],
+    office: ['Office: the computer and printer', 'Slow computers, new computer setup, backups, and printers that won\'t print.'],
+    kids: ['Kids\' room: parental controls', 'Screen time and content filtering on their devices, plus filtering at the router that covers the whole house.'],
+    hall: ['Hall closet: the router', 'Wifi that reaches the back bedroom, a network that doesn\'t drop during calls, and a router that\'s actually set up securely.'],
+    garage: ['Garage: the deeper stuff', 'Network design, a small server or home lab, self-hosted services, and Active Directory when you need it.']
+  };
+  var nameEl = document.getElementById('room-name');
+  var textEl = document.getElementById('room-text');
+  pins.forEach(function (pin) {
+    pin.addEventListener('click', function () {
+      pins.forEach(function (p) { p.setAttribute('aria-pressed', p === pin ? 'true' : 'false'); });
+      var room = rooms[pin.getAttribute('data-room')];
+      nameEl.textContent = room[0];
+      textEl.textContent = room[1];
+    });
+  });
+})();

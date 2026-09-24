@@ -24,19 +24,22 @@ feature/*  →  dev  →  staging  →  main
 
 ```
 /public              # everything served to visitors
-  index.html         # Home
-  services.html      # Everyday help + infrastructure/advanced   -> /services
+  index.html         # Home (interactive floor plan)
+  services.html      # Everyday help + bigger projects            -> /services
+  how-it-works.html  # The three steps, in person vs remote, FAQ  -> /how-it-works
+  about.html         # Who you'll be dealing with                 -> /about
   contact.html       # Contact form (opens your email app)        -> /contact
   privacy.html       # Plain-language privacy note                -> /privacy
-  index.md, services.md, contact.md, privacy.md  # Markdown twin of each page
+  *.md               # Markdown twin of each page
   llms.txt           # Index of the Markdown pages for AI agents
   llms-full.txt      # All pages in one file (generated, don't hand-edit)
   _headers           # Security + cache headers for static files
   site.webmanifest, robots.txt, sitemap.xml
-  /js/site.js        # Mobile menu + contact form behavior
+  /css/site.css      # Shared styles for every page
+  /js/site.js        # Mobile menu, floor-plan rooms, contact form
   /js/consent.js     # Cookie banner; loads Google Tag Manager only after Accept
   /css/consent.css   # Cookie banner styles
-  /assets            # Logo, favicons
+  /assets            # logo.svg (the source) + PNG icons rendered from it
 /worker/index.js     # Page routes only: Markdown for Accept: text/markdown
 wrangler.jsonc       # Cloudflare Worker config
 scripts/check-links.py  # Link + Markdown-coverage checker (run in CI)
@@ -69,9 +72,9 @@ npx wrangler dev
 
 ## Design direction
 
-An "ops console" visual language (IBM Plex Mono headlines, sharp corners,
-hairline borders, one sparing signal-blue accent) instead of a generic
-SaaS-template look. See `CLAUDE.md` for the reasoning and sources.
+"Every room in the house": warm, plain-spoken, one person. Blue floor-plan
+linework, a marigold accent, Schibsted Grotesk headings and Atkinson Hyperlegible
+Next body text. See `CLAUDE.md` for the full brief.
 
 ## Status
 
