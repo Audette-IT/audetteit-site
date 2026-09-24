@@ -613,7 +613,8 @@ numbers share the same sequence.
 - #66: docs, logo rights, #67.
 - **#69: handoff:** this CLAUDE.md rewrite, `tools/`, and the `.md`
   canonical-header fix.
-- #47, #51, #53, #54, #56, #58, #59, #62 and #64 were docs-only.
+- #47, #51, #53, #54, #56, #58, #59, #62, #64 and #70 (#23 closed) were
+  docs-only.
 
 ## 11. Lessons learned (failures, fixes, and what worked)
 
@@ -721,7 +722,8 @@ written here:
     `release/room-guide`, `release/handoff`
   - docs branches: `docs/main-after-46`, `docs/after-50`, `docs/after-52`,
     `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
-    `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`
+    `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`,
+    `docs/close-23`
   - other: `chore/add-skills`, `cloudflare/workers-autoconfig-2`
 - **Stale, not merged, safe to delete:** `feature/homepage-redesign`
   (superseded) and `cloudflare/workers-autoconfig` (PR #1, closed).
