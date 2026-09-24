@@ -61,9 +61,11 @@ Copy should read as one capable person, not a company.
   logo-mark.png`, `favicon-32.png`, `favicon-16.png`, `apple-touch-icon.png`,
   `faviconlogo.png`) — no more CSS `scale()`/`transform-origin` cropping hacks.
 
-- **Next release, on `dev` (2026-09-24), not live:** the "room guide"
-  redesign for #60/#61, with six pages, a new logo and new favicons. Promote
-  `dev` → `staging` → `main` only after asking the owner.
+- **Next release, on `dev` and `staging` (2026-09-24), not live:** the
+  "room guide" redesign for #60/#61, with six pages, a new logo and new
+  favicons. The owner approved the preview ("i like it, stage it") and it was
+  merged into `staging` (keeping staging's README). The PR to `main` needs the
+  owner's OK first.
 
 ## GitHub project tracking
 
@@ -411,8 +413,8 @@ promotion flow the user specified:
   rule: require PR before merging, require status checks once CI exists (#32),
   don't allow bypassing even for admins.
 - **`staging`** — has its own README. Promoted to `main` on 2026-09-23
-  (launch). Next promotion: merge `dev` in, review the preview, then PR to
-  `main`. The site is deployed as
+  (launch). `dev` (the room guide redesign) was merged in on 2026-09-24.
+  Next: the owner reviews the Cloudflare preview, then PR to `main`. The site is deployed as
   a Cloudflare **Worker** named `audetteit-site` (account
   `b7a46df8571aa32900c3155b464416ab`, worker ID
   `c8969d22263a484bae64aa2436af8e93`) — not classic Pages — so it uses Workers
