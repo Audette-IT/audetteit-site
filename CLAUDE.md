@@ -37,8 +37,9 @@ was checked against the code, GitHub and the live site on that date.
    for anything made for Audette IT (section 13).
 7. **Scheduled follow-ups for #25 (SEO):** one check fires **2026-09-26
    23:08 UTC** (Routine `trig_01LhJJBWV6ZDJ5foRQbcmqFG`, bound to the original
-   session `session_01LR2y4cu2zi21QRgiomcc14`). Another fires **2026-09-27
-   16:00 UTC** (`trig_01SfagBXWmwVy2SuSCUBKGk4`, bound to
+   session `session_01LR2y4cu2zi21QRgiomcc14`; that's 4:08 PM PDT on Sep 26).
+   Another fires **2026-09-27 16:00 UTC** (9:00 AM PDT;
+   `trig_01SfagBXWmwVy2SuSCUBKGk4`, bound to
    `session_01Krc8Vpb3N5XkVGZgo7vhTx`). Neither reaches new sessions. If
    you're in a new session after those dates and #25 is still open, do the
    check yourself (steps in the #25 entry, section 10).
@@ -101,6 +102,9 @@ was checked against the code, GitHub and the live site on that date.
     self-hosted services, security hardening.
 - **Voice:** first person ("I"), casual, plain English, short sentences.
 - **Owner:** GitHub account `mjaudettejr` (repo owner org `Audette-IT`).
+- **Time zone:** the owner is in **Pacific time** (PST/PDT; PDT is UTC−7
+  until Nov 1, then PST is UTC−8). Give times in PT when talking to them.
+  Routines and cron still take UTC, so convert.
 
 ## 4. Current state (2026-09-24)
 
@@ -628,7 +632,8 @@ numbers share the same sequence.
   canonical-header fix.
 - **#73: the `audette-it-design` skill** (#68, 2026-09-24).
 - #47, #51, #53, #54, #56, #58, #59, #62, #64, #70 (#23 closed), #71
-  (#25 SEO check) and #72 (#67 quick-fix correction) were docs-only.
+  (#25 SEO check), #72 (#67 quick-fix correction) and #74 (Pacific time)
+  were docs-only.
 
 ## 11. Lessons learned (failures, fixes, and what worked)
 
@@ -775,7 +780,8 @@ emails, flyers and profiles match the site.
   - docs branches: `docs/main-after-46`, `docs/after-50`, `docs/after-52`,
     `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
     `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`,
-    `docs/close-23`, `docs/seo-check-25`, `docs/dns-fix-67`
+    `docs/close-23`, `docs/seo-check-25`, `docs/dns-fix-67`,
+    `docs/pacific-time`
   - other: `chore/add-skills`, `cloudflare/workers-autoconfig-2`
 - **Stale, not merged, safe to delete:** `feature/homepage-redesign`
   (superseded), `cloudflare/workers-autoconfig` (PR #1, closed) and
