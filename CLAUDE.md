@@ -720,7 +720,7 @@ written here:
   can't delete branches):
   - release branches: `launch`, `release/analytics-www`,
     `release/gtm-advanced`, `release/clarity`, `release/tag-gateway`,
-    `release/room-guide`
+    `release/room-guide`, `release/handoff`
   - docs branches: `docs/main-after-46`, `docs/after-50`, `docs/after-52`,
     `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
     `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`
