@@ -124,8 +124,16 @@ Copy should read as one capable person, not a company.
     fixes. Case A: the AD domain *is* `audetteit.com` (split-brain; the apex
     resolves to the DCs, and those records must stay; the long-term fix is an
     AD subdomain). Case B: a stray `audetteit.com` zone/forwarder on the DC
-    (delete it, fix forwarders). Waiting on the owner's `nslookup` output.
-    **Don't guess which case it is.**
+    (delete it, fix forwarders). **Diagnosed 2026-09-24: case A.**
+    `%USERDNSDOMAIN%` = `AUDETTEIT.COM`; internally the apex → DC IPs
+    `192.168.4.59/.166/.31/.141` (+9 IPv6); `www` → a stale CNAME to Vercel.
+    Told the owner to repoint `www` (CNAME to
+    `www.audetteit.com.cdn.cloudflare.net`, or A records to the Cloudflare IPs as
+    a fallback). **Open decision for the owner:** make `www` the canonical host
+    (flip the Cloudflare redirect; the canonicals, sitemap and `og:url` go to
+    `www`; a site change through dev → staging → main), or move AD to a
+    subdomain long-term. Don't change the canonical host without the owner's
+    choice.
   - **#60** (owner-created 2026-09-24, no milestone): fix spelling, grammar
     and tone across site copy, casual and plain-language. Overlaps #23.
     **Closed 2026-09-24:** all copy was rewritten in the "I" voice as part
