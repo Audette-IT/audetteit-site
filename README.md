@@ -18,19 +18,22 @@ feature/*  →  dev  →  staging  →  main
 
 ```
 /public              # everything served to visitors
-  index.html         # Home
+  index.html         # Home (floor-plan figure)
   services.html      # -> /services
+  how-it-works.html  # -> /how-it-works (steps + FAQ)
+  about.html         # -> /about
   contact.html       # -> /contact (form opens your email app)
   privacy.html       # -> /privacy
-  index.md, services.md, contact.md, privacy.md  # Markdown twin of each page
+  *.md               # Markdown twin of each page
   llms.txt           # Index of the Markdown pages for AI agents
   llms-full.txt      # All pages in one file (generated, don't hand-edit)
   _headers           # Security + cache headers for static files
   favicon.ico, site.webmanifest, robots.txt, sitemap.xml
-  /js/site.js        # Mobile menu + contact form behavior
+  /css/site.css      # All page styles (light + dark)
+  /js/site.js        # Mobile menu, floor-plan room picker, contact form
   /js/consent.js     # Cookie banner; loads Google Tag Manager only after Accept
   /css/consent.css   # Cookie banner styles
-  /assets            # Logo, favicons
+  /assets            # logo.svg (source mark), rendered logo + favicons
 /worker/index.js     # Page routes only: Markdown for Accept: text/markdown
 wrangler.jsonc       # Cloudflare Worker config
 scripts/check-links.py  # Link + Markdown-coverage checker (run in CI)

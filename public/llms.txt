@@ -1,13 +1,15 @@
 # Audette IT
 
-> Personal IT help for family and friends, run by one person: everyday troubleshooting (wifi, slow computers, printers, accounts, parental controls) plus real infrastructure work (network design, Active Directory, self-hosted services, security hardening). Not a registered business. Contact: michael.audette@audetteit.com
+> Tech help from one person, Michael, in Las Vegas: everyday fixes (wifi, slow computers, new computer setup, backups, printers, TVs and smart home, accounts, parental controls) plus bigger projects (network design, Active Directory, self-hosted services, security hardening). In person around Las Vegas, or remotely from anywhere. Quote before any work. Not a registered business. Contact: michael.audette@audetteit.com
 
 Every page on this site has a Markdown version. Append `.md` to the page path, or request the normal URL with an `Accept: text/markdown` header.
 
 ## Pages
 
-- [Home](https://audetteit.com/index.md): What Audette IT is, the two service tiers, and the four-stage process
-- [Services](https://audetteit.com/services.md): Full list of everyday and infrastructure services
+- [Home](https://audetteit.com/index.md): Who Audette IT is, what it helps with room by room, and how it works
+- [Services](https://audetteit.com/services.md): Everything I help with, around the house and bigger projects
+- [How it works](https://audetteit.com/how-it-works.md): The three steps, in person vs remote, and common questions
+- [About](https://audetteit.com/about.md): Who you'll be dealing with
 - [Contact](https://audetteit.com/contact.md): Email address and how the contact form works
 - [Privacy](https://audetteit.com/privacy.md): What the site collects: contact form, opt-in Google Analytics and Microsoft Clarity, hosting
 

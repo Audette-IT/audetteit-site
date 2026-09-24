@@ -4,7 +4,7 @@
 
 ## The contact form
 
-The form on the [contact page](https://audetteit.com/contact.md) doesn't send anything to a server. When you hit send, it opens your own email app with your name, email, and message filled in — nothing leaves your device until you send that email yourself. Once it arrives, I use it only to reply to you.
+The form on the [contact page](https://audetteit.com/contact.md) doesn't send anything to a server. When you hit send, it opens your own email app with your name, email, and message filled in. Nothing leaves your device until you send that email yourself. Once it arrives, I use it only to reply to you.
 
 ## Analytics and cookies
 
