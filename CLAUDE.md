@@ -518,8 +518,8 @@ Only `favicon.ico` differs, because it's re-packed.
   3. Hand-edit an item's `"note"` or `"s"` (`open`/`progress`) in the output
      if needed. Closed issues are always `done`.
   4. Republish with the Artifact tool, passing the same `url`.
-  - Last synced 2026-09-24 14:36 UTC with this tool: **28 issues, 21 done / 5
-    in progress / 2 open.**
+  - Last synced 2026-09-24 (closing #23) with this tool: **28 issues, 22 done
+    / 4 in progress / 2 open.**
 
 ### 8.7 Checking the live site
 - Sessions **can't reach audetteit.com directly**. Use Firecrawl
@@ -557,9 +557,6 @@ were duplicates recreated as #21–#37, and #3 was a connectivity test. PR
 numbers share the same sequence.
 
 **Open:**
-- **#23 Copy review.** The copy was rewritten twice (the second time via #60)
-  and is live on all six pages. **Waiting only on the owner's tone/voice
-  sign-off.** Close it when they approve.
 - **#25 SEO.** Everything is served (canonicals, OG/Twitter, sitemap,
   robots, JSON-LD). **Gate:** all six pages indexed with current titles, and
   link previews show the new logo.
@@ -593,13 +590,14 @@ numbers share the same sequence.
     physical or VMs?
 - **#68 Design skill.** Make `audette-it-design` (`.claude/skills/`, via
   `skill-creator`) from the finished site. **Gate:** the owner says the
-  design is final, #23 and #25 are closed, and it's all live. The issue has
+  design is final, #25 is closed (#23 already is), and it's all live. The issue has
   the exact file list, the contents, the prompts and 5 test prompts.
 
 **Closed:**
-- **As completed:** #21, #22, #24, #26, #27, #28, #29, #30, #31, #33, #34,
+- **As completed:** #21, #22, #23, #24, #26, #27, #28, #29, #30, #31, #33, #34,
   #35, #36, #37, #38, #39, #40, #60, #61. Each has a closing comment saying
-  what was done.
+  what was done. #23 (copy) closed 2026-09-24 after the owner's sign-off
+  ("the copy is good").
 - **As not planned:** #41 and #42 (business/legal details, compliance
   review). They don't apply without a registered business.
 
@@ -615,7 +613,8 @@ numbers share the same sequence.
 - #66: docs, logo rights, #67.
 - **#69: handoff:** this CLAUDE.md rewrite, `tools/`, and the `.md`
   canonical-header fix.
-- #47, #51, #53, #54, #56, #58, #59, #62 and #64 were docs-only.
+- #47, #51, #53, #54, #56, #58, #59, #62, #64 and #70 (#23 closed) were
+  docs-only.
 
 ## 11. Lessons learned (failures, fixes, and what worked)
 
@@ -723,7 +722,8 @@ written here:
     `release/room-guide`, `release/handoff`
   - docs branches: `docs/main-after-46`, `docs/after-50`, `docs/after-52`,
     `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
-    `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`
+    `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`,
+    `docs/close-23`
   - other: `chore/add-skills`, `cloudflare/workers-autoconfig-2`
 - **Stale, not merged, safe to delete:** `feature/homepage-redesign`
   (superseded) and `cloudflare/workers-autoconfig` (PR #1, closed).
@@ -731,7 +731,6 @@ written here:
 
 ## 15. Open questions for the owner (don't guess these)
 
-- Tone/voice sign-off on the copy (#23).
 - More services? The list will grow as they're built out.
 - Whether and when to build the self-hosted help desk (#44).
 - The #67 AD details (four questions in section 10).
