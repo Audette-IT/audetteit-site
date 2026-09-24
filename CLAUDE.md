@@ -32,10 +32,14 @@ was checked against the code, GitHub and the live site on that date.
 5. **Before any push:** run the repo checks (section 8.2). Before a design or
    copy change goes live, run the browser QA (section 8.3) and show the owner a
    preview (section 8.4).
-6. **Scheduled follow-ups for #25 (SEO):** one check fires **2026-09-26
+6. **Audette IT design skill:** `audette-it-design` is in this repo *and* on
+   the owner's Claude account, so it's available in every session. Use it
+   for anything made for Audette IT (section 13).
+7. **Scheduled follow-ups for #25 (SEO):** one check fires **2026-09-26
    23:08 UTC** (Routine `trig_01LhJJBWV6ZDJ5foRQbcmqFG`, bound to the original
-   session `session_01LR2y4cu2zi21QRgiomcc14`). Another fires **2026-09-27
-   16:00 UTC** (`trig_01SfagBXWmwVy2SuSCUBKGk4`, bound to
+   session `session_01LR2y4cu2zi21QRgiomcc14`; that's 4:08 PM PDT on Sep 26).
+   Another fires **2026-09-27 16:00 UTC** (9:00 AM PDT;
+   `trig_01SfagBXWmwVy2SuSCUBKGk4`, bound to
    `session_01Krc8Vpb3N5XkVGZgo7vhTx`). Neither reaches new sessions. If
    you're in a new session after those dates and #25 is still open, do the
    check yourself (steps in the #25 entry, section 10).
@@ -98,6 +102,9 @@ was checked against the code, GitHub and the live site on that date.
     self-hosted services, security hardening.
 - **Voice:** first person ("I"), casual, plain English, short sentences.
 - **Owner:** GitHub account `mjaudettejr` (repo owner org `Audette-IT`).
+- **Time zone:** the owner is in **Pacific time** (PST/PDT; PDT is UTC−7
+  until Nov 1, then PST is UTC−8). Give times in PT when talking to them.
+  Routines and cron still take UTC, so convert.
 
 ## 4. Current state (2026-09-24)
 
@@ -117,6 +124,8 @@ was checked against the code, GitHub and the live site on that date.
 - **Branches:** `main` = production. `dev` and `staging` match `main` except
   their own READMEs, plus whatever the latest docs/tools change adds.
   `claude/stoic-gates-w5906b` matches `main`.
+- **Design skill (#68):** `audette-it-design` is on `main` and on the owner's
+  Claude account (section 13).
 - **Home network problem (#67):** the owner's AD domain is also called
   `audetteit.com`, so devices inside the house can't load the site. That's
   outside the repo. The owner is moving AD to `ad.audetteit.com` (#67 in
@@ -522,8 +531,8 @@ Only `favicon.ico` differs, because it's re-packed.
   3. Hand-edit an item's `"note"` or `"s"` (`open`/`progress`) in the output
      if needed. Closed issues are always `done`.
   4. Republish with the Artifact tool, passing the same `url`.
-  - Last synced 2026-09-24 (closing #23) with this tool: **28 issues, 22 done
-    / 4 in progress / 2 open.**
+  - Last synced 2026-09-24 (closing #68) with this tool: **28 issues, 23 done
+    / 4 in progress / 1 open.**
 
 ### 8.7 Checking the live site
 - Sessions **can't reach audetteit.com directly**. Use Firecrawl
@@ -598,17 +607,14 @@ numbers share the same sequence.
     (`192.168.4.59/.166/.31/.141`) separate DCs? How many PCs and users? Is
     there AD CS, file shares with ACLs, or LDAP-based apps? Are the DCs
     physical or VMs?
-- **#68 Design skill.** Built 2026-09-24 as `.claude/skills/audette-it-design/`
-  (section 13). The owner asked for it directly (treated as "the design is
-  final") and signed off on the test results ("with the skill sounds like
-  me i am happy with the skill"). On `dev` and `staging`. **Close when** it's
-  merged to `main`.
 
 **Closed:**
 - **As completed:** #21, #22, #23, #24, #26, #27, #28, #29, #30, #31, #33, #34,
-  #35, #36, #37, #38, #39, #40, #60, #61. Each has a closing comment saying
-  what was done. #23 (copy) closed 2026-09-24 after the owner's sign-off
-  ("the copy is good").
+  #35, #36, #37, #38, #39, #40, #60, #61, #68. Each has a closing comment
+  saying what was done. #23 (copy) closed 2026-09-24 after the owner's
+  sign-off ("the copy is good"). #68 (design skill) closed 2026-09-24 when the
+  skill merged to `main` (PR #73); the owner approved the test results ("with the
+  skill sounds like me i am happy with the skill").
 - **As not planned:** #41 and #42 (business/legal details, compliance
   review). They don't apply without a registered business.
 
@@ -624,6 +630,7 @@ numbers share the same sequence.
 - #66: docs, logo rights, #67.
 - **#69: handoff:** this CLAUDE.md rewrite, `tools/`, and the `.md`
   canonical-header fix.
+- **#73: the `audette-it-design` skill** (#68, 2026-09-24).
 - #47, #51, #53, #54, #56, #58, #59, #62, #64, #70 (#23 closed), #71
   (#25 SEO check) and #72 (#67 quick-fix correction) were docs-only.
 
@@ -741,9 +748,18 @@ emails, flyers and profiles match the site.
   `logo.svg` are copies. When `public/css/site.css`, `public/js/site.js`,
   `public/assets/logo.svg`, the page markup or the confirmed facts change,
   update the skill in the same change.
-- **Outside this repo:** the owner can add it to their Claude account from
-  the packaged `audette-it-design.skill` file (rebuild with skill-creator's
-  `scripts/package_skill.py`).
+- **Also on the owner's Claude account** (the owner confirmed on
+  2026-09-24: "the skill is on my account so you can now use it at any
+  time"). So it's available in any Claude chat, project or session, not
+  just this repo: use it for all Audette IT work, including other apps and
+  audetteit.net.
+  - **Two copies:** this repo's `.claude/skills/audette-it-design/` is the
+    source of truth. The account copy does **not** update itself. After
+    changing the repo copy, re-package it (skill-creator's
+    `scripts/package_skill.py`), send the `.skill` file to the owner
+    (`SendUserFile`) and ask them to re-save it on their account.
+  - The `description` in `SKILL.md` is a YAML folded block (`>-`) because it
+    contains colons and quotes; plain YAML would fail validation.
 
 ## 14. Branches
 
@@ -759,7 +775,7 @@ emails, flyers and profiles match the site.
   can't delete branches):
   - release branches: `launch`, `release/analytics-www`,
     `release/gtm-advanced`, `release/clarity`, `release/tag-gateway`,
-    `release/room-guide`, `release/handoff`
+    `release/room-guide`, `release/handoff`, `release/design-skill`
   - docs branches: `docs/main-after-46`, `docs/after-50`, `docs/after-52`,
     `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
     `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`,
