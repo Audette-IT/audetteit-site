@@ -156,6 +156,11 @@ How we got here (via `/grill-me` and four drafts):
   https://claude.ai/artifact/AuSs6Fp4zf374FJ8dufRyv, C
   https://claude.ai/artifact/MLct3zL3WuK81UTvc5wL8Y, **D (approved)**
   https://claude.ai/artifact/7cKQaJZ3nnvpAsfyn3FqhC.
+- **Built-site preview artifact** (all six `dev` pages in one page, the menu
+  switches between them; GTM/consent stripped, since it's a preview):
+  https://claude.ai/artifact/A279VNAj3QAxTAv9axKF2x. It's a snapshot of
+  commit `4f66c61`; rebuild it from `public/` if the pages change before
+  review.
 
 What D is (all in `public/css/site.css`):
 - **Type:** Red Hat Display (headings, weight 900 for big ones) and Red Hat
