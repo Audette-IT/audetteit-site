@@ -463,6 +463,28 @@ pushed to it, and decide on a custom domain alias for staging if wanted.
   Recommended: turn GitHub Pages off in Settings → Pages. The site is served by
   the Cloudflare Worker, not GitHub Pages.
 
+## Project skills (`.claude/skills/`, on every branch)
+
+On `main` via PR #63, and synced to `staging`, `dev` and
+`claude/stoic-gates-w5906b`, so any new session on this repo loads them.
+Installed 2026-09-24 for issue #61 (the owner named them in the issue), copied
+from upstream, not written here:
+- **`grill-me`** + **`grilling`** from `mattpocock/skills` (MIT, commit
+  `c55ee46`). `grill-me` is user-invoked only (`/grill-me`) and just hands off
+  to `grilling`, which interviews the owner in numbered rounds of questions
+  with recommended answers.
+- **`impeccable`** from `pbakaus/impeccable` `plugin/skills/impeccable`
+  (Apache-2.0, v4.3.1, commit `e0881d2`). This is the skill folder only: its
+  **edit hook was deliberately not installed** (no `settings.local.json`
+  changes). Its `scripts/impeccable` launcher downloads a prebuilt binary from
+  the project's GitHub releases on first run. Don't run it unless the owner
+  agrees; the skill documents a fallback (read PRODUCT.md/DESIGN.md directly)
+  when the launcher isn't used.
+- When using `impeccable` here, the existing "Design direction" section and
+  the owner's answers from `/grill-me` are the brief. Don't let its
+  "go bold" defaults override decisions already made.
+- To update: re-copy from upstream and bump the commit hashes above.
+
 ## Working conventions established this session
 
 - **Never push to `main` without asking the user first — no exceptions.** This
