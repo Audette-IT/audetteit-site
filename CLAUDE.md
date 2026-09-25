@@ -625,20 +625,27 @@ numbers share the same sequence.
       server.
     - **Accounts:** `Administrator`, `mjaudettejr`; `adfs_svc` (AD FS is
       installed and planned, not in use: rebuild AD FS fresh in the new
-      domain, it can't be migrated; which server runs it is being
-      confirmed); `svc_authentik` (Authentik isn't running: don't recreate).
+      domain, it can't be migrated; it's on `WIN-I2OP82Q15QJ`);
+      `svc_authentik` (Authentik isn't running: don't recreate).
     - **GPOs to carry:** `GPO-Servers-Security`, `TV-Server`,
       `TV Kiosk Lockdown`, `GPO-Workstations-Security`, `DesktopLockdown`.
       Skip `GPO-Workstations-WSUS` (WSUS unused).
     - **Done:** inventory; GPO backup to `C:\ADMove\GPOs` on
       `WIN-I2OP82Q15QJ` (all 8, with HTML reports); DNS zone export
       (`C:\Windows\System32\dns\audetteit.com.export`).
-    - **Blocked on a backup target:** System State backups failed on both
-      DCs (no `E:`). Proposed: a new `B:` partition in the Toshiba's
-      unallocated space on the HP (don't touch existing partitions), back
-      the HP up there, share a folder and back `WIN-I2OP82Q15QJ` up to it
-      with `wbadmin start backup -allCritical -systemState` to the UNC path.
-    - **Proposed plan (awaiting the owner's OK on VM resources):** build the
+    - **Backups done (step 2, 2026-09-24):** the Toshiba's empty 931 GB
+      NTFS partition 3 is now **`B:`** on the HP (not formatted; partitions
+      1-2 are the EFI/MSR). HP System State backup is on `B:`;
+      `WIN-I2OP82Q15QJ` has a full bare-metal + System State backup on
+      `\\192.168.4.166\DCBackups` (`B:\DCBackups`, Domain Admins only). Use the
+      LAN IP, not `\\HP-Z640SERVER`: the name-based run failed mid-way
+      (likely Tailscale name resolution).
+    - **AD FS is on `WIN-I2OP82Q15QJ`** (uninstall before retiring it).
+    - **HP capacity:** 72 logical processors, 32 GB RAM (~7 GB free), no VMs
+      yet. New DC VM: Dynamic Memory 2 GB startup / 4 GB max.
+    - **Next: step 3**, Tailscale DNS cleanup plus the stale `.31`/`.141`
+      records.
+    - **Plan:** build the
       new forest `ad.audetteit.com` in a **Hyper-V VM on the HP** (~4 GB RAM,
       2 vCPU, 80 GB) so both old DCs keep running until the end; import the
       GPOs; recreate `mjaudettejr`; move the 4 machines one at a time; point
