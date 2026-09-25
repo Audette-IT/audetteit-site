@@ -641,13 +641,46 @@ numbers share the same sequence.
       LAN IP, not `\\HP-Z640SERVER`: the name-based run failed mid-way
       (likely Tailscale name resolution).
     - **AD FS is on `WIN-I2OP82Q15QJ`** (uninstall before retiring it).
-    - **HP capacity:** 72 logical processors, 32 GB RAM (~7 GB free), no VMs
-      yet. New DC VM: Dynamic Memory 2 GB startup / 4 GB max.
-    - **Next: step 3**, Tailscale DNS cleanup plus the stale `.31`/`.141`
-      records.
+    - **HP capacity:** 72 logical processors, 32 GB RAM, but only ~5-7 GB
+      free: Task Manager shows ~29.5 GB in use with only ~5 GB in processes
+      (`dns.exe` ~2 GB). Unexplained; look into it later.
+    - **Step 3 done (2026-09-24):** on both DCs, Tailscale adapters no longer
+      register in DNS (`Set-DnsClient -RegisterThisConnectionsAddress
+      $false`), DNS listens on the LAN IP only (`dnscmd
+      /resetlistenaddresses`), and the stale `.31`/`.141` A records are gone
+      from `audetteit.com` and `_msdcs`. Domain lookups now return only `.59`
+      and `.166`. The HP (was DHCP) has an eero reservation for `.166`.
+    - **Step 4-6 done (2026-09-24, finished ~11:15 PM PT): the new forest
+      exists.**
+      - VM **`ADDC01`** on the HP: Gen 2, 2 vCPU, **3 GB static** RAM (4 GB
+        didn't fit), checkpoints off, Hyper-V time sync off, autostart on,
+        switch `External Lan`. Disk `B:\VMs\ADDC01\ADDC01.vhdx`, copied from
+        the read-only master `B:\ISO\WS2025-DC-eval-ORIGINAL.vhdx` (Server
+        2025 Datacenter **Evaluation**, 180 days; fine because the VM is
+        temporary). Don't hard-power-off a VM during first-boot setup: that
+        caused the "computer restarted unexpectedly" loop on the first try.
+      - Static IP **`192.168.4.20/22`**, gateway `192.168.4.1`, eero
+        reservation added.
+      - This image has **no ServerManager/ADDSDeployment PowerShell modules**
+        (`Install-WindowsFeature` isn't found), so the role and the promotion
+        were done in the Server Manager GUI. Use built-in exes (`dcdiag`,
+        `nltest`, `w32tm`, `dnscmd`) for checks.
+      - Forest/domain **`ad.audetteit.com`**, NetBIOS **`AUDETTE`** (the
+        owner's choice; `AUDETTEIT` is taken by the old domain), DNS
+        installed, **no delegation** created in the old zone.
+      - Checks: `nltest /dsgetdc:ad.audetteit.com` finds ADDC01 (PDC, GC,
+        KDC, DNS). `dcdiag /q`: DFSREvent/SystemLog fail only on first-boot
+        noise, plus one RID-allocator event 16642 at 23:07 (being verified with
+        `dcdiag /test:RidManager`). Time: `w32tm` peers
+        `time.cloudflare.com`/`time.windows.com`, synced, stratum 4.
+    - **Next:** confirm RidManager passes; conditional DNS forwarders both
+      ways (old DCs → `ad.audetteit.com` at `.20`; ADDC01 → `audetteit.com`
+      at `.59`/`.166`); then import the GPOs and recreate `mjaudettejr`.
+    - Later, optional: add UPN suffix `audetteit.com` so sign-in can be
+      `mjaudettejr@audetteit.com`.
     - **Plan:** build the
-      new forest `ad.audetteit.com` in a **Hyper-V VM on the HP** (~4 GB RAM,
-      2 vCPU, 80 GB) so both old DCs keep running until the end; import the
+      new forest `ad.audetteit.com` in a **Hyper-V VM on the HP** (ADDC01,
+      built) so both old DCs keep running until the end; import the
       GPOs; recreate `mjaudettejr`; move the 4 machines one at a time; point
       the router's DNS at the new DC; then retire the old domain and promote
       both physical servers into `ad.audetteit.com`; rebuild AD FS last.
