@@ -531,8 +531,8 @@ Only `favicon.ico` differs, because it's re-packed.
   3. Hand-edit an item's `"note"` or `"s"` (`open`/`progress`) in the output
      if needed. Closed issues are always `done`.
   4. Republish with the Artifact tool, passing the same `url`.
-  - Last synced 2026-09-25 UTC (#67 steps 3-6 progress) with this tool: **28 issues, 23 done
-    / 4 in progress / 1 open.**
+  - Last synced 2026-09-25 UTC (#76 added, #67 DNS progress) with this tool: **29 issues, 23 done
+    / 4 in progress / 2 open.**
 
 ### 8.7 Checking the live site
 - Sessions **can't reach audetteit.com directly**. Use Firecrawl
@@ -590,6 +590,13 @@ numbers share the same sequence.
   Open as a someday item.
 - **#44 Self-hosted help desk.** A standing reminder (replace the old Zammad
   at `help.audetteit.net`). No deadline.
+- **#76 Custom 404 page** (opened 2026-09-25 at the owner's request). Not
+  started. Today unknown URLs get the platform's blank 404 (no
+  `public/404.html`, no `assets.not_found_handling`). The plan and
+  acceptance criteria are in the issue: `404.html` in the room guide design,
+  `"not_found_handling": "404-page"`, `noindex`, left out of the sitemap,
+  `llms.txt` and Worker routes (`check-links.py` needs an exception), and
+  confirm the security headers apply to the 404 response.
 - **#67 Home DNS (AD).** Diagnosed and decided (section 11 has the story).
   The owner is moving AD to **`ad.audetteit.com`** (a new forest plus a
   device migration, not a `rendom` rename).
