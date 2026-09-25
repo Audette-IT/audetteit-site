@@ -636,7 +636,7 @@ numbers share the same sequence.
   `og:site_name`, image width/height/alt on every page; the `check-links.py`
   guards; and the share image `share.png` (draft B, picked by the owner:
   "go with B and merge it") with `twitter:card=summary_large_image`. Released
-  together with #76 (see PR history). Close after an opengraph.xyz check of
+  together with #76 in PR #79. Close after an opengraph.xyz check of
   the live site shows the new image.
 - **#67 Home DNS (AD).** Diagnosed and decided (section 11 has the story).
   The owner is moving AD to **`ad.audetteit.com`** (a new forest plus a
@@ -774,6 +774,8 @@ numbers share the same sequence.
 - **#69: handoff:** this CLAUDE.md rewrite, `tools/`, and the `.md`
   canonical-header fix.
 - **#73: the `audette-it-design` skill** (#68, 2026-09-24).
+- **#79: custom 404 page (#76) and launch polish with share image B (#77)**
+  (2026-09-25).
 - #47, #51, #53, #54, #56, #58, #59, #62, #64, #70 (#23 closed), #71
   (#25 SEO check), #72 (#67 quick-fix correction), #74 (Pacific time),
   #75 (#67 status) and #78 (#67 AD progress, #76/#77 opened, tracker
@@ -921,7 +923,8 @@ emails, flyers and profiles match the site.
   can't delete branches):
   - release branches: `launch`, `release/analytics-www`,
     `release/gtm-advanced`, `release/clarity`, `release/tag-gateway`,
-    `release/room-guide`, `release/handoff`, `release/design-skill`
+    `release/room-guide`, `release/handoff`, `release/design-skill`,
+    `release/404-and-polish`
   - docs branches: `docs/main-after-46`, `docs/after-50`, `docs/after-52`,
     `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
     `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`,
