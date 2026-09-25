@@ -670,10 +670,10 @@ numbers share the same sequence.
         installed, **no delegation** created in the old zone.
       - Checks: `nltest /dsgetdc:ad.audetteit.com` finds ADDC01 (PDC, GC,
         KDC, DNS). `dcdiag /q`: DFSREvent/SystemLog fail only on first-boot
-        noise, plus one RID-allocator event 16642 at 23:07 (being verified with
-        `dcdiag /test:RidManager`). Time: `w32tm` peers
+        noise, plus one RID-allocator event 16642 at 23:07 from first boot;
+        `dcdiag /test:RidManager` **passed** (pool 1100-1599). Time: `w32tm` peers
         `time.cloudflare.com`/`time.windows.com`, synced, stratum 4.
-    - **Next:** confirm RidManager passes; conditional DNS forwarders both
+    - **Next:** conditional DNS forwarders both
       ways (old DCs → `ad.audetteit.com` at `.20`; ADDC01 → `audetteit.com`
       at `.59`/`.166`); then import the GPOs and recreate `mjaudettejr`.
     - Later, optional: add UPN suffix `audetteit.com` so sign-in can be
