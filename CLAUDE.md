@@ -531,8 +531,8 @@ Only `favicon.ico` differs, because it's re-packed.
   3. Hand-edit an item's `"note"` or `"s"` (`open`/`progress`) in the output
      if needed. Closed issues are always `done`.
   4. Republish with the Artifact tool, passing the same `url`.
-  - Last synced 2026-09-25 UTC (#76 added, #67 DNS progress) with this tool: **29 issues, 23 done
-    / 4 in progress / 2 open.**
+  - Last synced 2026-09-25 UTC (#77 added) with this tool: **30 issues, 23 done
+    / 4 in progress / 3 open.**
 
 ### 8.7 Checking the live site
 - Sessions **can't reach audetteit.com directly**. Use Firecrawl
@@ -597,6 +597,14 @@ numbers share the same sequence.
   `"not_found_handling": "404-page"`, `noindex`, left out of the sitemap,
   `llms.txt` and Worker routes (`check-links.py` needs an exception), and
   confirm the security headers apply to the 404 response.
+- **#77 Launch-polish audit** (opened 2026-09-25 from a 19-point "vibe-coded
+  site" checklist the owner shared). Audited against the code + `site-qa.js`:
+  15 pass, 1 fail (no custom 404 = #76), 3 to improve: `/services` meta
+  description is 183 chars (trim to ~155), the share image is the 512px square
+  logo with `twitter:card=summary` (make a 1200x630 room-guide image via the
+  skill, drafts first; add `og:image:alt`/`width`/`height`, `og:site_name`),
+  and add `check-links.py` guards (description length, one `<h1>`, `alt`,
+  no `console.log`/source maps). Not started.
 - **#67 Home DNS (AD).** Diagnosed and decided (section 11 has the story).
   The owner is moving AD to **`ad.audetteit.com`** (a new forest plus a
   device migration, not a `rendom` rename).
