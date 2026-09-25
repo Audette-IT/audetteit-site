@@ -639,6 +639,8 @@ numbers share the same sequence.
   - **Blocked on the owner:** the GitHub connector can't create repos in
     the org (403), so the owner creates the empty repo and gives the
     Claude app access; then `add_repo`.
+  - **Starter `CLAUDE.md` for the new repo:** `tools/audetteit-help-CLAUDE.md`
+    (written 2026-09-25, sent to the owner to start a session with it).
   - **Changes this site will need** (through this repo, with a preview):
     the "No tickets and no call center" line becomes "No call center. You
     talk to me from the first email to the fix." (home + how-it-works + twins),
