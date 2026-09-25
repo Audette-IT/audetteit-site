@@ -682,6 +682,8 @@ numbers share the same sequence.
         to the HP): a **delegation** `ad` NS `ADDC01.ad.audetteit.com` plus
         glue `ADDC01.ad` A `192.168.4.20`. Remove it when the old zone is
         retired.
+      - Verified on **both** old DCs: `nslookup ADDC01.ad.audetteit.com` →
+        `192.168.4.20`, and `nltest /dsgetdc:ad.audetteit.com` finds ADDC01.
       - `dnscmd` needs an **elevated** PowerShell ("Administrator:" in the
         title). Unelevated, Domain Admins is "deny only" and every command
         returns ERROR_ACCESS_DENIED.
