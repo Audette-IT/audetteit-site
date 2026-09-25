@@ -531,7 +531,7 @@ Only `favicon.ico` differs, because it's re-packed.
   3. Hand-edit an item's `"note"` or `"s"` (`open`/`progress`) in the output
      if needed. Closed issues are always `done`.
   4. Republish with the Artifact tool, passing the same `url`.
-  - Last synced 2026-09-24 (closing #68) with this tool: **28 issues, 23 done
+  - Last synced 2026-09-25 UTC (#67 steps 3-6 progress) with this tool: **28 issues, 23 done
     / 4 in progress / 1 open.**
 
 ### 8.7 Checking the live site
