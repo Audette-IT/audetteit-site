@@ -112,6 +112,8 @@ was checked against the code, GitHub and the live site on that date.
   Services, How it works (with FAQ), About, Contact and Privacy.
   - It shipped via **PR #65** (production build succeeded 04:19 UTC) and was
     confirmed live with Firecrawl.
+  - Since PR #79 (2026-09-25): the custom 404 page and the 1200x630 share
+    image (`share.png`, floor-plan draft B).
   - Also live: a Markdown twin of every page, `llms.txt`/`llms-full.txt`, the
     sitemap (all six pages; the owner resubmitted it in Search Console on
     2026-09-24), `robots.txt`, favicons from the new logo, the cookie banner,
@@ -564,8 +566,8 @@ Only `favicon.ico` differs, because it's re-packed.
     checker's hex and inline-script flags on it are expected: issue text
     quotes old colors, and artifacts need inline JS.
   4. Republish with the Artifact tool, passing the same `url`.
-  - Last synced 2026-09-25 18:32 UTC (#76/#77 built on dev) with this tool:
-    **30 issues, 23 done / 6 in progress / 1 open.**
+  - Last synced 2026-09-25 UTC (#76 and #77 closed) with this tool:
+    **30 issues, 25 done / 4 in progress / 1 open.**
 
 ### 8.7 Checking the live site
 - Sessions **can't reach audetteit.com directly**. Use Firecrawl
@@ -623,21 +625,6 @@ numbers share the same sequence.
   Open as a someday item.
 - **#44 Self-hosted help desk.** A standing reminder (replace the old Zammad
   at `help.audetteit.net`). No deadline.
-- **#76 Custom 404 page** (opened 2026-09-25 at the owner's request). **Built
-  on `dev` (2026-09-25), waiting for the owner to review the preview and say
-  merge.** `public/404.html` in the room guide design ("This page isn't
-  here", three pill buttons, an email line), `"not_found_handling":
-  "404-page"`, `noindex`, no canonical; `check-links.py`, `site-qa.js` and
-  `build-preview.py` all know about it. Close after the release, once
-  Firecrawl shows a made-up URL returning the custom page with 404.
-- **#77 Launch-polish audit** (opened 2026-09-25 from a 19-point "vibe-coded
-  site" checklist the owner shared). Audited: 15 pass, 1 fail (#76), 3 to
-  improve. **All built (2026-09-25):** `/services` description 147 characters;
-  `og:site_name`, image width/height/alt on every page; the `check-links.py`
-  guards; and the share image `share.png` (draft B, picked by the owner:
-  "go with B and merge it") with `twitter:card=summary_large_image`. Released
-  together with #76 in PR #79. Close after an opengraph.xyz check of
-  the live site shows the new image.
 - **#67 Home DNS (AD).** Diagnosed and decided (section 11 has the story).
   The owner is moving AD to **`ad.audetteit.com`** (a new forest plus a
   device migration, not a `rendom` rename).
@@ -753,11 +740,15 @@ numbers share the same sequence.
 
 **Closed:**
 - **As completed:** #21, #22, #23, #24, #26, #27, #28, #29, #30, #31, #33, #34,
-  #35, #36, #37, #38, #39, #40, #60, #61, #68. Each has a closing comment
+  #35, #36, #37, #38, #39, #40, #60, #61, #68, #76, #77. Each has a closing comment
   saying what was done. #23 (copy) closed 2026-09-24 after the owner's
   sign-off ("the copy is good"). #68 (design skill) closed 2026-09-24 when the
   skill merged to `main` (PR #73); the owner approved the test results ("with the
   skill sounds like me i am happy with the skill").
+  #76 (custom 404) and #77 (19-point launch-polish audit: shorter `/services`
+  description, share image B, `check-links.py` guards) shipped in PR #79 and
+  were verified live on 2026-09-25 (a made-up URL returns 404 with the custom
+  page; opengraph.xyz shows `share.png`).
 - **As not planned:** #41 and #42 (business/legal details, compliance
   review). They don't apply without a registered business.
 
@@ -778,8 +769,8 @@ numbers share the same sequence.
   (2026-09-25).
 - #47, #51, #53, #54, #56, #58, #59, #62, #64, #70 (#23 closed), #71
   (#25 SEO check), #72 (#67 quick-fix correction), #74 (Pacific time),
-  #75 (#67 status) and #78 (#67 AD progress, #76/#77 opened, tracker
-  redesign) were docs-only.
+  #75 (#67 status), #78 (#67 AD progress, #76/#77 opened, tracker
+  redesign) and #80 (#76/#77 closed) were docs-only.
 
 ## 11. Lessons learned (failures, fixes, and what worked)
 
@@ -847,7 +838,7 @@ numbers share the same sequence.
 |---|---|---|
 | **Issue Tracker** | https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy | **Canonical, keep in sync** (room guide design since 2026-09-25; copy in `tools/tracker-page.html`) |
 | Built-site preview (all pages) | https://claude.ai/artifact/A279VNAj3QAxTAv9axKF2x | Rebuild with `tools/build-preview.py` |
-| Share image drafts (#77) | https://claude.ai/artifact/YUzucfrq5yfFiVLNResfgy | Owner picked **B** (floor plan) on 2026-09-25; source `tools/share-image.html` |
+| Share image drafts (#77) | https://claude.ai/artifact/YUzucfrq5yfFiVLNResfgy | Owner picked **B** (floor plan); live since PR #79. Source `tools/share-image.html` |
 | Draft D "room guide" (approved) | https://claude.ai/artifact/7cKQaJZ3nnvpAsfyn3FqhC | History |
 | Draft A "floor plan" | https://claude.ai/artifact/VGNK2aqvB6sSYLTPXQvRSw | Rejected |
 | Draft B "quick start" | https://claude.ai/artifact/AuSs6Fp4zf374FJ8dufRyv | Rejected (feel reused in D) |
@@ -929,7 +920,8 @@ emails, flyers and profiles match the site.
     `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
     `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`,
     `docs/close-23`, `docs/seo-check-25`, `docs/dns-fix-67`,
-    `docs/pacific-time`, `docs/dns-67-status`, `docs/tracker-design`
+    `docs/pacific-time`, `docs/dns-67-status`, `docs/tracker-design`,
+    `docs/close-76-77`
   - other: `chore/add-skills`, `cloudflare/workers-autoconfig-2`
 - **Stale, not merged, safe to delete:** `feature/homepage-redesign`
   (superseded), `cloudflare/workers-autoconfig` (PR #1, closed) and
