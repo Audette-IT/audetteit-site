@@ -27,6 +27,11 @@ wrangler = (ROOT / "wrangler.jsonc").read_text()
 routes = json.loads(re.search(r'"run_worker_first"\s*:\s*(\[[^\]]*\])', wrangler).group(1))
 pages = [("index" if r == "/" else r.strip("/"), "home" if r == "/" else r.strip("/")) for r in routes]
 anchor = {r: "#" + key for r, (_, key) in zip(routes, pages)}
+# The 404 page has no route; show it too so it can be reviewed (GitHub #76).
+notfound = ""
+if (PUBLIC / "404.html").exists():
+    pages.append(("404", "404"))
+    notfound = ', or <a href="#404">see the 404 page</a>'
 
 branch = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
 commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
@@ -68,8 +73,9 @@ out = f"""<title>Audette IT Room Guide</title>
 <style>
 {css}
 .pv-bar {{ background: var(--mark); color: var(--mark-ink); font: 700 0.85rem/1.4 "Red Hat Text", system-ui, sans-serif; padding: 8px 16px; text-align: center; }}
+.pv-bar a {{ color: var(--mark-ink); }}
 </style>
-<div class="pv-bar">Preview of <code>{branch}</code> (commit {commit}). Use the menu to switch pages.</div>
+<div class="pv-bar">Preview of <code>{branch}</code> (commit {commit}). Use the menu to switch pages{notfound}.</div>
 {header}
 <main id="main-content">
 {mains}</main>
