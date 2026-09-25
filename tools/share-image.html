@@ -1,0 +1,195 @@
+<title>Share Image Drafts</title>
+<!-- Source for audetteit.com's 1200x630 link-preview image (GitHub #77).
+     Open it to compare the drafts. tools/render-share-image.js renders one card to PNG. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700;900&family=Red+Hat+Text:wght@400;500;700&display=swap">
+<style>
+  :root { --paper: #FFFFFF; --paper-2: #F2F4F6; --ink: #1A1E23; --ink-soft: #545D66; --rule: #1A1E23; --hair: #D9DEE3; color-scheme: light; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --paper: #111418; --paper-2: #181C21; --ink: #ECEFF2; --ink-soft: #A7B0B9; --rule: #ECEFF2; --hair: #2A3037; color-scheme: dark; } }
+  :root[data-theme="dark"] { --paper: #111418; --paper-2: #181C21; --ink: #ECEFF2; --ink-soft: #A7B0B9; --rule: #ECEFF2; --hair: #2A3037; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 1rem/1.6 "Red Hat Text", "Segoe UI", system-ui, sans-serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: clamp(28px, 5vw, 56px) clamp(16px, 4vw, 40px) 64px; }
+  h1, h2 { font-family: "Red Hat Display", "Segoe UI", system-ui, sans-serif; margin: 0; text-wrap: balance; }
+  .intro h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; line-height: 1; letter-spacing: -0.03em; }
+  .intro p { color: var(--ink-soft); margin: 16px 0 0; max-width: 60ch; }
+  .draft { margin-top: clamp(32px, 5vw, 48px); border-top: 3px solid var(--rule); padding-top: 16px; }
+  .draft-head { display: flex; gap: 12px; align-items: baseline; margin-bottom: 14px; }
+  .letter { flex: none; display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #FFD23F; color: #1A1E23; font: 900 1rem/1 "Red Hat Display", sans-serif; }
+  .draft-head h2 { font-size: 1.3rem; font-weight: 900; }
+  .draft-head p { color: var(--ink-soft); margin: 4px 0 0; }
+  /* The frame scales a real 1200x630 card to the page width. */
+  .frame { position: relative; width: 100%; aspect-ratio: 1200 / 630; overflow: hidden; border: 2px solid var(--hair); border-radius: 6px; }
+  .frame .card { position: absolute; top: 0; left: 0; transform-origin: 0 0; transform: scale(var(--s, 0.5)); }
+  body.render { background: #FFFFFF; }
+  body.render .frame { border: 0; border-radius: 0; width: 1200px; }
+  body.render .frame .card { transform: none; }
+
+  /* ---- The card itself: fixed light colors, because it becomes a PNG. ---- */
+  .card { width: 1200px; height: 630px; background: #FFFFFF; color: #1A1E23; padding: 56px 64px; display: flex; flex-direction: column; font-family: "Red Hat Text", "Segoe UI", sans-serif; }
+  .card .brand { display: flex; align-items: center; gap: 16px; }
+  .card .brand svg { width: 58px; height: 64px; flex: none; }
+  .card .brand b { display: block; font: 900 34px/1 "Red Hat Display", sans-serif; letter-spacing: -0.01em; }
+  .card .brand small { display: block; font-size: 19px; color: #545D66; margin-top: 6px; }
+  .card .rule { border-top: 4px solid #1A1E23; }
+  .card mark { background: #FFD23F; color: #1A1E23; padding: 0 10px; border-radius: 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .card .foot { margin-top: auto; display: flex; justify-content: space-between; align-items: baseline; border-top: 4px solid #1A1E23; padding-top: 18px; font-size: 22px; color: #545D66; }
+  .card .foot b { font: 900 26px/1 "Red Hat Display", sans-serif; color: #1A1E23; }
+
+  /* A: headline */
+  .a .rule { margin-top: 30px; }
+  .a h1 { font: 900 88px/1.02 "Red Hat Display", sans-serif; letter-spacing: -0.03em; margin-top: 44px; max-width: 900px; }
+
+  /* B: floor plan */
+  .b { flex-direction: row; gap: 48px; }
+  .b .left { flex: 1; display: flex; flex-direction: column; }
+  .b h1 { font: 900 68px/1.02 "Red Hat Display", sans-serif; letter-spacing: -0.03em; margin-top: 56px; }
+  .b .lede { font-size: 23px; line-height: 1.4; color: #545D66; margin-top: 22px; max-width: 460px; }
+  .b .url { margin-top: auto; border-top: 4px solid #1A1E23; padding-top: 18px; font: 900 26px/1 "Red Hat Display", sans-serif; }
+  .b .fig { width: 540px; flex: none; border: 3px solid #1A1E23; border-radius: 8px; padding: 14px; align-self: center; }
+  .b .stage { position: relative; }
+  .b .stage svg { display: block; width: 100%; height: auto; }
+  .b .pin { position: absolute; transform: translate(-50%, -50%); width: 34px; height: 34px; border-radius: 50%; border: 2px solid #1A1E23; background: #FFD23F; display: grid; place-items: center; font: 900 17px/1 "Red Hat Display", sans-serif; }
+  .b .pin.on { background: #1A1E23; color: #FFD23F; border-color: #FFD23F; }
+  .b .cap { font-size: 15px; color: #545D66; margin-top: 8px; }
+
+  /* C: two lists */
+  .c h1 { font: 900 64px/1.02 "Red Hat Display", sans-serif; letter-spacing: -0.03em; margin-top: 36px; }
+  .c .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; margin-top: 30px; }
+  .c h2 { font: 900 18px/1 "Red Hat Display", sans-serif; text-transform: uppercase; letter-spacing: 0.08em; padding-bottom: 10px; border-bottom: 4px solid #1A1E23; }
+  .c ul { list-style: none; margin: 0; padding: 0; }
+  .c li { font: 700 22px/1 "Red Hat Display", sans-serif; padding: 11px 0; border-bottom: 1px solid #D9DEE3; }
+  .c .foot { font-size: 20px; }
+</style>
+
+<main>
+  <div class="intro">
+    <h1>Share image drafts</h1>
+    <p>This is the picture that shows up when someone shares an audetteit.com link in a text, email or social post. Right now it's the small square logo. Each draft below is the real 1200×630 size, scaled to fit. Pick one (or mix parts), and I'll build it.</p>
+  </div>
+
+  <section class="draft">
+    <div class="draft-head"><span class="letter">A</span><div><h2>The headline</h2><p>The homepage headline, big, with the yellow highlight. Reads well even as a small thumbnail.</p></div></div>
+    <div class="frame"><div class="card a" id="card-a">
+      <div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 44" width="40" height="44" aria-hidden="true">
+  <defs>
+    <clipPath id="ait-shield"><path d="M3.5 8.5 Q20 2.5 36.5 8.5 V22.5 C36.5 32.5 29 39.5 20 43 C11 39.5 3.5 32.5 3.5 22.5 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#ait-shield)">
+    <rect x="0" y="0" width="20" height="44" fill="#1FA6E0"/>
+    <rect x="20" y="0" width="20" height="44" fill="#0B2545"/>
+    <g fill="none" stroke="#3BB9EE" stroke-width="1" stroke-linecap="round" opacity="0.75">
+      <path d="M40 12 H33 V16"/><path d="M40 29 H34 L31.5 31.5"/>
+    </g>
+    <g fill="#3BB9EE" opacity="0.9"><circle cx="33" cy="16.6" r="1.1"/><circle cx="31" cy="32" r="1.1"/></g>
+  </g>
+  <path d="M10.5 34 L20 13.5 L29.5 34" fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M15 27.2 Q20 23 25 27.2" fill="none" stroke="#FFC23D" stroke-width="2.8" stroke-linecap="round"/>
+  <circle cx="20" cy="31.2" r="2" fill="#FFC23D"/>
+</svg>
+<div><b>Audette IT</b><small>Home tech help · Las Vegas</small></div></div>
+      <div class="rule"></div>
+      <h1>Tech help for <mark>every&nbsp;room</mark> in your house.</h1>
+      <div class="foot"><span>In person around Las Vegas, or remotely from anywhere.</span><b>audetteit.com</b></div>
+    </div></div>
+  </section>
+
+  <section class="draft">
+    <div class="draft-head"><span class="letter">B</span><div><h2>The floor plan</h2><p>Headline on the left, the Fig. 1 floor plan from the homepage on the right. The most "you", but busier when small.</p></div></div>
+    <div class="frame"><div class="card b" id="card-b">
+      <div class="left">
+        <div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 44" width="40" height="44" aria-hidden="true">
+  <defs>
+    <clipPath id="ait-shield"><path d="M3.5 8.5 Q20 2.5 36.5 8.5 V22.5 C36.5 32.5 29 39.5 20 43 C11 39.5 3.5 32.5 3.5 22.5 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#ait-shield)">
+    <rect x="0" y="0" width="20" height="44" fill="#1FA6E0"/>
+    <rect x="20" y="0" width="20" height="44" fill="#0B2545"/>
+    <g fill="none" stroke="#3BB9EE" stroke-width="1" stroke-linecap="round" opacity="0.75">
+      <path d="M40 12 H33 V16"/><path d="M40 29 H34 L31.5 31.5"/>
+    </g>
+    <g fill="#3BB9EE" opacity="0.9"><circle cx="33" cy="16.6" r="1.1"/><circle cx="31" cy="32" r="1.1"/></g>
+  </g>
+  <path d="M10.5 34 L20 13.5 L29.5 34" fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M15 27.2 Q20 23 25 27.2" fill="none" stroke="#FFC23D" stroke-width="2.8" stroke-linecap="round"/>
+  <circle cx="20" cy="31.2" r="2" fill="#FFC23D"/>
+</svg>
+<div><b>Audette IT</b><small>Home tech help · Las Vegas</small></div></div>
+        <h1>Tech help for <mark>every room</mark>.</h1>
+        <p class="lede">In person around Las Vegas, or remotely from anywhere. Quote before any work.</p>
+        <div class="url">audetteit.com</div>
+      </div>
+      <div class="fig"><div class="stage"><svg viewBox="0 0 520 400" aria-hidden="true">
+          <g stroke="#1A1E23" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="14" y="14" width="492" height="372" stroke-width="5"/>
+            <path d="M300 14 V120 M300 150 V290 M300 160 H506 M14 200 H150 M180 200 H300 M200 200 V250 M200 280 V386 M300 290 H380 M410 290 H506 M300 320 V386" stroke-width="3.5"/>
+            <rect x="60" y="120" width="160" height="46" rx="8" stroke-width="2"/>
+            <rect x="96" y="24" width="88" height="8" rx="2" stroke-width="2"/>
+            <path d="M320 24 H496 V120" stroke-width="2"/>
+            <rect x="360" y="80" width="70" height="34" rx="4" stroke-width="2"/>
+            <circle cx="395" cy="97" r="6" stroke-width="1.6"/>
+            <rect x="330" y="176" width="130" height="44" rx="4" stroke-width="2"/>
+            <path d="M370 186 H420" stroke-width="3"/>
+            <rect x="470" y="180" width="26" height="30" rx="3" stroke-width="1.6"/>
+            <rect x="34" y="240" width="72" height="120" rx="6" stroke-width="2"/>
+            <rect x="130" y="330" width="56" height="34" rx="3" stroke-width="1.6"/>
+            <rect x="232" y="232" width="36" height="24" rx="4" stroke-width="2"/>
+            <path d="M242 232 V222 M258 232 V222" stroke-width="2"/>
+            <rect x="330" y="306" width="40" height="66" rx="3" stroke-width="2"/>
+          </g>
+          <g stroke="#8A949E" fill="none" stroke-width="1.4" stroke-linecap="round">
+            <path d="M150 200 A30 30 0 0 1 180 230 M300 120 A30 30 0 0 1 330 150 M200 250 A30 30 0 0 0 230 280 M380 290 A30 30 0 0 1 410 320"/>
+            <path d="M60 140 H220 M320 44 H476 V120 M34 266 H106 M334 318 H366 M334 330 H366 M334 342 H366 M334 354 H366"/>
+            <rect x="110" y="70" width="60" height="30" rx="4"/>
+            <circle cx="395" cy="246" r="14"/>
+            <rect x="400" y="316" width="90" height="56" rx="6" stroke-dasharray="5 5"/>
+          </g>
+          <g stroke="#0074A8" fill="none" stroke-width="1.4" stroke-dasharray="3 6">
+            <circle cx="250" cy="244" r="50"/>
+            <circle cx="250" cy="244" r="100" opacity="0.7"/>
+          </g>
+          <g fill="#545D66" font-family="Red Hat Text, sans-serif" font-weight="700" font-size="11.5" letter-spacing="0.08em">
+            <text x="30" y="46">LIVING ROOM</text><text x="320" y="146">KITCHEN</text><text x="316" y="278">OFFICE</text>
+            <text x="30" y="226">KIDS' ROOM</text><text x="214" y="302">HALL</text><text x="388" y="306">GARAGE</text>
+          </g>
+        </svg><span class="pin" style="left:25%;top:22%">A</span><span class="pin" style="left:80%;top:12%">B</span><span class="pin" style="left:76%;top:61%">C</span><span class="pin" style="left:30%;top:74%">D</span><span class="pin on" style="left:48%;top:52%">E</span><span class="pin" style="left:90%;top:84%">F</span></div><div class="cap">Fig. 1: every room I can help with</div></div>
+    </div></div>
+  </section>
+
+  <section class="draft">
+    <div class="draft-head"><span class="letter">C</span><div><h2>The two lists</h2><p>What you do, at a glance: the everyday fixes and the bigger jobs, like the services page.</p></div></div>
+    <div class="frame"><div class="card c" id="card-c">
+      <div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 44" width="40" height="44" aria-hidden="true">
+  <defs>
+    <clipPath id="ait-shield"><path d="M3.5 8.5 Q20 2.5 36.5 8.5 V22.5 C36.5 32.5 29 39.5 20 43 C11 39.5 3.5 32.5 3.5 22.5 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#ait-shield)">
+    <rect x="0" y="0" width="20" height="44" fill="#1FA6E0"/>
+    <rect x="20" y="0" width="20" height="44" fill="#0B2545"/>
+    <g fill="none" stroke="#3BB9EE" stroke-width="1" stroke-linecap="round" opacity="0.75">
+      <path d="M40 12 H33 V16"/><path d="M40 29 H34 L31.5 31.5"/>
+    </g>
+    <g fill="#3BB9EE" opacity="0.9"><circle cx="33" cy="16.6" r="1.1"/><circle cx="31" cy="32" r="1.1"/></g>
+  </g>
+  <path d="M10.5 34 L20 13.5 L29.5 34" fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M15 27.2 Q20 23 25 27.2" fill="none" stroke="#FFC23D" stroke-width="2.8" stroke-linecap="round"/>
+  <circle cx="20" cy="31.2" r="2" fill="#FFC23D"/>
+</svg>
+<div><b>Audette IT</b><small>Home tech help · Las Vegas</small></div></div>
+      <h1>Everyday fixes. <mark>Bigger jobs.</mark></h1>
+      <div class="cols">
+        <div><h2>Everyday</h2><ul><li>Wifi and devices</li><li>Slow computers</li><li>Printers</li><li>TVs and smart home</li></ul></div>
+        <div><h2>Bigger jobs</h2><ul><li>Network design</li><li>Active Directory</li><li>Self-hosted services</li><li>Security hardening</li></ul></div>
+      </div>
+      <div class="foot"><span>In person around Las Vegas, or remotely. Quote before any work.</span><b>audetteit.com</b></div>
+    </div></div>
+  </section>
+</main>
+
+<script>
+  // Scale each 1200x630 card to its frame's width.
+  function fit() { document.querySelectorAll('.frame').forEach(f => f.style.setProperty('--s', f.clientWidth / 1200)); }
+  addEventListener('resize', fit); fit();
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(document.body);
+</script>
