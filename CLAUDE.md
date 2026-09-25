@@ -673,9 +673,21 @@ numbers share the same sequence.
         noise, plus one RID-allocator event 16642 at 23:07 from first boot;
         `dcdiag /test:RidManager` **passed** (pool 1100-1599). Time: `w32tm` peers
         `time.cloudflare.com`/`time.windows.com`, synced, stratum 4.
-    - **Next:** conditional DNS forwarders both
-      ways (old DCs → `ad.audetteit.com` at `.20`; ADDC01 → `audetteit.com`
-      at `.59`/`.166`); then import the GPOs and recreate `mjaudettejr`.
+    - **DNS between the domains done (2026-09-24, ~11:57 PM PT):**
+      - On ADDC01: a **conditional forwarder** `audetteit.com` →
+        `192.168.4.59`, `192.168.4.166` (not AD-stored), made in DNS Manager
+        because `dnscmd` isn't on this image. Its "not authoritative"
+        validation X was a false alarm; lookups work.
+      - In the old zone (on `WIN-I2OP82Q15QJ`, AD-integrated so it replicates
+        to the HP): a **delegation** `ad` NS `ADDC01.ad.audetteit.com` plus
+        glue `ADDC01.ad` A `192.168.4.20`. Remove it when the old zone is
+        retired.
+      - `dnscmd` needs an **elevated** PowerShell ("Administrator:" in the
+        title). Unelevated, Domain Admins is "deny only" and every command
+        returns ERROR_ACCESS_DENIED.
+      - **At cutover, delete ADDC01's `audetteit.com` forwarder**, or the new
+        domain will keep sending the apex to the old DCs (the #67 problem).
+    - **Next:** import the GPOs and recreate `mjaudettejr`.
     - Later, optional: add UPN suffix `audetteit.com` so sign-in can be
       `mjaudettejr@audetteit.com`.
     - **Plan:** build the
