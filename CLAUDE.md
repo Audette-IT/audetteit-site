@@ -566,8 +566,8 @@ Only `favicon.ico` differs, because it's re-packed.
     checker's hex and inline-script flags on it are expected: issue text
     quotes old colors, and artifacts need inline JS.
   4. Republish with the Artifact tool, passing the same `url`.
-  - Last synced 2026-09-25 UTC (#76 and #77 closed) with this tool:
-    **30 issues, 25 done / 4 in progress / 1 open.**
+  - Last synced 2026-09-25 UTC (#44 planned, now in progress) with this tool:
+    **30 issues, 25 done / 5 in progress / 0 open.**
 
 ### 8.7 Checking the live site
 - Sessions **can't reach audetteit.com directly**. Use Firecrawl
@@ -623,8 +623,27 @@ numbers share the same sequence.
 - **#43 Markdown for Agents.** It's a Cloudflare Pro feature. The Worker
   stand-in (Accept negotiation, `.md` twins, `llms*.txt`) covers the need.
   Open as a someday item.
-- **#44 Self-hosted help desk.** A standing reminder (replace the old Zammad
-  at `help.audetteit.net`). No deadline.
+- **#44 Help desk. Planned 2026-09-25** (`/grill-me`; the owner said "this
+  is correct"). It will be **built** in a new private repo
+  **`Audette-IT/audetteit-help`**, whose own `CLAUDE.md` and issues are the
+  source of truth from then on. The plan is in the #44 comment:
+  - `support.audetteit.com` on Cloudflare free (Worker `audetteit-help`,
+    D1, Durable Objects for chat); TypeScript + Hono, room guide design
+  - Access with a one-time PIN for Michael; customers need no account
+  - Gmail messages labeled `Help desk` on `michael.audette@audetteit.com`
+    become requests (Gmail API via OAuth)
+  - build order: requests → customer side → live chat → knowledge base
+  - The owner's rule: **future plans go in that repo's `CLAUDE.md` and
+    also become issues there.** Its issues should show in this tracker under
+    "Help desk" (`tools/sync-tracker.py` needs a second-repo option).
+  - **Blocked on the owner:** the GitHub connector can't create repos in
+    the org (403), so the owner creates the empty repo and gives the
+    Claude app access; then `add_repo`.
+  - **Changes this site will need** (through this repo, with a preview):
+    the "No tickets and no call center" line becomes "No call center. You
+    talk to me from the first email to the fix." (home + how-it-works + twins),
+    and the contact form posts to the help desk with Turnstile (CSP +
+    privacy page updates).
 - **#67 Home DNS (AD).** Diagnosed and decided (section 11 has the story).
   The owner is moving AD to **`ad.audetteit.com`** (a new forest plus a
   device migration, not a `rendom` rename).
@@ -931,6 +950,5 @@ emails, flyers and profiles match the site.
 ## 15. Open questions for the owner (don't guess these)
 
 - More services? The list will grow as they're built out.
-- Whether and when to build the self-hosted help desk (#44).
 - The dashboard to-dos in section 7: Branch control, Access for previews,
   turning off GitHub Pages, and `main` branch protection.
