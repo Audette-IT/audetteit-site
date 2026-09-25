@@ -557,8 +557,8 @@ Only `favicon.ico` differs, because it's re-packed.
     checker's hex and inline-script flags on it are expected: issue text
     quotes old colors, and artifacts need inline JS.
   4. Republish with the Artifact tool, passing the same `url`.
-  - Last synced 2026-09-25 UTC (#77 added) with this tool: **30 issues, 23 done
-    / 4 in progress / 3 open.**
+  - Last synced 2026-09-25 18:32 UTC (#76/#77 built on dev) with this tool:
+    **30 issues, 23 done / 6 in progress / 1 open.**
 
 ### 8.7 Checking the live site
 - Sessions **can't reach audetteit.com directly**. Use Firecrawl
