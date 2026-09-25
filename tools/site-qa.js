@@ -20,12 +20,15 @@ const axePath = require.resolve('axe-core/axe.min.js');
 // Page list comes from wrangler.jsonc so new pages are checked automatically.
 const wrangler = fs.readFileSync(path.join(__dirname, '..', 'wrangler.jsonc'), 'utf8');
 const pages = JSON.parse(wrangler.match(/"run_worker_first"\s*:\s*(\[[^\]]*\])/)[1]);
+// Plus a made-up URL, so the custom 404 page (public/404.html, #76) gets the same checks.
+const MISSING = '/this-page-does-not-exist';
+pages.push(MISSING);
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
   const launch = process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {};
   const b = await chromium.launch(launch);
-  const R = { pages, overflow: [], axe: [], csp: [], errors: [] };
+  const R = { pages, overflow: [], axe: [], csp: [], errors: [], notFound: null };
 
   for (const scheme of ['light', 'dark']) for (const [w, h] of [[390, 844], [1366, 900]]) {
     const ctx = await b.newContext({ viewport: { width: w, height: h }, colorScheme: scheme, reducedMotion: 'reduce' });
@@ -33,13 +36,14 @@ const pages = JSON.parse(wrangler.match(/"run_worker_first"\s*:\s*(\[[^\]]*\])/)
     p.on('console', m => { if (/Content Security Policy|Refused to/i.test(m.text())) R.csp.push(m.text().slice(0, 160)); });
     p.on('pageerror', e => R.errors.push(String(e)));
     for (const route of pages) {
-      await p.goto(BASE + route, { waitUntil: 'load' });
+      const res = await p.goto(BASE + route, { waitUntil: 'load' });
+      if (route === MISSING) R.notFound = { status: res.status(), custom: (await p.title()).startsWith('Page not found') };
       // Hide the cookie banner so it doesn't cover the screenshots.
       await p.evaluate(() => { try { localStorage.setItem('audetteit-consent', 'denied'); } catch (e) {} });
       await p.reload({ waitUntil: 'load' });
       const ov = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
       if (ov) R.overflow.push({ scheme, w, route, ov });
-      const name = route === '/' ? 'home' : route.slice(1);
+      const name = route === '/' ? 'home' : route === MISSING ? '404' : route.slice(1);
       await p.screenshot({ path: path.join(OUT, `${name}-${w}-${scheme}.png`), fullPage: true });
     }
     await ctx.close();
@@ -82,6 +86,7 @@ const pages = JSON.parse(wrangler.match(/"run_worker_first"\s*:\s*(\[[^\]]*\])/)
 
   console.log(JSON.stringify(R, null, 1));
   const ok = !R.overflow.length && !R.axe.length && !R.csp.length && !R.errors.length &&
+    R.notFound && R.notFound.status === 404 && R.notFound.custom &&
     R.bannerShown && R.menuHiddenBefore && R.menuOpen && R.room && R.formError && R.faqOpen;
   console.log(ok ? 'QA passed.' : 'QA FAILED.');
   process.exit(ok ? 0 : 1);
