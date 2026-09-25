@@ -10,6 +10,8 @@
     // Only public/ is uploaded — keeps repo files (CLAUDE.md, README, etc.) off the site.
     "directory": "./public",
     "binding": "ASSETS",
+    // Unknown URLs get public/404.html with a real 404 status (GitHub #76).
+    "not_found_handling": "404-page",
     // Only the HTML page routes go through worker/index.js (Markdown
     // negotiation); everything else is served directly as a static asset.
     // Keep in sync with MARKDOWN_PAGES in worker/index.js.

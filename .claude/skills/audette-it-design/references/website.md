@@ -20,6 +20,23 @@ page to the header nav and footer if it belongs there.
 
 **Whenever copy changes, update the `.md` twin in the same change.**
 
+## The 404 page (`public/404.html`, GitHub #76)
+
+Unknown URLs get `public/404.html` with a real 404 status, because
+`wrangler.jsonc` sets `"not_found_handling": "404-page"`. It's the one page
+with no Markdown twin, route, sitemap or `llms.txt` entry, and no canonical.
+It has `<meta name="robots" content="noindex">`. `check-links.py` allows the
+exception and checks the noindex. Use root-relative links (`/css/site.css`),
+because it's served at any path depth.
+
+## Page basics that `check-links.py` enforces (GitHub #77)
+
+- a meta description of 160 characters or fewer
+- exactly one `<h1>`
+- `alt` on every `<img>`
+- `og:image:alt` on every page except the 404
+- no `console.log`, `debugger`, source maps or `sourceMappingURL` in `public/`
+
 ## The `<head>` block (copy exactly)
 
 Order matters:

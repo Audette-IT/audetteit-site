@@ -315,7 +315,8 @@ ASSETS.md                # asset provenance and rights
   2. Google's **exact** GTM snippet (`GTM-TKBJX8F5`).
   3. Meta tags, the favicon links (`/favicon.ico` first, `sizes="48x48"`),
      the canonical, `rel="alternate" type="text/markdown"`, OG/Twitter tags
-     (image: `logo-mark.png`), the manifest, `theme-color #0074A8`, Google
+     (`og:site_name`; image `share.png` 1200x630 with width/height/alt;
+     `twitter:card=summary_large_image`), the manifest, `theme-color #0074A8`, Google
      Fonts and `site.css`.
   4. `WebSite` JSON-LD (homepage only; deliberately no Person/Organization
      schema).
@@ -379,7 +380,13 @@ ASSETS.md                # asset provenance and rights
 - **Icons:** `favicon.ico` (16/32/48, at the root because Google Search
   requests it directly), `favicon-16/32.png`, `apple-touch-icon.png` (180 on
   white), `faviconlogo.png` (192, used by the manifest) and `logo-mark.png`
-  (512, the OG image). All are rendered from `logo.svg`.
+  (512). All are rendered from `logo.svg`.
+- **Share image** (#77): `public/assets/share.png`, 1200x630, draft B
+  ("floor plan", the owner's pick on 2026-09-25) from `tools/share-image.html`.
+  Re-render with `cd tools && npm install && node render-share-image.js b`
+  (fonts come from `@fontsource`, since Google Fonts is blocked in sessions).
+  If the homepage headline or floor plan changes, update the card and
+  re-render.
 - **Accessibility:** a skip link, `:focus-visible` rings (yellow),
   `aria-hidden` on decorative SVG, a mobile menu with `aria-expanded`, room
   pins with `aria-pressed`, a labeled form and AA contrast in both themes.
@@ -625,17 +632,12 @@ numbers share the same sequence.
   Firecrawl shows a made-up URL returning the custom page with 404.
 - **#77 Launch-polish audit** (opened 2026-09-25 from a 19-point "vibe-coded
   site" checklist the owner shared). Audited: 15 pass, 1 fail (#76), 3 to
-  improve. **Done on `dev` (2026-09-25):** `/services` description is 147
-  characters; every page has `og:site_name`, `og:image:width`/`height` (512)
-  and `og:image:alt`/`twitter:image:alt`; the `check-links.py` guards (above).
-  **Waiting on the owner:** pick a share image from the drafts artifact
-  (https://claude.ai/artifact/YUzucfrq5yfFiVLNResfgy, source
-  `tools/share-image.html`: A headline, B floor plan, C two lists). Then
-  render the chosen card to `public/assets/share.png` (1200x630) with a
-  `tools/` script (Google Fonts is blocked in sessions, so load the fonts
-  from npm `@fontsource/red-hat-display` and `@fontsource/red-hat-text`),
-  switch to `twitter:card=summary_large_image`, update width/height/alt on
-  all 6 pages and the skill's `site-page.html`, and add it to `ASSETS.md`.
+  improve. **All built (2026-09-25):** `/services` description 147 characters;
+  `og:site_name`, image width/height/alt on every page; the `check-links.py`
+  guards; and the share image `share.png` (draft B, picked by the owner:
+  "go with B and merge it") with `twitter:card=summary_large_image`. Released
+  together with #76 in PR #79. Close after an opengraph.xyz check of
+  the live site shows the new image.
 - **#67 Home DNS (AD).** Diagnosed and decided (section 11 has the story).
   The owner is moving AD to **`ad.audetteit.com`** (a new forest plus a
   device migration, not a `rendom` rename).
@@ -772,6 +774,8 @@ numbers share the same sequence.
 - **#69: handoff:** this CLAUDE.md rewrite, `tools/`, and the `.md`
   canonical-header fix.
 - **#73: the `audette-it-design` skill** (#68, 2026-09-24).
+- **#79: custom 404 page (#76) and launch polish with share image B (#77)**
+  (2026-09-25).
 - #47, #51, #53, #54, #56, #58, #59, #62, #64, #70 (#23 closed), #71
   (#25 SEO check), #72 (#67 quick-fix correction), #74 (Pacific time),
   #75 (#67 status) and #78 (#67 AD progress, #76/#77 opened, tracker
@@ -843,7 +847,7 @@ numbers share the same sequence.
 |---|---|---|
 | **Issue Tracker** | https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy | **Canonical, keep in sync** (room guide design since 2026-09-25; copy in `tools/tracker-page.html`) |
 | Built-site preview (all pages) | https://claude.ai/artifact/A279VNAj3QAxTAv9axKF2x | Rebuild with `tools/build-preview.py` |
-| Share image drafts (#77) | https://claude.ai/artifact/YUzucfrq5yfFiVLNResfgy | Waiting for the owner to pick A, B or C (source `tools/share-image.html`) |
+| Share image drafts (#77) | https://claude.ai/artifact/YUzucfrq5yfFiVLNResfgy | Owner picked **B** (floor plan) on 2026-09-25; source `tools/share-image.html` |
 | Draft D "room guide" (approved) | https://claude.ai/artifact/7cKQaJZ3nnvpAsfyn3FqhC | History |
 | Draft A "floor plan" | https://claude.ai/artifact/VGNK2aqvB6sSYLTPXQvRSw | Rejected |
 | Draft B "quick start" | https://claude.ai/artifact/AuSs6Fp4zf374FJ8dufRyv | Rejected (feel reused in D) |
@@ -919,7 +923,8 @@ emails, flyers and profiles match the site.
   can't delete branches):
   - release branches: `launch`, `release/analytics-www`,
     `release/gtm-advanced`, `release/clarity`, `release/tag-gateway`,
-    `release/room-guide`, `release/handoff`, `release/design-skill`
+    `release/room-guide`, `release/handoff`, `release/design-skill`,
+    `release/404-and-polish`
   - docs branches: `docs/main-after-46`, `docs/after-50`, `docs/after-52`,
     `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
     `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`,

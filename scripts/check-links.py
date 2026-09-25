@@ -41,7 +41,10 @@ wrangler = (ROOT / "wrangler.jsonc").read_text()
 sitemap = (PUBLIC / "sitemap.xml").read_text()
 llms = (PUBLIC / "llms.txt").read_text()
 headers = (PUBLIC / "_headers").read_text()
-for page in sorted(PUBLIC.glob("*.html")):
+# 404.html is the one exception: it's served for unknown URLs (wrangler.jsonc
+# not_found_handling), so it has no route, twin, sitemap entry or canonical.
+NOT_FOUND = PUBLIC / "404.html"
+for page in sorted(p for p in PUBLIC.glob("*.html") if p != NOT_FOUND):
     route = "/" if page.stem == "index" else f"/{page.stem}"
     md = f"/{page.stem}.md"
     checks = {
@@ -68,6 +71,43 @@ for page in sorted(PUBLIC.glob("*.html")):
             broken.append(f"{page.name}: inline script hash {h} missing from public/_headers CSP")
         if h not in worker:
             broken.append(f"{page.name}: inline script hash {h} missing from worker/index.js CSP")
+
+# Page basics (GitHub #77), so the launch polish doesn't slip back.
+for page in sorted(PUBLIC.glob("*.html")):
+    html = page.read_text()
+    desc = re.search(r'<meta name="description" content="([^"]*)"', html)
+    if not desc or not desc.group(1).strip():
+        broken.append(f"{page.name}: missing meta description")
+    elif len(desc.group(1)) > 160:
+        broken.append(f"{page.name}: meta description is {len(desc.group(1))} characters (keep it to 160)")
+    h1s = len(re.findall(r"<h1[\s>]", html))
+    if h1s != 1:
+        broken.append(f"{page.name}: has {h1s} <h1> elements (needs exactly 1)")
+    for img in re.findall(r"<img\b[^>]*>", html):
+        if not re.search(r'\balt="', img):
+            broken.append(f"{page.name}: <img> without alt: {img[:60]}")
+    if page == NOT_FOUND:
+        if '<meta name="robots" content="noindex">' not in html:
+            broken.append("404.html: needs <meta name=\"robots\" content=\"noindex\">")
+        if 'rel="canonical"' in html:
+            broken.append("404.html: must not have a canonical link")
+    elif 'property="og:image:alt"' not in html:
+        broken.append(f"{page.name}: missing og:image:alt")
+if f"<loc>{SITE}/404</loc>" in sitemap:
+    broken.append("sitemap.xml: 404 must not be listed")
+if '"not_found_handling": "404-page"' not in wrangler:
+    broken.append('wrangler.jsonc: assets.not_found_handling must be "404-page"')
+
+# No debugging leftovers in anything that's served.
+for f in sorted(PUBLIC.rglob("*")):
+    if f.suffix == ".map":
+        broken.append(f"{f.relative_to(ROOT)}: source map is served")
+    elif f.suffix in {".js", ".css", ".html"}:
+        text = f.read_text()
+        if "sourceMappingURL" in text:
+            broken.append(f"{f.relative_to(ROOT)}: sourceMappingURL comment")
+        if f.suffix == ".js" and re.search(r"\bconsole\.(log|debug)\(|\bdebugger\b", text):
+            broken.append(f"{f.relative_to(ROOT)}: console.log/debug or debugger left in")
 
 if broken:
     print("Problems:\n  " + "\n  ".join(broken))
