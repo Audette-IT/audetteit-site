@@ -530,9 +530,23 @@ Only `favicon.ico` differs, because it's re-packed.
      double-wraps the page) and updates the footer's count and sync time.
   3. Hand-edit an item's `"note"` or `"s"` (`open`/`progress`) in the output
      if needed. Closed issues are always `done`.
+  - **Design (2026-09-25, the owner asked for it):** the page is in the
+    room guide style, made with the `audette-it-design` skill:
+    - site tokens (light and dark), Red Hat fonts and the inline logo
+    - status shown as a word plus a shape (filled ink = Done, hollow blue =
+      In progress, hollow grey = Open)
+    - a "Fig. 1" progress bar, yellow +/− toggles, and C/Y callouts for
+      Claude's and the owner's comments
+    - it renders Markdown tables in issue text
+    `tools/tracker-page.html` is a copy of the published page (data
+    included), so the design survives if the artifact is lost. The sync
+    tool only needs `const DATA = ...;` and the footer's "N issues &middot;
+    synced from GitHub" text, so keep both if the page is edited. The
+    checker's hex and inline-script flags on it are expected: issue text
+    quotes old colors, and artifacts need inline JS.
   4. Republish with the Artifact tool, passing the same `url`.
-  - Last synced 2026-09-24 (closing #68) with this tool: **28 issues, 23 done
-    / 4 in progress / 1 open.**
+  - Last synced 2026-09-25 UTC (#77 added) with this tool: **30 issues, 23 done
+    / 4 in progress / 3 open.**
 
 ### 8.7 Checking the live site
 - Sessions **can't reach audetteit.com directly**. Use Firecrawl
@@ -590,6 +604,21 @@ numbers share the same sequence.
   Open as a someday item.
 - **#44 Self-hosted help desk.** A standing reminder (replace the old Zammad
   at `help.audetteit.net`). No deadline.
+- **#76 Custom 404 page** (opened 2026-09-25 at the owner's request). Not
+  started. Today unknown URLs get the platform's blank 404 (no
+  `public/404.html`, no `assets.not_found_handling`). The plan and
+  acceptance criteria are in the issue: `404.html` in the room guide design,
+  `"not_found_handling": "404-page"`, `noindex`, left out of the sitemap,
+  `llms.txt` and Worker routes (`check-links.py` needs an exception), and
+  confirm the security headers apply to the 404 response.
+- **#77 Launch-polish audit** (opened 2026-09-25 from a 19-point "vibe-coded
+  site" checklist the owner shared). Audited against the code + `site-qa.js`:
+  15 pass, 1 fail (no custom 404 = #76), 3 to improve: `/services` meta
+  description is 183 chars (trim to ~155), the share image is the 512px square
+  logo with `twitter:card=summary` (make a 1200x630 room-guide image via the
+  skill, drafts first; add `og:image:alt`/`width`/`height`, `og:site_name`),
+  and add `check-links.py` guards (description length, one `<h1>`, `alt`,
+  no `console.log`/source maps). Not started.
 - **#67 Home DNS (AD).** Diagnosed and decided (section 11 has the story).
   The owner is moving AD to **`ad.audetteit.com`** (a new forest plus a
   device migration, not a `rendom` rename).
@@ -603,25 +632,105 @@ numbers share the same sequence.
   - `ad.audetteit.com` stays internal (no Cloudflare records).
   - **Close when** `nslookup audetteit.com` inside the house matches
     `1.1.1.1`.
-  - **Owner's answers (2026-09-24):** all four apex IPs
-    (`192.168.4.59/.166/.31/.141`) are separate DCs, bare metal, Windows
-    Server 2025. Joined: 1 member server + 3 PCs. Nothing uses LDAP yet;
-    **Authentik** is planned (build it against `ad.audetteit.com`).
-  - **Updated plan** (latest #67 comment): demote 2 old DCs, build the new
-    forest `ad.audetteit.com` on them, rejoin the 4 machines one at a time,
-    switch DHCP DNS, then retire the other 2 old DCs.
+  - **AD move IN PROGRESS** (started 2026-09-24 ~11:10 AM PT; walk the
+    owner through one step at a time, read-only checks first; details in the
+    #67 comments from 11:15 AM PT on).
+    - **Only 2 DCs** (the earlier "four DCs / 1 member server" notes were
+      wrong): `WIN-I2OP82Q15QJ` (LAN `192.168.4.59`, single 500 GB NVMe
+      disk, holds **all 5 FSMO roles**) and `HP-Z640SERVER` (`192.168.4.166`
+      on a Hyper-V switch, so it's a **Hyper-V host**; C: on a Samsung SSD
+      with 211 GB free, plus a 1 TB Toshiba (disk 1) that is nearly empty but
+      holds the HP's **EFI boot partition**: never wipe disk 1). Both run
+      Windows Server 2025; replication healthy.
+    - Domain `audetteit.com`, NetBIOS `AUDETTEIT`, `Windows2025Domain`.
+      `192.168.4.31`/`.141` in the apex are **stale records** (neither DC).
+    - **Tailscale:** AD lists `WIN-I2OP82Q15QJ`'s IPv4 as its Tailscale IP
+      `100.83.160.98`; the HP has Tailscale `100.91.184.103`. Fix before any
+      demotion: untick "Register this connection's addresses in DNS" on the
+      Tailscale adapters, delete the records, `ipconfig /registerdns`.
+    - **DHCP is the home router**, so cutover = change the router's DNS.
+    - **Machines to move:** `DESKTOP-AUATMUT`, `DESKTOP-RL6BHNS`,
+      `DESKTOP-V4NRKDB`, `michaels-mac-mi` (a Mac). No separate member
+      server.
+    - **Accounts:** `Administrator`, `mjaudettejr`; `adfs_svc` (AD FS is
+      installed and planned, not in use: rebuild AD FS fresh in the new
+      domain, it can't be migrated; it's on `WIN-I2OP82Q15QJ`);
+      `svc_authentik` (Authentik isn't running: don't recreate).
+    - **GPOs to carry:** `GPO-Servers-Security`, `TV-Server`,
+      `TV Kiosk Lockdown`, `GPO-Workstations-Security`, `DesktopLockdown`.
+      Skip `GPO-Workstations-WSUS` (WSUS unused).
+    - **Done:** inventory; GPO backup to `C:\ADMove\GPOs` on
+      `WIN-I2OP82Q15QJ` (all 8, with HTML reports); DNS zone export
+      (`C:\Windows\System32\dns\audetteit.com.export`).
+    - **Backups done (step 2, 2026-09-24):** the Toshiba's empty 931 GB
+      NTFS partition 3 is now **`B:`** on the HP (not formatted; partitions
+      1-2 are the EFI/MSR). HP System State backup is on `B:`;
+      `WIN-I2OP82Q15QJ` has a full bare-metal + System State backup on
+      `\\192.168.4.166\DCBackups` (`B:\DCBackups`, Domain Admins only). Use the
+      LAN IP, not `\\HP-Z640SERVER`: the name-based run failed mid-way
+      (likely Tailscale name resolution).
+    - **AD FS is on `WIN-I2OP82Q15QJ`** (uninstall before retiring it).
+    - **HP capacity:** 72 logical processors, 32 GB RAM, but only ~5-7 GB
+      free: Task Manager shows ~29.5 GB in use with only ~5 GB in processes
+      (`dns.exe` ~2 GB). Unexplained; look into it later.
+    - **Step 3 done (2026-09-24):** on both DCs, Tailscale adapters no longer
+      register in DNS (`Set-DnsClient -RegisterThisConnectionsAddress
+      $false`), DNS listens on the LAN IP only (`dnscmd
+      /resetlistenaddresses`), and the stale `.31`/`.141` A records are gone
+      from `audetteit.com` and `_msdcs`. Domain lookups now return only `.59`
+      and `.166`. The HP (was DHCP) has an eero reservation for `.166`.
+    - **Step 4-6 done (2026-09-24, finished ~11:15 PM PT): the new forest
+      exists.**
+      - VM **`ADDC01`** on the HP: Gen 2, 2 vCPU, **3 GB static** RAM (4 GB
+        didn't fit), checkpoints off, Hyper-V time sync off, autostart on,
+        switch `External Lan`. Disk `B:\VMs\ADDC01\ADDC01.vhdx`, copied from
+        the read-only master `B:\ISO\WS2025-DC-eval-ORIGINAL.vhdx` (Server
+        2025 Datacenter **Evaluation**, 180 days; fine because the VM is
+        temporary). Don't hard-power-off a VM during first-boot setup: that
+        caused the "computer restarted unexpectedly" loop on the first try.
+      - Static IP **`192.168.4.20/22`**, gateway `192.168.4.1`, eero
+        reservation added.
+      - This image has **no ServerManager/ADDSDeployment PowerShell modules**
+        (`Install-WindowsFeature` isn't found), so the role and the promotion
+        were done in the Server Manager GUI. Use built-in exes (`dcdiag`,
+        `nltest`, `w32tm`, `dnscmd`) for checks.
+      - Forest/domain **`ad.audetteit.com`**, NetBIOS **`AUDETTE`** (the
+        owner's choice; `AUDETTEIT` is taken by the old domain), DNS
+        installed, **no delegation** created in the old zone.
+      - Checks: `nltest /dsgetdc:ad.audetteit.com` finds ADDC01 (PDC, GC,
+        KDC, DNS). `dcdiag /q`: DFSREvent/SystemLog fail only on first-boot
+        noise, plus one RID-allocator event 16642 at 23:07 from first boot;
+        `dcdiag /test:RidManager` **passed** (pool 1100-1599). Time: `w32tm` peers
+        `time.cloudflare.com`/`time.windows.com`, synced, stratum 4.
+    - **DNS between the domains done (2026-09-24, ~11:57 PM PT):**
+      - On ADDC01: a **conditional forwarder** `audetteit.com` →
+        `192.168.4.59`, `192.168.4.166` (not AD-stored), made in DNS Manager
+        because `dnscmd` isn't on this image. Its "not authoritative"
+        validation X was a false alarm; lookups work.
+      - In the old zone (on `WIN-I2OP82Q15QJ`, AD-integrated so it replicates
+        to the HP): a **delegation** `ad` NS `ADDC01.ad.audetteit.com` plus
+        glue `ADDC01.ad` A `192.168.4.20`. Remove it when the old zone is
+        retired.
+      - Verified on **both** old DCs: `nslookup ADDC01.ad.audetteit.com` →
+        `192.168.4.20`, and `nltest /dsgetdc:ad.audetteit.com` finds ADDC01.
+      - `dnscmd` needs an **elevated** PowerShell ("Administrator:" in the
+        title). Unelevated, Domain Admins is "deny only" and every command
+        returns ERROR_ACCESS_DENIED.
+      - **At cutover, delete ADDC01's `audetteit.com` forwarder**, or the new
+        domain will keep sending the apex to the old DCs (the #67 problem).
+    - **Next:** import the GPOs and recreate `mjaudettejr`.
+    - Later, optional: add UPN suffix `audetteit.com` so sign-in can be
+      `mjaudettejr@audetteit.com`.
+    - **Plan:** build the
+      new forest `ad.audetteit.com` in a **Hyper-V VM on the HP** (ADDC01,
+      built) so both old DCs keep running until the end; import the
+      GPOs; recreate `mjaudettejr`; move the 4 machines one at a time; point
+      the router's DNS at the new DC; then retire the old domain and promote
+      both physical servers into `ad.audetteit.com`; rebuild AD FS last.
   - **Quick fix done** (2026-09-24, owner's screenshot): inside the house,
     `nslookup www.audetteit.com` via DC `192.168.4.59` returns
     `172.67.161.97` and `104.21.9.228`. The apex still resolves to the DCs,
     so the site still won't load at home until the AD move.
-  - **Not started yet** (owner confirmed 2026-09-24: "i havent done anything
-    expet the dns reccord for www"): the Tailscale DNS cleanup and the whole
-    move to `ad.audetteit.com`. The move is still the plan. Walk the owner
-    through it step by step when they start.
-  - **Found in the owner's screenshot:** DC `win-i2op82q15qj` registers
-    Tailscale addresses in AD DNS (`100.83.160.98`, `fd7a:115c:a1e0:…`).
-    Advised turning off DNS registration on the Tailscale adapter and
-    deleting those records.
 
 **Closed:**
 - **As completed:** #21, #22, #23, #24, #26, #27, #28, #29, #30, #31, #33, #34,
@@ -714,7 +823,7 @@ numbers share the same sequence.
 
 | What | Link | Status |
 |---|---|---|
-| **Issue Tracker** | https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy | **Canonical, keep in sync** |
+| **Issue Tracker** | https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy | **Canonical, keep in sync** (room guide design since 2026-09-25; copy in `tools/tracker-page.html`) |
 | Built-site preview (all pages) | https://claude.ai/artifact/A279VNAj3QAxTAv9axKF2x | Rebuild with `tools/build-preview.py` |
 | Draft D "room guide" (approved) | https://claude.ai/artifact/7cKQaJZ3nnvpAsfyn3FqhC | History |
 | Draft A "floor plan" | https://claude.ai/artifact/VGNK2aqvB6sSYLTPXQvRSw | Rejected |
