@@ -530,6 +530,20 @@ Only `favicon.ico` differs, because it's re-packed.
      double-wraps the page) and updates the footer's count and sync time.
   3. Hand-edit an item's `"note"` or `"s"` (`open`/`progress`) in the output
      if needed. Closed issues are always `done`.
+  - **Design (2026-09-25, the owner asked for it):** the page is in the
+    room guide style, made with the `audette-it-design` skill:
+    - site tokens (light and dark), Red Hat fonts and the inline logo
+    - status shown as a word plus a shape (filled ink = Done, hollow blue =
+      In progress, hollow grey = Open)
+    - a "Fig. 1" progress bar, yellow +/− toggles, and C/Y callouts for
+      Claude's and the owner's comments
+    - it renders Markdown tables in issue text
+    `tools/tracker-page.html` is a copy of the published page (data
+    included), so the design survives if the artifact is lost. The sync
+    tool only needs `const DATA = ...;` and the footer's "N issues &middot;
+    synced from GitHub" text, so keep both if the page is edited. The
+    checker's hex and inline-script flags on it are expected: issue text
+    quotes old colors, and artifacts need inline JS.
   4. Republish with the Artifact tool, passing the same `url`.
   - Last synced 2026-09-25 UTC (#77 added) with this tool: **30 issues, 23 done
     / 4 in progress / 3 open.**
@@ -809,7 +823,7 @@ numbers share the same sequence.
 
 | What | Link | Status |
 |---|---|---|
-| **Issue Tracker** | https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy | **Canonical, keep in sync** |
+| **Issue Tracker** | https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy | **Canonical, keep in sync** (room guide design since 2026-09-25; copy in `tools/tracker-page.html`) |
 | Built-site preview (all pages) | https://claude.ai/artifact/A279VNAj3QAxTAv9axKF2x | Rebuild with `tools/build-preview.py` |
 | Draft D "room guide" (approved) | https://claude.ai/artifact/7cKQaJZ3nnvpAsfyn3FqhC | History |
 | Draft A "floor plan" | https://claude.ai/artifact/VGNK2aqvB6sSYLTPXQvRSw | Rejected |
