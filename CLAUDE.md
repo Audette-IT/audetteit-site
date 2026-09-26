@@ -389,6 +389,11 @@ ASSETS.md                # asset provenance and rights
   (fonts come from `@fontsource`, since Google Fonts is blocked in sessions).
   If the homepage headline or floor plan changes, update the card and
   re-render.
+- **Wallpapers** (not served): `brand/wallpapers/{desktop,mac,ultrawide,phone,tablet}/`,
+  draft B "the mark" (logo, 3px rule, "Audette IT", "Tech help for every
+  room") in light (`#F2F4F6`) and dark (`#111418`). Re-render all 42 with
+  `cd tools && npm install && node render-wallpaper.js`; add sizes to `SIZES`
+  there. Could be deployed to domain PCs by GPO after the AD move (#67).
 - **Accessibility:** a skip link, `:focus-visible` rings (yellow),
   `aria-hidden` on decorative SVG, a mobile menu with `aria-expanded`, room
   pins with `aria-pressed`, a labeled form and AA contrast in both themes.
@@ -566,8 +571,8 @@ Only `favicon.ico` differs, because it's re-packed.
     checker's hex and inline-script flags on it are expected: issue text
     quotes old colors, and artifacts need inline JS.
   4. Republish with the Artifact tool, passing the same `url`.
-  - Last synced 2026-09-25 UTC (#76 and #77 closed) with this tool:
-    **30 issues, 25 done / 4 in progress / 1 open.**
+  - Last synced 2026-09-25 UTC (#44 planned, now in progress) with this tool:
+    **30 issues, 25 done / 5 in progress / 0 open.**
 
 ### 8.7 Checking the live site
 - Sessions **can't reach audetteit.com directly**. Use Firecrawl
@@ -623,8 +628,29 @@ numbers share the same sequence.
 - **#43 Markdown for Agents.** It's a Cloudflare Pro feature. The Worker
   stand-in (Accept negotiation, `.md` twins, `llms*.txt`) covers the need.
   Open as a someday item.
-- **#44 Self-hosted help desk.** A standing reminder (replace the old Zammad
-  at `help.audetteit.net`). No deadline.
+- **#44 Help desk. Planned 2026-09-25** (`/grill-me`; the owner said "this
+  is correct"). It will be **built** in a new private repo
+  **`Audette-IT/audetteit-help`**, whose own `CLAUDE.md` and issues are the
+  source of truth from then on. The plan is in the #44 comment:
+  - `support.audetteit.com` on Cloudflare free (Worker `audetteit-help`,
+    D1, Durable Objects for chat); TypeScript + Hono, room guide design
+  - Access with a one-time PIN for Michael; customers need no account
+  - Gmail messages labeled `Help desk` on `michael.audette@audetteit.com`
+    become requests (Gmail API via OAuth)
+  - build order: requests → customer side → live chat → knowledge base
+  - The owner's rule: **future plans go in that repo's `CLAUDE.md` and
+    also become issues there.** Its issues should show in this tracker under
+    "Help desk" (`tools/sync-tracker.py` needs a second-repo option).
+  - **Blocked on the owner:** the GitHub connector can't create repos in
+    the org (403), so the owner creates the empty repo and gives the
+    Claude app access; then `add_repo`.
+  - **Starter `CLAUDE.md` for the new repo:** `tools/audetteit-help-CLAUDE.md`
+    (written 2026-09-25, sent to the owner to start a session with it).
+  - **Changes this site will need** (through this repo, with a preview):
+    the "No tickets and no call center" line becomes "No call center. You
+    talk to me from the first email to the fix." (home + how-it-works + twins),
+    and the contact form posts to the help desk with Turnstile (CSP +
+    privacy page updates).
 - **#67 Home DNS (AD).** Diagnosed and decided (section 11 has the story).
   The owner is moving AD to **`ad.audetteit.com`** (a new forest plus a
   device migration, not a `rendom` rename).
@@ -767,6 +793,8 @@ numbers share the same sequence.
 - **#73: the `audette-it-design` skill** (#68, 2026-09-24).
 - **#79: custom 404 page (#76) and launch polish with share image B (#77)**
   (2026-09-25).
+- **#81: wallpapers (the mark, 42 PNGs in `brand/wallpapers/`) and the
+  help desk plan (#44, `tools/audetteit-help-CLAUDE.md`)** (2026-09-26).
 - #47, #51, #53, #54, #56, #58, #59, #62, #64, #70 (#23 closed), #71
   (#25 SEO check), #72 (#67 quick-fix correction), #74 (Pacific time),
   #75 (#67 status), #78 (#67 AD progress, #76/#77 opened, tracker
@@ -839,6 +867,7 @@ numbers share the same sequence.
 | **Issue Tracker** | https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy | **Canonical, keep in sync** (room guide design since 2026-09-25; copy in `tools/tracker-page.html`) |
 | Built-site preview (all pages) | https://claude.ai/artifact/A279VNAj3QAxTAv9axKF2x | Rebuild with `tools/build-preview.py` |
 | Share image drafts (#77) | https://claude.ai/artifact/YUzucfrq5yfFiVLNResfgy | Owner picked **B** (floor plan); live since PR #79. Source `tools/share-image.html` |
+| Desktop wallpaper drafts | https://claude.ai/artifact/VaRGQZyRnswZfgiW1BHqvs | Owner picked **B, the mark** (2026-09-26). 42 PNGs in `brand/wallpapers/` (21 device sizes × light/dark), rendered by `tools/render-wallpaper.js`; zip sent to the owner |
 | Draft D "room guide" (approved) | https://claude.ai/artifact/7cKQaJZ3nnvpAsfyn3FqhC | History |
 | Draft A "floor plan" | https://claude.ai/artifact/VGNK2aqvB6sSYLTPXQvRSw | Rejected |
 | Draft B "quick start" | https://claude.ai/artifact/AuSs6Fp4zf374FJ8dufRyv | Rejected (feel reused in D) |
@@ -915,7 +944,7 @@ emails, flyers and profiles match the site.
   - release branches: `launch`, `release/analytics-www`,
     `release/gtm-advanced`, `release/clarity`, `release/tag-gateway`,
     `release/room-guide`, `release/handoff`, `release/design-skill`,
-    `release/404-and-polish`
+    `release/404-and-polish`, `release/wallpapers-help-plan`
   - docs branches: `docs/main-after-46`, `docs/after-50`, `docs/after-52`,
     `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
     `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`,
@@ -931,6 +960,5 @@ emails, flyers and profiles match the site.
 ## 15. Open questions for the owner (don't guess these)
 
 - More services? The list will grow as they're built out.
-- Whether and when to build the self-hosted help desk (#44).
 - The dashboard to-dos in section 7: Branch control, Access for previews,
   turning off GitHub Pages, and `main` branch protection.
