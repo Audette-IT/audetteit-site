@@ -777,8 +777,44 @@ numbers share the same sequence.
         stays unlinked (delete it later if unused).
       - `redircmp` sends newly joined computers to `OU=Workstations`. Move
         the Mac to `OU=MacOS` after it joins.
-    - **Next:** move the PCs one at a time (`DESKTOP-AUATMUT`,
-      `DESKTOP-RL6BHNS`, `DESKTOP-V4NRKDB`, then `michaels-mac-mi`).
+    - **Change of order (owner, 2026-09-26): a second new DC before any PC
+      moves.** Converting **`WIN-I2OP82Q15QJ`** (not the HP), so the new
+      domain survives the HP (which hosts ADDC01) going down. The old domain
+      keeps running on the HP. Plan: move home DNS off `.59` → back up and
+      remove AD CS, AD FS and IIS → move the 5 FSMO roles to the HP → demote
+      `WIN-I2OP` → workgroup → join `ad.audetteit.com` → promote as the
+      second DC (DNS + GC).
+      - **Found on `WIN-I2OP`:** an **Enterprise Root CA**
+        `audetteit-WIN-I2OP82Q15QJ-CA` (it blocks demotion until removed). It
+        issued only 4 certs: both DCs' DC certs, `fs.audetteit.com` (AD FS)
+        and `wac.audetteit.com` (Windows Admin Center, which the owner doesn't
+        use; don't rebuild it). IIS only has a leftover "WSUS
+        Administration" site (WSUS itself is gone). AD FS is configured as
+        `fs.audetteit.com` but unused. No other shares.
+      - **CA backed up** (key `.p12` with an owner-chosen password,
+        `CAConfig.reg`, database): `\\192.168.4.166\DCBackups\ADMove\CABackup`
+        (all of `C:\ADMove` was copied there).
+      - **Home DNS moved off `.59` (done):** eero custom DNS is now
+        **`192.168.4.20` primary, `192.168.4.166` secondary** (was `.59`
+        only). ADDC01 was checked first: it resolves internet names, both
+        domains and `www.audetteit.com` (Cloudflare IPs).
+      - **Gotcha on PCs:** `DESKTOP-AUATMUT` had `.59` pinned in **two**
+        places: a static `NameServer` (fixed with `netsh interface ipv4 set
+        dnsservers name="Wi-Fi" source=dhcp`) and Windows 11's per-network
+        **`ProfileNameServer`** (Settings → Wi-Fi → properties → DNS server
+        assignment). Deleting the registry value didn't stick; the Settings
+        app did. It now uses `.20`/`.166`. **Check every PC for both.**
+        (`Set-DnsClientServerAddress` failed with a CIM access error even
+        elevated; `netsh` worked.)
+      - `DESKTOP-AUATMUT` has **no enabled local admin** (built-in
+        Administrator disabled). Create `localadmin` and test it before it
+        leaves the old domain. Its profiles: `mjaudettejr`, `TV`.
+      - **In progress:** DNS query logging on `WIN-I2OP`
+        (`C:\ADMove\dns-queries.log`) to find devices still using `.59`
+        before it stops serving DNS. Turn logging off afterwards.
+    - **After the second DC:** move the PCs one at a time
+      (`DESKTOP-AUATMUT`, `DESKTOP-RL6BHNS`, `DESKTOP-V4NRKDB`, then
+      `michaels-mac-mi`).
     - Later, optional: add UPN suffix `audetteit.com` so sign-in can be
       `mjaudettejr@audetteit.com`.
     - **Plan:** build the
