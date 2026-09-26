@@ -13,6 +13,10 @@ Update this whenever an asset is added or replaced (GitHub issue #39).
 | `apple-touch-icon.png` | Rendered from `logo.svg` at 180×180 on white. | Follows `logo.svg`. |
 | `faviconlogo.png` | Rendered from `logo.svg` at 192×192 (used by `site.webmanifest`). | Follows `logo.svg`. |
 
+**Wallpapers** (not served; in `brand/wallpapers/`): draft B "the mark" (the owner's pick, 2026-09-26) from
+`tools/wallpaper.html`, rendered by `tools/render-wallpaper.js` in 21 sizes (desktop, Mac, ultrawide,
+phone, tablet) × light/dark. The logo plus Red Hat fonts (`@fontsource`, SIL OFL); rights follow `logo.svg`.
+
 No stock photos, icon packs, or other third-party imagery are used. The floor-plan
 illustration, the menu icon and the small note icons are inline SVGs drawn in
 the HTML.
