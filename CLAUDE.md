@@ -812,12 +812,9 @@ numbers share the same sequence.
       - **DNS log results (30 min, 2026-09-26 ~3 PM PT):** ~30 clients still
         asked `.59`. Most are phones/cameras/TVs waiting for their eero DHCP
         lease to renew (re-check the next day). Real fixes:
-        - **Pi-hole at `192.168.4.77`** conditionally forwards
-          `audetteit.com` to `.59` → change the IP to `192.168.4.20`
-          (dnsmasq forwarding covers subdomains, so one entry serves
-          `ad.audetteit.com` too). **At cutover, change its domain to
-          `ad.audetteit.com`**, or Pi-hole users keep sending the website to
-          the DCs.
+        - **Pi-hole at `192.168.4.77`: uninstalled** (owner, 2026-09-26),
+          so no forwarder to fix. If `.77` still asks `.59` for `_ldap`
+          records in the next log, it's some other domain-aware device.
         - the HP (`.166`): its NIC DNS or its DNS server forwarder points at
           `.59` (being checked)
         - `DESKTOP-V4NRKDB` (`.48`) and the Mac `MAC-E85B94` (`.38`) likely
