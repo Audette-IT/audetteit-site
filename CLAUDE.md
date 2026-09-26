@@ -860,6 +860,7 @@ numbers share the same sequence.
 | **Issue Tracker** | https://claude.ai/artifact/MXvC5hYXLAz4ged3ufUYQy | **Canonical, keep in sync** (room guide design since 2026-09-25; copy in `tools/tracker-page.html`) |
 | Built-site preview (all pages) | https://claude.ai/artifact/A279VNAj3QAxTAv9axKF2x | Rebuild with `tools/build-preview.py` |
 | Share image drafts (#77) | https://claude.ai/artifact/YUzucfrq5yfFiVLNResfgy | Owner picked **B** (floor plan); live since PR #79. Source `tools/share-image.html` |
+| Desktop wallpaper drafts | https://claude.ai/artifact/VaRGQZyRnswZfgiW1BHqvs | Waiting for the owner to pick A (floor plan), B (mark) or C (need a hand?). Source `tools/wallpaper.html` (1920x1080 canvases, light + dark); render the pick like `tools/render-share-image.js` |
 | Draft D "room guide" (approved) | https://claude.ai/artifact/7cKQaJZ3nnvpAsfyn3FqhC | History |
 | Draft A "floor plan" | https://claude.ai/artifact/VGNK2aqvB6sSYLTPXQvRSw | Rejected |
 | Draft B "quick start" | https://claude.ai/artifact/AuSs6Fp4zf374FJ8dufRyv | Rejected (feel reused in D) |
