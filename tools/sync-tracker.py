@@ -76,6 +76,11 @@ data = json.loads(html[start + len("const DATA = "):end])
 changes = []
 known = set()
 for group in data:
+    # Groups from another repo (e.g. "Help desk", repo Audette-IT/audetteit-help)
+    # carry a "repo" key. Their numbers overlap this repo's, so leave them for
+    # that repo's session to sync.
+    if group.get("repo", REPO) != REPO:
+        continue
     for item in group["items"]:
         n = item["n"]
         known.add(n)
