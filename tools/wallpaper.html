@@ -1,0 +1,308 @@
+<title>Desktop Wallpaper Drafts</title>
+<!-- Source for the Audette IT desktop wallpaper. Each .wp is a real 1920x1080 canvas; tools/render-wallpaper.js renders the picked one. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700;900&family=Red+Hat+Text:wght@400;500;700&display=swap">
+<style>
+  :root { --paper:#FFFFFF; --paper-2:#F2F4F6; --ink:#1A1E23; --ink-soft:#545D66; --rule:#1A1E23; --hair:#D9DEE3; color-scheme: light; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --paper:#111418; --paper-2:#181C21; --ink:#ECEFF2; --ink-soft:#A7B0B9; --rule:#ECEFF2; --hair:#2A3037; color-scheme: dark; } }
+  :root[data-theme="dark"] { --paper:#111418; --paper-2:#181C21; --ink:#ECEFF2; --ink-soft:#A7B0B9; --rule:#ECEFF2; --hair:#2A3037; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font:400 1rem/1.6 "Red Hat Text","Segoe UI",system-ui,sans-serif; }
+  main { max-width:1180px; margin:0 auto; padding:clamp(28px,5vw,56px) clamp(16px,4vw,40px) 64px; }
+  h1,h2 { font-family:"Red Hat Display","Segoe UI",system-ui,sans-serif; margin:0; text-wrap:balance; }
+  .intro h1 { font-size:clamp(2rem,5vw,3.2rem); font-weight:900; line-height:1; letter-spacing:-0.03em; }
+  .intro p { color:var(--ink-soft); margin:16px 0 0; max-width:62ch; }
+  .draft { margin-top:clamp(32px,5vw,48px); border-top:3px solid var(--rule); padding-top:16px; }
+  .draft-head { display:flex; gap:12px; align-items:baseline; margin-bottom:14px; }
+  .letter { flex:none; display:inline-grid; place-items:center; width:30px; height:30px; border-radius:50%; background:#FFD23F; color:#1A1E23; font:900 1rem/1 "Red Hat Display",sans-serif; }
+  .draft-head h2 { font-size:1.3rem; font-weight:900; }
+  .draft-head p { color:var(--ink-soft); margin:4px 0 0; }
+  .pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+  .lbl { margin:0 0 6px; font:700 0.78rem/1.2 "Red Hat Display",sans-serif; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); }
+  .frame { position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; border:2px solid var(--hair); border-radius:6px; }
+  .frame .wp { position:absolute; top:0; left:0; transform-origin:0 0; transform:scale(var(--s,0.3)); }
+  @media (max-width:760px) { .pair { grid-template-columns:minmax(0,1fr); } }
+
+  /* ---- The wallpaper canvas: 1920x1080, fixed colors per theme (it becomes a PNG). ---- */
+  .wp { width:1920px; height:1080px; position:relative; overflow:hidden; font-family:"Red Hat Text","Segoe UI",sans-serif; }
+  .wp.light { --bg:#F2F4F6; --fg:#1A1E23; --soft:#545D66; --draw:#1A1E23; --draw-soft:#8A949E; --wifi:#0074A8; --rule:#1A1E23; --card:#FFFFFF; }
+  .wp.dark  { --bg:#111418; --fg:#ECEFF2; --soft:#A7B0B9; --draw:#ECEFF2; --draw-soft:#7E8993; --wifi:#6CC6F0; --rule:#ECEFF2; --card:#181C21; }
+  .wp { background:var(--bg); color:var(--fg); }
+  .wp .plan { position:relative; }
+  .wp .plan svg { display:block; width:100%; height:auto; }
+  .wp .plan .pl { stroke:var(--draw); }
+  .wp .plan .pd { stroke:var(--draw-soft); }
+  .wp .plan .pw { stroke:var(--wifi); }
+  .wp .plan .pt { fill:var(--soft); font-family:"Red Hat Text",sans-serif; font-weight:700; }
+  .wp .pin { position:absolute; transform:translate(-50%,-50%); width:44px; height:44px; border-radius:50%; border:3px solid #1A1E23; background:#FFD23F; color:#1A1E23; display:grid; place-items:center; font:900 21px/1 "Red Hat Display",sans-serif; }
+  .wp .pin.on { background:#1A1E23; color:#FFD23F; border-color:#FFD23F; }
+  .wp .brand { position:absolute; right:96px; bottom:120px; display:flex; align-items:center; gap:18px; }
+  .wp .brand svg { width:64px; height:70px; }
+  .wp .brand b { display:block; font:900 38px/1 "Red Hat Display",sans-serif; letter-spacing:-0.01em; }
+  .wp .brand small { display:block; font-size:20px; color:var(--soft); margin-top:6px; }
+
+  .a .a-plan { position:absolute; right:96px; top:120px; width:920px; }
+  .a .cap { margin:14px 0 0; font-size:18px; color:var(--soft); border-top:1px solid var(--draw-soft); padding-top:12px; }
+  .a .brand { right:96px; bottom:110px; }
+  .a .a-plan { top:96px; width:860px; }
+
+  .b .b-center { position:absolute; inset:0 0 60px 0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .b .b-center svg { width:220px; height:242px; }
+  .b .b-rule { width:360px; border-top:4px solid var(--rule); margin:44px 0 30px; }
+  .b .b-name { font:900 72px/1 "Red Hat Display",sans-serif; letter-spacing:-0.03em; }
+  .b .b-line { margin-top:16px; font-size:26px; color:var(--soft); }
+
+  .c .c-plan { position:absolute; left:540px; top:110px; width:620px; opacity:0.35; }
+  .c .c-card { position:absolute; right:96px; bottom:120px; width:620px; background:var(--card); border:4px solid var(--rule); border-radius:8px; padding:40px 44px; }
+  .c .c-card h2 { font:900 64px/1 "Red Hat Display",sans-serif; letter-spacing:-0.02em; }
+  .c .c-card p { margin:16px 0 0; font-size:24px; color:var(--soft); }
+  .c .c-addr { display:block; margin-top:24px; font:700 30px/1.2 "Red Hat Display",sans-serif; }
+  .c .c-foot { display:flex; align-items:center; gap:12px; margin-top:28px; padding-top:20px; border-top:1px solid var(--draw-soft); font-size:19px; color:var(--soft); }
+  .c .c-foot svg { width:30px; height:33px; }
+</style>
+
+<main>
+  <div class="intro">
+    <h1>Desktop wallpaper drafts</h1>
+    <p>Three directions in the room guide style, each in light and dark. Each is a real 1920×1080 picture, scaled to fit here. Everything sits right of center and above the bottom edge, so desktop icons (top left) and the taskbar or dock stay clear. Pick one, and I'll make it at 1080p, 1440p and 4K, plus Mac and ultrawide sizes if you want.</p>
+  </div>
+  <section class="draft"><div class="draft-head"><span class="letter">A</span><div><h2>The floor plan</h2><p>The homepage drawing, large and quiet on the right, with your logo in the bottom-right corner. Icons on the left stay readable.</p></div></div>
+<div class="pair"><div><p class="lbl">Light</p><div class="frame"><div class="wp a light" id="wp-a-light"><div class="a-plan"><div class="plan"><svg viewBox="0 0 520 400" aria-hidden="true">
+          <g class="pl" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="14" y="14" width="492" height="372" stroke-width="5"/>
+            <path d="M300 14 V120 M300 150 V290 M300 160 H506 M14 200 H150 M180 200 H300 M200 200 V250 M200 280 V386 M300 290 H380 M410 290 H506 M300 320 V386" stroke-width="3.5"/>
+            <rect x="60" y="120" width="160" height="46" rx="8" stroke-width="2"/>
+            <rect x="96" y="24" width="88" height="8" rx="2" stroke-width="2"/>
+            <path d="M320 24 H496 V120" stroke-width="2"/>
+            <rect x="360" y="80" width="70" height="34" rx="4" stroke-width="2"/>
+            <circle cx="395" cy="97" r="6" stroke-width="1.6"/>
+            <rect x="330" y="176" width="130" height="44" rx="4" stroke-width="2"/>
+            <path d="M370 186 H420" stroke-width="3"/>
+            <rect x="470" y="180" width="26" height="30" rx="3" stroke-width="1.6"/>
+            <rect x="34" y="240" width="72" height="120" rx="6" stroke-width="2"/>
+            <rect x="130" y="330" width="56" height="34" rx="3" stroke-width="1.6"/>
+            <rect x="232" y="232" width="36" height="24" rx="4" stroke-width="2"/>
+            <path d="M242 232 V222 M258 232 V222" stroke-width="2"/>
+            <rect x="330" y="306" width="40" height="66" rx="3" stroke-width="2"/>
+          </g>
+          <g class="pd" fill="none" stroke-width="1.4" stroke-linecap="round">
+            <path d="M150 200 A30 30 0 0 1 180 230 M300 120 A30 30 0 0 1 330 150 M200 250 A30 30 0 0 0 230 280 M380 290 A30 30 0 0 1 410 320"/>
+            <path d="M60 140 H220 M320 44 H476 V120 M34 266 H106 M334 318 H366 M334 330 H366 M334 342 H366 M334 354 H366"/>
+            <rect x="110" y="70" width="60" height="30" rx="4"/>
+            <circle cx="395" cy="246" r="14"/>
+            <rect x="400" y="316" width="90" height="56" rx="6" stroke-dasharray="5 5"/>
+          </g>
+          <g class="pw" fill="none" stroke-width="1.4" stroke-dasharray="3 6">
+            <circle cx="250" cy="244" r="50"/>
+            <circle cx="250" cy="244" r="100" opacity="0.7"/>
+          </g>
+          <g class="pt" font-size="11.5" letter-spacing="0.08em">
+            <text x="30" y="46">LIVING ROOM</text><text x="320" y="146">KITCHEN</text><text x="316" y="278">OFFICE</text>
+            <text x="30" y="226">KIDS' ROOM</text><text x="214" y="302">HALL</text><text x="388" y="306">GARAGE</text>
+          </g>
+        </svg><span class="pin" style="left:25%;top:22%">A</span><span class="pin" style="left:80%;top:12%">B</span><span class="pin" style="left:76%;top:61%">C</span><span class="pin" style="left:30%;top:74%">D</span><span class="pin on" style="left:48%;top:52%">E</span><span class="pin" style="left:90%;top:84%">F</span></div><p class="cap">Fig. 1: every room I can help with</p></div><div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 44" width="40" height="44" aria-hidden="true">
+  <defs>
+    <clipPath id="ait-shield"><path d="M3.5 8.5 Q20 2.5 36.5 8.5 V22.5 C36.5 32.5 29 39.5 20 43 C11 39.5 3.5 32.5 3.5 22.5 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#ait-shield)">
+    <rect x="0" y="0" width="20" height="44" fill="#1FA6E0"/>
+    <rect x="20" y="0" width="20" height="44" fill="#0B2545"/>
+    <g fill="none" stroke="#3BB9EE" stroke-width="1" stroke-linecap="round" opacity="0.75">
+      <path d="M40 12 H33 V16"/><path d="M40 29 H34 L31.5 31.5"/>
+    </g>
+    <g fill="#3BB9EE" opacity="0.9"><circle cx="33" cy="16.6" r="1.1"/><circle cx="31" cy="32" r="1.1"/></g>
+  </g>
+  <path d="M10.5 34 L20 13.5 L29.5 34" fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M15 27.2 Q20 23 25 27.2" fill="none" stroke="#FFC23D" stroke-width="2.8" stroke-linecap="round"/>
+  <circle cx="20" cy="31.2" r="2" fill="#FFC23D"/>
+</svg>
+<div><b>Audette IT</b><small>audetteit.com</small></div></div></div></div></div><div><p class="lbl">Dark</p><div class="frame"><div class="wp a dark" id="wp-a-dark"><div class="a-plan"><div class="plan"><svg viewBox="0 0 520 400" aria-hidden="true">
+          <g class="pl" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="14" y="14" width="492" height="372" stroke-width="5"/>
+            <path d="M300 14 V120 M300 150 V290 M300 160 H506 M14 200 H150 M180 200 H300 M200 200 V250 M200 280 V386 M300 290 H380 M410 290 H506 M300 320 V386" stroke-width="3.5"/>
+            <rect x="60" y="120" width="160" height="46" rx="8" stroke-width="2"/>
+            <rect x="96" y="24" width="88" height="8" rx="2" stroke-width="2"/>
+            <path d="M320 24 H496 V120" stroke-width="2"/>
+            <rect x="360" y="80" width="70" height="34" rx="4" stroke-width="2"/>
+            <circle cx="395" cy="97" r="6" stroke-width="1.6"/>
+            <rect x="330" y="176" width="130" height="44" rx="4" stroke-width="2"/>
+            <path d="M370 186 H420" stroke-width="3"/>
+            <rect x="470" y="180" width="26" height="30" rx="3" stroke-width="1.6"/>
+            <rect x="34" y="240" width="72" height="120" rx="6" stroke-width="2"/>
+            <rect x="130" y="330" width="56" height="34" rx="3" stroke-width="1.6"/>
+            <rect x="232" y="232" width="36" height="24" rx="4" stroke-width="2"/>
+            <path d="M242 232 V222 M258 232 V222" stroke-width="2"/>
+            <rect x="330" y="306" width="40" height="66" rx="3" stroke-width="2"/>
+          </g>
+          <g class="pd" fill="none" stroke-width="1.4" stroke-linecap="round">
+            <path d="M150 200 A30 30 0 0 1 180 230 M300 120 A30 30 0 0 1 330 150 M200 250 A30 30 0 0 0 230 280 M380 290 A30 30 0 0 1 410 320"/>
+            <path d="M60 140 H220 M320 44 H476 V120 M34 266 H106 M334 318 H366 M334 330 H366 M334 342 H366 M334 354 H366"/>
+            <rect x="110" y="70" width="60" height="30" rx="4"/>
+            <circle cx="395" cy="246" r="14"/>
+            <rect x="400" y="316" width="90" height="56" rx="6" stroke-dasharray="5 5"/>
+          </g>
+          <g class="pw" fill="none" stroke-width="1.4" stroke-dasharray="3 6">
+            <circle cx="250" cy="244" r="50"/>
+            <circle cx="250" cy="244" r="100" opacity="0.7"/>
+          </g>
+          <g class="pt" font-size="11.5" letter-spacing="0.08em">
+            <text x="30" y="46">LIVING ROOM</text><text x="320" y="146">KITCHEN</text><text x="316" y="278">OFFICE</text>
+            <text x="30" y="226">KIDS' ROOM</text><text x="214" y="302">HALL</text><text x="388" y="306">GARAGE</text>
+          </g>
+        </svg><span class="pin" style="left:25%;top:22%">A</span><span class="pin" style="left:80%;top:12%">B</span><span class="pin" style="left:76%;top:61%">C</span><span class="pin" style="left:30%;top:74%">D</span><span class="pin on" style="left:48%;top:52%">E</span><span class="pin" style="left:90%;top:84%">F</span></div><p class="cap">Fig. 1: every room I can help with</p></div><div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 44" width="40" height="44" aria-hidden="true">
+  <defs>
+    <clipPath id="ait-shield"><path d="M3.5 8.5 Q20 2.5 36.5 8.5 V22.5 C36.5 32.5 29 39.5 20 43 C11 39.5 3.5 32.5 3.5 22.5 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#ait-shield)">
+    <rect x="0" y="0" width="20" height="44" fill="#1FA6E0"/>
+    <rect x="20" y="0" width="20" height="44" fill="#0B2545"/>
+    <g fill="none" stroke="#3BB9EE" stroke-width="1" stroke-linecap="round" opacity="0.75">
+      <path d="M40 12 H33 V16"/><path d="M40 29 H34 L31.5 31.5"/>
+    </g>
+    <g fill="#3BB9EE" opacity="0.9"><circle cx="33" cy="16.6" r="1.1"/><circle cx="31" cy="32" r="1.1"/></g>
+  </g>
+  <path d="M10.5 34 L20 13.5 L29.5 34" fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M15 27.2 Q20 23 25 27.2" fill="none" stroke="#FFC23D" stroke-width="2.8" stroke-linecap="round"/>
+  <circle cx="20" cy="31.2" r="2" fill="#FFC23D"/>
+</svg>
+<div><b>Audette IT</b><small>audetteit.com</small></div></div></div></div></div></div></section><section class="draft"><div class="draft-head"><span class="letter">B</span><div><h2>The mark</h2><p>Just the logo and name in the middle, like a blank page of the guide. The calmest option.</p></div></div>
+<div class="pair"><div><p class="lbl">Light</p><div class="frame"><div class="wp b light" id="wp-b-light"><div class="b-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 44" width="40" height="44" aria-hidden="true">
+  <defs>
+    <clipPath id="ait-shield"><path d="M3.5 8.5 Q20 2.5 36.5 8.5 V22.5 C36.5 32.5 29 39.5 20 43 C11 39.5 3.5 32.5 3.5 22.5 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#ait-shield)">
+    <rect x="0" y="0" width="20" height="44" fill="#1FA6E0"/>
+    <rect x="20" y="0" width="20" height="44" fill="#0B2545"/>
+    <g fill="none" stroke="#3BB9EE" stroke-width="1" stroke-linecap="round" opacity="0.75">
+      <path d="M40 12 H33 V16"/><path d="M40 29 H34 L31.5 31.5"/>
+    </g>
+    <g fill="#3BB9EE" opacity="0.9"><circle cx="33" cy="16.6" r="1.1"/><circle cx="31" cy="32" r="1.1"/></g>
+  </g>
+  <path d="M10.5 34 L20 13.5 L29.5 34" fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M15 27.2 Q20 23 25 27.2" fill="none" stroke="#FFC23D" stroke-width="2.8" stroke-linecap="round"/>
+  <circle cx="20" cy="31.2" r="2" fill="#FFC23D"/>
+</svg>
+<div class="b-rule"></div><b class="b-name">Audette IT</b><span class="b-line">Tech help for every room</span></div></div></div></div><div><p class="lbl">Dark</p><div class="frame"><div class="wp b dark" id="wp-b-dark"><div class="b-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 44" width="40" height="44" aria-hidden="true">
+  <defs>
+    <clipPath id="ait-shield"><path d="M3.5 8.5 Q20 2.5 36.5 8.5 V22.5 C36.5 32.5 29 39.5 20 43 C11 39.5 3.5 32.5 3.5 22.5 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#ait-shield)">
+    <rect x="0" y="0" width="20" height="44" fill="#1FA6E0"/>
+    <rect x="20" y="0" width="20" height="44" fill="#0B2545"/>
+    <g fill="none" stroke="#3BB9EE" stroke-width="1" stroke-linecap="round" opacity="0.75">
+      <path d="M40 12 H33 V16"/><path d="M40 29 H34 L31.5 31.5"/>
+    </g>
+    <g fill="#3BB9EE" opacity="0.9"><circle cx="33" cy="16.6" r="1.1"/><circle cx="31" cy="32" r="1.1"/></g>
+  </g>
+  <path d="M10.5 34 L20 13.5 L29.5 34" fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M15 27.2 Q20 23 25 27.2" fill="none" stroke="#FFC23D" stroke-width="2.8" stroke-linecap="round"/>
+  <circle cx="20" cy="31.2" r="2" fill="#FFC23D"/>
+</svg>
+<div class="b-rule"></div><b class="b-name">Audette IT</b><span class="b-line">Tech help for every room</span></div></div></div></div></div></section><section class="draft"><div class="draft-head"><span class="letter">C</span><div><h2>Need a hand?</h2><p>For computers you set up for other people: a faint floor plan, plus a card saying how to reach you. Useful on family or customer PCs.</p></div></div>
+<div class="pair"><div><p class="lbl">Light</p><div class="frame"><div class="wp c light" id="wp-c-light"><div class="c-plan"><div class="plan"><svg viewBox="0 0 520 400" aria-hidden="true">
+          <g class="pl" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="14" y="14" width="492" height="372" stroke-width="5"/>
+            <path d="M300 14 V120 M300 150 V290 M300 160 H506 M14 200 H150 M180 200 H300 M200 200 V250 M200 280 V386 M300 290 H380 M410 290 H506 M300 320 V386" stroke-width="3.5"/>
+            <rect x="60" y="120" width="160" height="46" rx="8" stroke-width="2"/>
+            <rect x="96" y="24" width="88" height="8" rx="2" stroke-width="2"/>
+            <path d="M320 24 H496 V120" stroke-width="2"/>
+            <rect x="360" y="80" width="70" height="34" rx="4" stroke-width="2"/>
+            <circle cx="395" cy="97" r="6" stroke-width="1.6"/>
+            <rect x="330" y="176" width="130" height="44" rx="4" stroke-width="2"/>
+            <path d="M370 186 H420" stroke-width="3"/>
+            <rect x="470" y="180" width="26" height="30" rx="3" stroke-width="1.6"/>
+            <rect x="34" y="240" width="72" height="120" rx="6" stroke-width="2"/>
+            <rect x="130" y="330" width="56" height="34" rx="3" stroke-width="1.6"/>
+            <rect x="232" y="232" width="36" height="24" rx="4" stroke-width="2"/>
+            <path d="M242 232 V222 M258 232 V222" stroke-width="2"/>
+            <rect x="330" y="306" width="40" height="66" rx="3" stroke-width="2"/>
+          </g>
+          <g class="pd" fill="none" stroke-width="1.4" stroke-linecap="round">
+            <path d="M150 200 A30 30 0 0 1 180 230 M300 120 A30 30 0 0 1 330 150 M200 250 A30 30 0 0 0 230 280 M380 290 A30 30 0 0 1 410 320"/>
+            <path d="M60 140 H220 M320 44 H476 V120 M34 266 H106 M334 318 H366 M334 330 H366 M334 342 H366 M334 354 H366"/>
+            <rect x="110" y="70" width="60" height="30" rx="4"/>
+            <circle cx="395" cy="246" r="14"/>
+            <rect x="400" y="316" width="90" height="56" rx="6" stroke-dasharray="5 5"/>
+          </g>
+          <g class="pw" fill="none" stroke-width="1.4" stroke-dasharray="3 6">
+            <circle cx="250" cy="244" r="50"/>
+            <circle cx="250" cy="244" r="100" opacity="0.7"/>
+          </g>
+          <g class="pt" font-size="11.5" letter-spacing="0.08em">
+            <text x="30" y="46">LIVING ROOM</text><text x="320" y="146">KITCHEN</text><text x="316" y="278">OFFICE</text>
+            <text x="30" y="226">KIDS' ROOM</text><text x="214" y="302">HALL</text><text x="388" y="306">GARAGE</text>
+          </g>
+        </svg><span class="pin" style="left:25%;top:22%">A</span><span class="pin" style="left:80%;top:12%">B</span><span class="pin" style="left:76%;top:61%">C</span><span class="pin" style="left:30%;top:74%">D</span><span class="pin on" style="left:48%;top:52%">E</span><span class="pin" style="left:90%;top:84%">F</span></div></div><div class="c-card"><h2>Need a hand?</h2><p>Email me and tell me what's going on.</p><span class="c-addr">michael.audette@audetteit.com</span><div class="c-foot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 44" width="40" height="44" aria-hidden="true">
+  <defs>
+    <clipPath id="ait-shield"><path d="M3.5 8.5 Q20 2.5 36.5 8.5 V22.5 C36.5 32.5 29 39.5 20 43 C11 39.5 3.5 32.5 3.5 22.5 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#ait-shield)">
+    <rect x="0" y="0" width="20" height="44" fill="#1FA6E0"/>
+    <rect x="20" y="0" width="20" height="44" fill="#0B2545"/>
+    <g fill="none" stroke="#3BB9EE" stroke-width="1" stroke-linecap="round" opacity="0.75">
+      <path d="M40 12 H33 V16"/><path d="M40 29 H34 L31.5 31.5"/>
+    </g>
+    <g fill="#3BB9EE" opacity="0.9"><circle cx="33" cy="16.6" r="1.1"/><circle cx="31" cy="32" r="1.1"/></g>
+  </g>
+  <path d="M10.5 34 L20 13.5 L29.5 34" fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M15 27.2 Q20 23 25 27.2" fill="none" stroke="#FFC23D" stroke-width="2.8" stroke-linecap="round"/>
+  <circle cx="20" cy="31.2" r="2" fill="#FFC23D"/>
+</svg>
+<span>Audette IT · audetteit.com</span></div></div></div></div></div><div><p class="lbl">Dark</p><div class="frame"><div class="wp c dark" id="wp-c-dark"><div class="c-plan"><div class="plan"><svg viewBox="0 0 520 400" aria-hidden="true">
+          <g class="pl" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="14" y="14" width="492" height="372" stroke-width="5"/>
+            <path d="M300 14 V120 M300 150 V290 M300 160 H506 M14 200 H150 M180 200 H300 M200 200 V250 M200 280 V386 M300 290 H380 M410 290 H506 M300 320 V386" stroke-width="3.5"/>
+            <rect x="60" y="120" width="160" height="46" rx="8" stroke-width="2"/>
+            <rect x="96" y="24" width="88" height="8" rx="2" stroke-width="2"/>
+            <path d="M320 24 H496 V120" stroke-width="2"/>
+            <rect x="360" y="80" width="70" height="34" rx="4" stroke-width="2"/>
+            <circle cx="395" cy="97" r="6" stroke-width="1.6"/>
+            <rect x="330" y="176" width="130" height="44" rx="4" stroke-width="2"/>
+            <path d="M370 186 H420" stroke-width="3"/>
+            <rect x="470" y="180" width="26" height="30" rx="3" stroke-width="1.6"/>
+            <rect x="34" y="240" width="72" height="120" rx="6" stroke-width="2"/>
+            <rect x="130" y="330" width="56" height="34" rx="3" stroke-width="1.6"/>
+            <rect x="232" y="232" width="36" height="24" rx="4" stroke-width="2"/>
+            <path d="M242 232 V222 M258 232 V222" stroke-width="2"/>
+            <rect x="330" y="306" width="40" height="66" rx="3" stroke-width="2"/>
+          </g>
+          <g class="pd" fill="none" stroke-width="1.4" stroke-linecap="round">
+            <path d="M150 200 A30 30 0 0 1 180 230 M300 120 A30 30 0 0 1 330 150 M200 250 A30 30 0 0 0 230 280 M380 290 A30 30 0 0 1 410 320"/>
+            <path d="M60 140 H220 M320 44 H476 V120 M34 266 H106 M334 318 H366 M334 330 H366 M334 342 H366 M334 354 H366"/>
+            <rect x="110" y="70" width="60" height="30" rx="4"/>
+            <circle cx="395" cy="246" r="14"/>
+            <rect x="400" y="316" width="90" height="56" rx="6" stroke-dasharray="5 5"/>
+          </g>
+          <g class="pw" fill="none" stroke-width="1.4" stroke-dasharray="3 6">
+            <circle cx="250" cy="244" r="50"/>
+            <circle cx="250" cy="244" r="100" opacity="0.7"/>
+          </g>
+          <g class="pt" font-size="11.5" letter-spacing="0.08em">
+            <text x="30" y="46">LIVING ROOM</text><text x="320" y="146">KITCHEN</text><text x="316" y="278">OFFICE</text>
+            <text x="30" y="226">KIDS' ROOM</text><text x="214" y="302">HALL</text><text x="388" y="306">GARAGE</text>
+          </g>
+        </svg><span class="pin" style="left:25%;top:22%">A</span><span class="pin" style="left:80%;top:12%">B</span><span class="pin" style="left:76%;top:61%">C</span><span class="pin" style="left:30%;top:74%">D</span><span class="pin on" style="left:48%;top:52%">E</span><span class="pin" style="left:90%;top:84%">F</span></div></div><div class="c-card"><h2>Need a hand?</h2><p>Email me and tell me what's going on.</p><span class="c-addr">michael.audette@audetteit.com</span><div class="c-foot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 44" width="40" height="44" aria-hidden="true">
+  <defs>
+    <clipPath id="ait-shield"><path d="M3.5 8.5 Q20 2.5 36.5 8.5 V22.5 C36.5 32.5 29 39.5 20 43 C11 39.5 3.5 32.5 3.5 22.5 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#ait-shield)">
+    <rect x="0" y="0" width="20" height="44" fill="#1FA6E0"/>
+    <rect x="20" y="0" width="20" height="44" fill="#0B2545"/>
+    <g fill="none" stroke="#3BB9EE" stroke-width="1" stroke-linecap="round" opacity="0.75">
+      <path d="M40 12 H33 V16"/><path d="M40 29 H34 L31.5 31.5"/>
+    </g>
+    <g fill="#3BB9EE" opacity="0.9"><circle cx="33" cy="16.6" r="1.1"/><circle cx="31" cy="32" r="1.1"/></g>
+  </g>
+  <path d="M10.5 34 L20 13.5 L29.5 34" fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M15 27.2 Q20 23 25 27.2" fill="none" stroke="#FFC23D" stroke-width="2.8" stroke-linecap="round"/>
+  <circle cx="20" cy="31.2" r="2" fill="#FFC23D"/>
+</svg>
+<span>Audette IT · audetteit.com</span></div></div></div></div></div></div></section>
+</main>
+
+<script>
+  function fit() { document.querySelectorAll('.frame').forEach(f => f.style.setProperty('--s', f.clientWidth / 1920)); }
+  addEventListener('resize', fit); fit();
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(document.body);
+</script>
