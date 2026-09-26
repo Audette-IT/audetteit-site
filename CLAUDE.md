@@ -793,6 +793,8 @@ numbers share the same sequence.
 - **#73: the `audette-it-design` skill** (#68, 2026-09-24).
 - **#79: custom 404 page (#76) and launch polish with share image B (#77)**
   (2026-09-25).
+- **#81: wallpapers (the mark, 42 PNGs in `brand/wallpapers/`) and the
+  help desk plan (#44, `tools/audetteit-help-CLAUDE.md`)** (2026-09-26).
 - #47, #51, #53, #54, #56, #58, #59, #62, #64, #70 (#23 closed), #71
   (#25 SEO check), #72 (#67 quick-fix correction), #74 (Pacific time),
   #75 (#67 status), #78 (#67 AD progress, #76/#77 opened, tracker
@@ -942,7 +944,7 @@ emails, flyers and profiles match the site.
   - release branches: `launch`, `release/analytics-www`,
     `release/gtm-advanced`, `release/clarity`, `release/tag-gateway`,
     `release/room-guide`, `release/handoff`, `release/design-skill`,
-    `release/404-and-polish`
+    `release/404-and-polish`, `release/wallpapers-help-plan`
   - docs branches: `docs/main-after-46`, `docs/after-50`, `docs/after-52`,
     `docs/www-live`, `docs/after-55`, `docs/after-57`, `docs/gtm-consent`,
     `docs/tracker-comments`, `docs/skills-all-branches`, `docs/logo-rights`,
