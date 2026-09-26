@@ -571,8 +571,15 @@ Only `favicon.ico` differs, because it's re-packed.
     checker's hex and inline-script flags on it are expected: issue text
     quotes old colors, and artifacts need inline JS.
   4. Republish with the Artifact tool, passing the same `url`.
-  - Last synced 2026-09-25 UTC (#44 planned, now in progress) with this tool:
-    **30 issues, 25 done / 5 in progress / 0 open.**
+  - **Help desk group:** the tracker also has a "Help desk" group holding
+    `Audette-IT/audetteit-help` issues (its #1 onward), marked with a
+    `"repo"` key. Its numbers overlap this repo's old #1–#20, so
+    `sync-tracker.py` skips any group whose `repo` isn't this repo. That
+    group is synced from a session that can read `audetteit-help` (this
+    repo's sessions get 403 on it).
+  - Last synced 2026-09-26 UTC (#67 AD progress) with this tool:
+    **41 issues, 27 done / 9 in progress / 5 open** (30 from this repo:
+    25 done / 5 in progress; 11 from the help desk repo).
 
 ### 8.7 Checking the live site
 - Sessions **can't reach audetteit.com directly**. Use Firecrawl
