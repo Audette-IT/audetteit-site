@@ -809,6 +809,21 @@ numbers share the same sequence.
       - `DESKTOP-AUATMUT` has **no enabled local admin** (built-in
         Administrator disabled). Create `localadmin` and test it before it
         leaves the old domain. Its profiles: `mjaudettejr`, `TV`.
+      - **DNS log results (30 min, 2026-09-26 ~3 PM PT):** ~30 clients still
+        asked `.59`. Most are phones/cameras/TVs waiting for their eero DHCP
+        lease to renew (re-check the next day). Real fixes:
+        - **Pi-hole at `192.168.4.77`** conditionally forwards
+          `audetteit.com` to `.59` → change the IP to `192.168.4.20`
+          (dnsmasq forwarding covers subdomains, so one entry serves
+          `ad.audetteit.com` too). **At cutover, change its domain to
+          `ad.audetteit.com`**, or Pi-hole users keep sending the website to
+          the DCs.
+        - the HP (`.166`): its NIC DNS or its DNS server forwarder points at
+          `.59` (being checked)
+        - `DESKTOP-V4NRKDB` (`.48`) and the Mac `MAC-E85B94` (`.38`) likely
+          have `.59` pinned: fix when each moves
+        - Also seen: many devices query `fleetdm.audetteit.net` (a Fleet /
+          osquery agent the owner runs), including WIN-I2OP itself.
       - **In progress:** DNS query logging on `WIN-I2OP`
         (`C:\ADMove\dns-queries.log`) to find devices still using `.59`
         before it stops serving DNS. Turn logging off afterwards.
