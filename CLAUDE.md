@@ -750,7 +750,28 @@ numbers share the same sequence.
         returns ERROR_ACCESS_DENIED.
       - **At cutover, delete ADDC01's `audetteit.com` forwarder**, or the new
         domain will keep sending the apex to the old DCs (the #67 problem).
-    - **Next:** import the GPOs and recreate `mjaudettejr`.
+    - **Accounts, GPOs and OUs done (2026-09-26, ~1:33 PM PT, on ADDC01):**
+      - `mjaudettejr` created (full name "Michael", Domain Admins, in
+        `OU=Admins`). Its password is new and separate from the old domain's
+        and expires 11/7/2026 (the default 42 days; change the policy later
+        if wanted). Sign in as `AUDETTE\mjaudettejr`.
+      - The GPO backups were copied to `C:\ADMove\GPOs` on ADDC01. The
+        `GroupPolicy` module **does** work on this image (`Import-GPO`,
+        `New-GPLink`); OUs were made with `dsadd`, moves with `dsmove`.
+      - Imported: `GPO-Servers-Security`, `TV-Server`, `TV Kiosk Lockdown`,
+        `GPO-Workstations-Security`, `DesktopLockdown` (WSUS and the two
+        Defaults skipped).
+      - OUs match the old domain: `MacOS`, `Workstations`, `RegUser`,
+        `Admins`, `Servers`, `TV-Servers`. Links match too: Servers →
+        `GPO-Servers-Security`, TV-Servers → `TV-Server`, Workstations →
+        `GPO-Workstations-Security`, RegUser → `DesktopLockdown` (filtered to
+        Domain Users). `TV Kiosk Lockdown` was unlinked, all settings
+        disabled and applied to a deleted group in the old domain, so it
+        stays unlinked (delete it later if unused).
+      - `redircmp` sends newly joined computers to `OU=Workstations`. Move
+        the Mac to `OU=MacOS` after it joins.
+    - **Next:** move the PCs one at a time (`DESKTOP-AUATMUT`,
+      `DESKTOP-RL6BHNS`, `DESKTOP-V4NRKDB`, then `michaels-mac-mi`).
     - Later, optional: add UPN suffix `audetteit.com` so sign-in can be
       `mjaudettejr@audetteit.com`.
     - **Plan:** build the
